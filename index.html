@@ -3,66 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professional E-commerce Website</title>
-    <link rel="stylesheet" href="style.css">
+    <title>E-Commerce Website</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
-        <h1>Welcome to Moonspicys</h1>
+        <h1>Welcome to Our E-Commerce Store</h1>
         <nav>
+            <!-- Navigation Menu -->
             <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Shop</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Contact</a></li>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#products">Products</a></li>
+                <li><a href="#cart">Shopping Cart</a></li>
+                <li><a href="#wishlist">Wishlist</a></li>
+                <li><a href="#orders">Track Order</a></li>
+                <li><a href="#login">Login</a></li>
             </ul>
         </nav>
     </header>
 
     <main>
-        <section id="banner">
-            <h2>Flash Sale!</h2>
-            <p>Open for 24 hours! Don't miss out!</p>
-        </section>
-
         <section id="products">
-            <h2>Featured Products</h2>
-            <!-- Product listings will go here -->
+            <h2>Products</h2>
+            <!-- Placeholder for product listings -->
+            <div class="product-listing"></div>
         </section>
 
-        <section id="coupons">
-            <h2>Coupon Code</h2>
-            <input type="text" placeholder="Enter your coupon code">
-            <button>Apply</button>
+        <section id="cart">
+            <h2>Your Shopping Cart</h2>
+            <div class="cart-items"></div>
         </section>
 
-        <section id="payment">
-            <h2>Payment Options</h2>
-            <form>
-                <label for="card">Credit/Debit Card:</label>
-                <input type="text" id="card" name="card">
-                <input type="submit" value="Pay Now">
-            </form>
+        <section id="wishlist">
+            <h2>Your Wishlist</h2>
+            <div class="wishlist-items"></div>
         </section>
 
-        <section id="notifications">
-            <h2>Notifications</h2>
-            <button>View Broadcast Notifications</button>
-        </section>
-
-        <section id="admin-analytics">
-            <h2>Admin Analytics Dashboard</h2>
-            <button>View Analytics</button>
-        </section>
-
-        <section id="referrals">
-            <h2>Referral Program</h2>
-            <p>Invite your friends and earn rewards!</p>
+        <section id="admin-dashboard">
+            <h2>Admin Dashboard</h2>
+            <div class="analytics"></div>
+            <div class="inventory-management"></div>
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2026 Moonspicys. All rights reserved.</p>
+        <p>&copy; 2026 E-Commerce Website</p>
     </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>
