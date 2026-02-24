@@ -13,7 +13,8 @@
         body { background: var(--bg); color: var(--white); padding-bottom: 80px; }
         
         /* Loading & Auth */
-        .full-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
+        .full-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .full-screen input, .full-screen button { width: 80%; max-width: 300px; }
         
         /* Header */
         .header { background: var(--card); padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 1000; }
@@ -45,12 +46,17 @@
         .nav-item.active { color: var(--p); }
 
         .admin-box { background: #1a1a1a; padding: 15px; border-radius: 12px; margin-bottom: 15px; border-left: 4px solid var(--p); }
+        
+        .order-card { background: #111; padding: 12px; margin-bottom: 8px; border-radius: 8px; border-left: 3px solid var(--p); }
+        .order-status { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 0.7rem; margin-top: 5px; }
+        .status-pending { background: #ff6b00; color: #fff; }
+        .status-delivered { background: #28a745; color: #fff; }
     </style>
 </head>
 <body>
 
     <div id="screen-auth" class="full-screen" style="display:none;">
-        <h1 style="color:var(--p); margin-bottom:10px;">MOON SPICY</h1>
+        <h1 style="color:var(--p); margin-bottom:10px;">🌶️ MOON SPICY</h1>
         <div id="auth-login-box">
             <p>Enter details to start shopping</p><br>
             <input type="text" id="reg-name" placeholder="Apka Naam">
@@ -67,7 +73,7 @@
 
     <div id="main-ui">
         <header class="header">
-            <div class="logo">MOON SPICY</div>
+            <div class="logo">🌶️ MOON SPICY</div>
             <div style="display:flex; gap:15px; align-items:center;">
                 <div style="background:#ffc107; color:#000; padding:4px 10px; border-radius:20px; font-weight:bold; font-size:0.8rem;">
                    💰 <span id="user-coins">0</span>
@@ -120,20 +126,20 @@
     </div>
 
     <div id="panel-admin" class="panel">
-        <h2 style="color:red; margin-bottom:20px;">ADMIN COMMAND CENTER</h2>
+        <h2 style="color:red; margin-bottom:20px;">⚙️ ADMIN COMMAND CENTER</h2>
         
         <div class="admin-box">
-            <h4>Approval Requests</h4>
+            <h4>📋 Approval Requests</h4>
             <div id="adm-pending-list" style="margin-top:10px;"></div>
         </div>
 
         <div class="admin-box">
-            <h4>Live Orders</h4>
+            <h4>📦 Live Orders</h4>
             <div id="adm-order-list" style="margin-top:10px;"></div>
         </div>
 
         <div class="admin-box">
-            <h4>Add New Product</h4>
+            <h4>➕ Add New Product</h4>
             <input type="text" id="adm-p-name" placeholder="Product Name">
             <input type="number" id="adm-p-price" placeholder="Price">
             <input type="text" id="adm-p-img" placeholder="Image URL">
@@ -141,7 +147,7 @@
         </div>
 
         <div class="admin-box">
-            <h4>Broadcast Notification</h4>
+            <h4>📢 Broadcast Notification</h4>
             <input type="text" id="adm-noti-text" placeholder="Message for all users...">
             <button class="buy-btn" style="background:orange" onclick="adminBroadcast()">SEND TO ALL</button>
         </div>
@@ -214,7 +220,7 @@
                     <div class="p-title">${p.name}</div>
                     <div class="p-price">₹${p.price}</div>
                     <button class="buy-btn" onclick="initiateBuy(${p.id})">BUY NOW</button>
-                    <i class="fas fa-trash" style="position:absolute; top:8px; right:8px; color:#444; font-size:0.7rem;" onclick="deleteProd(${p.id})"></i>
+                    <i class="fas fa-trash" style="position:absolute; top:8px; right:8px; color:#444; font-size:0.7rem; cursor:pointer;" onclick="deleteProd(${p.id})"></i>
                 </div>
             `).join('');
         }
@@ -257,16 +263,26 @@
             db.users[uIdx].addr = db.session.addr;
 
             const oid = "MS-" + Math.floor(1000 + Math.random()*9000);
-            const order = { oid, item: p.name, price: p.price, user: db.session.name, phone: db.session.phone, addr: db.session.addr };
+            const order = { 
+                oid, 
+                item: p.name, 
+                price: p.price, 
+                user: db.session.name, 
+                phone: db.session.phone, 
+                addr: db.session.addr,
+                status: 'pending',
+                date: new Date().toLocaleString(),
+                coinsAwarded: false
+            };
             
             db.orders.push(order);
-            addNoti(`Order Successful! ID: ${oid}`);
+            addNoti(`Order Placed! ID: ${oid}`);
             saveDB();
 
             confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
 
             const waMsg = `🚀 *NEW ORDER* %0AID: ${oid}%0AItem: ${p.name}%0APrice: ₹${p.price}%0A%0A*Address:* %0A${v}, ${pin}`;
-            Swal.fire('Ordered!', 'WhatsApp Receipt Sending...', 'success').then(() => {
+            Swal.fire('Order Placed!', 'WhatsApp Receipt Sending...', 'success').then(() => {
                 window.open(`https://wa.me/917017206016?text=${waMsg}`);
                 location.reload();
             });
@@ -298,9 +314,12 @@
 
         // Admin Operations
         function checkAdmin() {
-            if(prompt("Admin Key:") === "ANAS BRO") {
+            const key = prompt("🔐 Admin Key:");
+            if(key === "ANAS BRO") {
                 openPanel('admin');
                 renderAdmin();
+            } else if(key !== null) {
+                alert("❌ Wrong password!");
             }
         }
 
@@ -308,20 +327,31 @@
             // Pending Approvals
             const pending = db.users.filter(u => u.status === 'pending');
             document.getElementById('adm-pending-list').innerHTML = pending.map(u => `
-                <div style="padding:10px; border-bottom:1px solid #333;">
-                    ${u.name} (${u.phone}) 
-                    <button onclick="approveUser('${u.phone}')" style="background:green; color:#fff; border:none; padding:5px 10px; border-radius:5px; float:right;">APPROVE</button>
+                <div style="padding:10px; border-bottom:1px solid #333; display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <b>${u.name}</b><br>
+                        <small style="color:#888;">${u.phone}</small>
+                    </div>
+                    <button onclick="approveUser('${u.phone}')" style="background:green; color:#fff; border:none; padding:6px 12px; border-radius:5px; cursor:pointer;">APPROVE</button>
                 </div>
-            `).join('') || "No pending requests.";
+            `).join('') || "<small style='color:#666;'>No pending requests</small>";
 
-            // Order History
+            // Order History with Status Management
             document.getElementById('adm-order-list').innerHTML = db.orders.slice().reverse().map(o => `
-                <div style="font-size:0.8rem; background:#111; padding:10px; margin-bottom:5px; border-radius:8px;">
+                <div class="order-card">
                     <b>${o.oid}</b> - ${o.item} (₹${o.price})<br>
-                    User: ${o.user} (${o.phone})
-                    <button onclick="giftCoins('${o.phone}')" style="background:#ffc107; color:#000; border:none; padding:2px 8px; border-radius:4px; font-size:0.7rem; float:right;">REWARD COINS</button>
+                    <small style="color:#888;">User: ${o.user} (${o.phone})</small><br>
+                    <small style="color:#888;">Date: ${o.date}</small><br>
+                    <span class="order-status ${o.status === 'delivered' ? 'status-delivered' : 'status-pending'}">
+                        ${o.status.toUpperCase()}
+                    </span>
+                    <div style="margin-top:8px; display:flex; gap:5px;">
+                        ${o.status === 'pending' ? `<button onclick="markDelivered('${o.oid}')" style="background:#28a745; color:#fff; border:none; padding:4px 10px; border-radius:4px; font-size:0.75rem; cursor:pointer;">✓ Delivered</button>` : ''}
+                        ${!o.coinsAwarded && o.status === 'delivered' ? `<button onclick="awardCoins('${o.oid}')" style="background:#ffc107; color:#000; border:none; padding:4px 10px; border-radius:4px; font-size:0.75rem; cursor:pointer; font-weight:bold;">💰 Award Coins</button>` : ''}
+                        ${o.coinsAwarded ? `<span style="color:#28a745; font-size:0.75rem;">✓ Coins Awarded</span>` : ''}
+                    </div>
                 </div>
-            `).join('') || "No orders.";
+            `).join('') || "<small style='color:#666;'>No orders yet</small>";
         }
 
         function approveUser(ph) {
@@ -329,16 +359,39 @@
             db.users[uIdx].status = 'approved';
             saveDB();
             renderAdmin();
-            alert("User approved successfully!");
+            addNoti(`✅ You are approved! Start shopping now.`);
+            alert("✅ User approved!");
         }
 
-        function giftCoins(ph) {
-            let amt = prompt("Kitne coins gift karne hain? (1-99)");
-            if(amt) {
-                let uIdx = db.users.findIndex(u => u.phone === ph);
-                db.users[uIdx].coins = (db.users[uIdx].coins || 0) + parseInt(amt);
+        function markDelivered(oid) {
+            let oIdx = db.orders.findIndex(o => o.oid === oid);
+            db.orders[oIdx].status = 'delivered';
+            saveDB();
+            renderAdmin();
+            alert("📦 Order marked as delivered!");
+        }
+
+        function awardCoins(oid) {
+            const order = db.orders.find(o => o.oid === oid);
+            let coinAmount = prompt(`🪙 Kitne coins ${order.user} ko dene hain? (1-90):`);
+            
+            if(coinAmount) {
+                coinAmount = parseInt(coinAmount);
+                if(coinAmount < 1 || coinAmount > 90) {
+                    alert("❌ 1 se 90 ke beech coins do!");
+                    return;
+                }
+                
+                let uIdx = db.users.findIndex(u => u.phone === order.phone);
+                db.users[uIdx].coins = (db.users[uIdx].coins || 0) + coinAmount;
+                
+                let oIdx = db.orders.findIndex(o => o.oid === oid);
+                db.orders[oIdx].coinsAwarded = true;
+                
                 saveDB();
-                alert("Coins Gifted!");
+                renderAdmin();
+                addNoti(`🎉 You earned ${coinAmount} coins for order ${oid}!`);
+                alert(`✅ ${coinAmount} coins awarded to ${order.user}!`);
             }
         }
 
@@ -347,10 +400,15 @@
             const p = document.getElementById('adm-p-price').value;
             const i = document.getElementById('adm-p-img').value;
             if(n && p) {
-                db.products.push({id: Date.now(), name: n, price: p, img: i});
+                db.products.push({id: Date.now(), name: n, price: parseInt(p), img: i});
                 saveDB();
-                alert("Product Added!");
+                alert("✅ Product Added!");
+                document.getElementById('adm-p-name').value = '';
+                document.getElementById('adm-p-price').value = '';
+                document.getElementById('adm-p-img').value = '';
                 location.reload();
+            } else {
+                alert("❌ Name aur Price zaroor fill karo!");
             }
         }
 
@@ -366,7 +424,8 @@
             const m = document.getElementById('adm-noti-text').value;
             if(m) {
                 addNoti("📢 UPDATE: " + m);
-                alert("Broadcast sent to all users!");
+                document.getElementById('adm-noti-text').value = '';
+                alert("✅ Broadcast sent to all users!");
             }
         }
 
@@ -374,15 +433,30 @@
 
         function openProfile() {
             const u = db.session;
+            const userOrders = db.orders.filter(o => o.phone === u.phone);
             Swal.fire({
-                title: 'User Profile',
+                title: '👤 User Profile',
                 background: '#1a1a1a',
                 color: '#fff',
-                html: `<div style="text-align:left;"><b>Name:</b> ${u.name}<br><b>Phone:</b> ${u.phone}<br><b>Status:</b> ${u.status.toUpperCase()}<br><b>Address:</b> ${u.addr ? u.addr.v : 'Not set'}</div>`,
+                html: `
+                    <div style="text-align:left; font-size:0.9rem;">
+                        <b>👤 Name:</b> ${u.name}<br>
+                        <b>📱 Phone:</b> ${u.phone}<br>
+                        <b>✅ Status:</b> <span style="color:${u.status === 'approved' ? '#28a745' : '#ff9800'}">${u.status.toUpperCase()}</span><br>
+                        <b>📍 Address:</b> ${u.addr ? `${u.addr.v}, ${u.addr.d}` : 'Not set'}<br>
+                        <b>💰 Coins:</b> <span style="color:#ffc107;">${u.coins}</span><br>
+                        <b>📦 Orders:</b> ${userOrders.length}<br>
+                    </div>
+                `,
                 showCancelButton: true,
                 confirmButtonText: 'Logout',
                 confirmButtonColor: '#d33'
-            }).then((res) => { if(res.isConfirmed) { localStorage.removeItem('moon_session'); location.reload(); } });
+            }).then((res) => { 
+                if(res.isConfirmed) { 
+                    localStorage.removeItem('moon_session'); 
+                    location.reload(); 
+                } 
+            });
         }
     </script>
 </body>
