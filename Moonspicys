@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOON SPICY | The Ultimate Store</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --p: #ff4500; --bg: #0d0d0d; --card: #1a1a1a; --white: #ffffff; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+        body { background: var(--bg); color: var(--white); padding-bottom: 80px; }
+        
+        /* Loading & Auth */
+        .full-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
+        
+        /* Header */
+        .header { background: var(--card); padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 1000; }
+        .logo { color: var(--p); font-size: 1.5rem; font-weight: 900; letter-spacing: 1px; }
+        .noti-bell { position: relative; font-size: 1.4rem; cursor: pointer; }
+        .noti-dot { position: absolute; top: 0; right: 0; width: 10px; height: 10px; background: red; border-radius: 50%; display: none; }
+
+        /* Banner & Reels */
+        .banner { width: 100%; height: 160px; object-fit: cover; border-bottom: 2px solid var(--p); }
+        .reels-container { display: flex; overflow-x: auto; gap: 10px; padding: 15px; scrollbar-width: none; }
+        .reel-box { min-width: 100px; height: 160px; background: #222; border-radius: 10px; border: 1px solid var(--p); overflow: hidden; }
+
+        /* Products */
+        .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 15px; }
+        .p-card { background: var(--card); border-radius: 15px; padding: 12px; border: 1px solid #222; position: relative; transition: 0.3s; }
+        .p-card img { width: 100%; height: 120px; object-fit: contain; border-radius: 10px; }
+        .p-title { font-size: 0.85rem; margin-top: 8px; height: 35px; overflow: hidden; }
+        .p-price { font-size: 1.1rem; color: var(--p); font-weight: bold; margin: 5px 0; }
+        
+        .buy-btn { background: var(--p); color: #fff; border: none; width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+
+        /* Generic Panels */
+        .panel { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 5000; display: none; overflow-y: auto; padding: 20px; }
+        input, select { width: 100%; padding: 14px; margin-bottom: 15px; border-radius: 10px; border: 1px solid #333; background: #111; color: #fff; }
+        
+        /* Bottom Navigation */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: #121212; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #333; z-index: 1001; }
+        .nav-item { text-align: center; color: #666; font-size: 0.7rem; cursor: pointer; }
+        .nav-item.active { color: var(--p); }
+
+        .admin-box { background: #1a1a1a; padding: 15px; border-radius: 12px; margin-bottom: 15px; border-left: 4px solid var(--p); }
+    </style>
+</head>
+<body>
+
+    <div id="screen-auth" class="full-screen" style="display:none;">
+        <h1 style="color:var(--p); margin-bottom:10px;">MOON SPICY</h1>
+        <div id="auth-login-box">
+            <p>Enter details to start shopping</p><br>
+            <input type="text" id="reg-name" placeholder="Apka Naam">
+            <input type="number" id="reg-phone" placeholder="WhatsApp Number">
+            <button class="buy-btn" onclick="handleRegister()">LOGIN / REGISTER</button>
+        </div>
+        <div id="auth-pending-box" style="display:none;">
+            <div style="font-size: 4rem; color: orange;">⏳</div>
+            <h2>Approval Pending</h2>
+            <p style="color:#888; margin: 15px 0;">Admin aapki request check kar raha hai. <br> Thodi der baad refresh karein.</p>
+            <button class="buy-btn" style="background:#333;" onclick="location.reload()">REFRESH STATUS</button>
+        </div>
+    </div>
+
+    <div id="main-ui">
+        <header class="header">
+            <div class="logo">MOON SPICY</div>
+            <div style="display:flex; gap:15px; align-items:center;">
+                <div style="background:#ffc107; color:#000; padding:4px 10px; border-radius:20px; font-weight:bold; font-size:0.8rem;">
+                   💰 <span id="user-coins">0</span>
+                </div>
+                <div class="noti-bell" onclick="openPanel('notis')">
+                    <i class="fas fa-bell"></i>
+                    <div class="noti-dot" id="noti-dot"></div>
+                </div>
+            </div>
+        </header>
+
+        <img class="banner" id="top-banner" src="https://img.freepik.com/free-vector/flat-design-spicy-food-sale-banner_23-2149124445.jpg">
+
+        <div style="padding:15px 15px 0;"><b>🔥 Moon Reels</b></div>
+        <div class="reels-container" id="reels-list">
+            <div class="reel-box"></div><div class="reel-box"></div><div class="reel-box"></div>
+        </div>
+
+        <div style="padding:15px 15px 0;"><b>📦 Premium Collection</b></div>
+        <div class="product-grid" id="product-list"></div>
+    </div>
+
+    <div id="panel-checkout" class="panel">
+        <h2 style="margin-bottom:20px;"><i class="fas fa-truck"></i> Shipping Details</h2>
+        <input type="text" id="addr-village" placeholder="Village / City">
+        <input type="text" id="addr-tehsil" placeholder="Tehsil">
+        <input type="text" id="addr-dist" placeholder="District">
+        <input type="number" id="addr-pin" placeholder="Pin Code">
+        
+        <h3 style="margin:10px 0;">Payment Method</h3>
+        <select id="pay-method" onchange="toggleQR()">
+            <option value="COD">Cash on Delivery</option>
+            <option value="UPI">UPI Payment (QR Code)</option>
+        </select>
+        <div id="qr-box" style="display:none; text-align:center; padding:15px;">
+            <img id="qr-img" style="width:180px; border:5px solid #fff; border-radius:10px;">
+            <p style="font-size:0.7rem; margin-top:5px;">Scan & Pay - Screenshot bhejein</p>
+        </div>
+
+        <button class="buy-btn" id="btn-confirm" onclick="processOrder()">PLACE ORDER & SEND RECEIPT</button>
+        <button class="buy-btn" style="background:#333; margin-top:10px;" onclick="closePanels()">CANCEL</button>
+    </div>
+
+    <div id="panel-notis" class="panel">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h2>Notifications</h2>
+            <i class="fas fa-times" onclick="closePanels()"></i>
+        </div>
+        <div id="noti-content" style="margin-top:20px;"></div>
+    </div>
+
+    <div id="panel-admin" class="panel">
+        <h2 style="color:red; margin-bottom:20px;">ADMIN COMMAND CENTER</h2>
+        
+        <div class="admin-box">
+            <h4>Approval Requests</h4>
+            <div id="adm-pending-list" style="margin-top:10px;"></div>
+        </div>
+
+        <div class="admin-box">
+            <h4>Live Orders</h4>
+            <div id="adm-order-list" style="margin-top:10px;"></div>
+        </div>
+
+        <div class="admin-box">
+            <h4>Add New Product</h4>
+            <input type="text" id="adm-p-name" placeholder="Product Name">
+            <input type="number" id="adm-p-price" placeholder="Price">
+            <input type="text" id="adm-p-img" placeholder="Image URL">
+            <button class="buy-btn" onclick="adminAddProduct()">ADD ITEM</button>
+        </div>
+
+        <div class="admin-box">
+            <h4>Broadcast Notification</h4>
+            <input type="text" id="adm-noti-text" placeholder="Message for all users...">
+            <button class="buy-btn" style="background:orange" onclick="adminBroadcast()">SEND TO ALL</button>
+        </div>
+
+        <button class="buy-btn" style="background:red" onclick="closePanels()">CLOSE ADMIN</button>
+    </div>
+
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="location.reload()"><i class="fas fa-home"></i><br>Home</div>
+        <div class="nav-item" onclick="openProfile()"><i class="fas fa-user-circle"></i><br>Profile</div>
+        <div class="nav-item" onclick="checkAdmin()"><i class="fas fa-user-shield"></i><br>Admin</div>
+    </div>
+
+    <script>
+        // Database Management
+        let db = {
+            users: JSON.parse(localStorage.getItem('moon_users')) || [],
+            orders: JSON.parse(localStorage.getItem('moon_orders')) || [],
+            notis: JSON.parse(localStorage.getItem('moon_notis')) || [{msg: "Welcome to Moon Spicy!", date: "Abhi"}],
+            products: JSON.parse(localStorage.getItem('moon_prods')) || [
+                {id: 1, name: "Ghost Pepper Extreme", price: 299, img: "https://i.ibb.co/h7VvN1p/1000151644.jpg"},
+                {id: 2, name: "Royal Biryani Kit", price: 799, img: "https://i.ibb.co/LST6PhY/1000151664.jpg"}
+            ],
+            session: JSON.parse(localStorage.getItem('moon_session')) || null
+        };
+
+        function saveDB() {
+            localStorage.setItem('moon_users', JSON.stringify(db.users));
+            localStorage.setItem('moon_orders', JSON.stringify(db.orders));
+            localStorage.setItem('moon_notis', JSON.stringify(db.notis));
+            localStorage.setItem('moon_prods', JSON.stringify(db.products));
+            localStorage.setItem('moon_session', JSON.stringify(db.session));
+        }
+
+        window.onload = () => {
+            if(!db.session) {
+                document.getElementById('screen-auth').style.display = 'flex';
+            } else if(db.session.status === 'pending') {
+                document.getElementById('screen-auth').style.display = 'flex';
+                document.getElementById('auth-login-box').style.display = 'none';
+                document.getElementById('auth-pending-box').style.display = 'block';
+            } else {
+                renderStore();
+                checkNotiDot();
+            }
+        };
+
+        // Auth Logic
+        function handleRegister() {
+            const n = document.getElementById('reg-name').value;
+            const p = document.getElementById('reg-phone').value;
+            if(!n || !p) return alert("Details bharo bhai!");
+
+            let user = db.users.find(u => u.phone === p);
+            if(!user) {
+                user = { name: n, phone: p, status: 'pending', coins: 0, addr: null };
+                db.users.push(user);
+            }
+            db.session = user;
+            saveDB();
+            location.reload();
+        }
+
+        // Store Logic
+        function renderStore() {
+            document.getElementById('user-coins').innerText = db.session.coins;
+            document.getElementById('product-list').innerHTML = db.products.map(p => `
+                <div class="p-card">
+                    <img src="${p.img || 'https://via.placeholder.com/150/222/fff?text=No+Image'}">
+                    <div class="p-title">${p.name}</div>
+                    <div class="p-price">₹${p.price}</div>
+                    <button class="buy-btn" onclick="initiateBuy(${p.id})">BUY NOW</button>
+                    <i class="fas fa-trash" style="position:absolute; top:8px; right:8px; color:#444; font-size:0.7rem;" onclick="deleteProd(${p.id})"></i>
+                </div>
+            `).join('');
+        }
+
+        function initiateBuy(id) {
+            const prod = db.products.find(x => x.id === id);
+            sessionStorage.setItem('current_p', JSON.stringify(prod));
+            
+            // Auto-fill address if exists
+            if(db.session.addr) {
+                document.getElementById('addr-village').value = db.session.addr.v;
+                document.getElementById('addr-tehsil').value = db.session.addr.t;
+                document.getElementById('addr-dist').value = db.session.addr.d;
+                document.getElementById('addr-pin').value = db.session.addr.p;
+            }
+            openPanel('checkout');
+        }
+
+        function toggleQR() {
+            const m = document.getElementById('pay-method').value;
+            const p = JSON.parse(sessionStorage.getItem('current_p'));
+            if(m === 'UPI') {
+                document.getElementById('qr-box').style.display = 'block';
+                document.getElementById('qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=7217299458@paytm&am=${p.price}&nm=MoonSpicy`;
+            } else {
+                document.getElementById('qr-box').style.display = 'none';
+            }
+        }
+
+        function processOrder() {
+            const p = JSON.parse(sessionStorage.getItem('current_p'));
+            const v = document.getElementById('addr-village').value;
+            const pin = document.getElementById('addr-pin').value;
+            
+            if(!v || !pin) return alert("Address zaroori hai!");
+
+            // Update user address in DB
+            db.session.addr = { v: v, t: document.getElementById('addr-tehsil').value, d: document.getElementById('addr-dist').value, p: pin };
+            let uIdx = db.users.findIndex(u => u.phone === db.session.phone);
+            db.users[uIdx].addr = db.session.addr;
+
+            const oid = "MS-" + Math.floor(1000 + Math.random()*9000);
+            const order = { oid, item: p.name, price: p.price, user: db.session.name, phone: db.session.phone, addr: db.session.addr };
+            
+            db.orders.push(order);
+            addNoti(`Order Successful! ID: ${oid}`);
+            saveDB();
+
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+
+            const waMsg = `🚀 *NEW ORDER* %0AID: ${oid}%0AItem: ${p.name}%0APrice: ₹${p.price}%0A%0A*Address:* %0A${v}, ${pin}`;
+            Swal.fire('Ordered!', 'WhatsApp Receipt Sending...', 'success').then(() => {
+                window.open(`https://wa.me/917017206016?text=${waMsg}`);
+                location.reload();
+            });
+        }
+
+        // Notification System
+        function addNoti(m) {
+            db.notis.unshift({msg: m, date: new Date().toLocaleTimeString()});
+            saveDB();
+            checkNotiDot();
+        }
+
+        function checkNotiDot() {
+            if(db.notis.length > 0) document.getElementById('noti-dot').style.display = 'block';
+        }
+
+        function openPanel(id) { 
+            closePanels(); 
+            document.getElementById('panel-'+id).style.display = 'block'; 
+            if(id === 'notis') {
+                document.getElementById('noti-dot').style.display = 'none';
+                document.getElementById('noti-content').innerHTML = db.notis.map(n => `
+                    <div style="background:#111; padding:12px; border-radius:10px; margin-bottom:10px; border-left:3px solid var(--p);">
+                        <p>${n.msg}</p><small style="color:#666;">${n.date}</small>
+                    </div>
+                `).join('') || "No alerts.";
+            }
+        }
+
+        // Admin Operations
+        function checkAdmin() {
+            if(prompt("Admin Key:") === "ANAS BRO") {
+                openPanel('admin');
+                renderAdmin();
+            }
+        }
+
+        function renderAdmin() {
+            // Pending Approvals
+            const pending = db.users.filter(u => u.status === 'pending');
+            document.getElementById('adm-pending-list').innerHTML = pending.map(u => `
+                <div style="padding:10px; border-bottom:1px solid #333;">
+                    ${u.name} (${u.phone}) 
+                    <button onclick="approveUser('${u.phone}')" style="background:green; color:#fff; border:none; padding:5px 10px; border-radius:5px; float:right;">APPROVE</button>
+                </div>
+            `).join('') || "No pending requests.";
+
+            // Order History
+            document.getElementById('adm-order-list').innerHTML = db.orders.slice().reverse().map(o => `
+                <div style="font-size:0.8rem; background:#111; padding:10px; margin-bottom:5px; border-radius:8px;">
+                    <b>${o.oid}</b> - ${o.item} (₹${o.price})<br>
+                    User: ${o.user} (${o.phone})
+                    <button onclick="giftCoins('${o.phone}')" style="background:#ffc107; color:#000; border:none; padding:2px 8px; border-radius:4px; font-size:0.7rem; float:right;">REWARD COINS</button>
+                </div>
+            `).join('') || "No orders.";
+        }
+
+        function approveUser(ph) {
+            let uIdx = db.users.findIndex(u => u.phone === ph);
+            db.users[uIdx].status = 'approved';
+            saveDB();
+            renderAdmin();
+            alert("User approved successfully!");
+        }
+
+        function giftCoins(ph) {
+            let amt = prompt("Kitne coins gift karne hain? (1-99)");
+            if(amt) {
+                let uIdx = db.users.findIndex(u => u.phone === ph);
+                db.users[uIdx].coins = (db.users[uIdx].coins || 0) + parseInt(amt);
+                saveDB();
+                alert("Coins Gifted!");
+            }
+        }
+
+        function adminAddProduct() {
+            const n = document.getElementById('adm-p-name').value;
+            const p = document.getElementById('adm-p-price').value;
+            const i = document.getElementById('adm-p-img').value;
+            if(n && p) {
+                db.products.push({id: Date.now(), name: n, price: p, img: i});
+                saveDB();
+                alert("Product Added!");
+                location.reload();
+            }
+        }
+
+        function deleteProd(id) {
+            if(confirm("Pakka delete karein?")) {
+                db.products = db.products.filter(p => p.id !== id);
+                saveDB();
+                renderStore();
+            }
+        }
+
+        function adminBroadcast() {
+            const m = document.getElementById('adm-noti-text').value;
+            if(m) {
+                addNoti("📢 UPDATE: " + m);
+                alert("Broadcast sent to all users!");
+            }
+        }
+
+        function closePanels() { document.querySelectorAll('.panel').forEach(p => p.style.display='none'); }
+
+        function openProfile() {
+            const u = db.session;
+            Swal.fire({
+                title: 'User Profile',
+                background: '#1a1a1a',
+                color: '#fff',
+                html: `<div style="text-align:left;"><b>Name:</b> ${u.name}<br><b>Phone:</b> ${u.phone}<br><b>Status:</b> ${u.status.toUpperCase()}<br><b>Address:</b> ${u.addr ? u.addr.v : 'Not set'}</div>`,
+                showCancelButton: true,
+                confirmButtonText: 'Logout',
+                confirmButtonColor: '#d33'
+            }).then((res) => { if(res.isConfirmed) { localStorage.removeItem('moon_session'); location.reload(); } });
+        }
+    </script>
+</body>
+</html>
