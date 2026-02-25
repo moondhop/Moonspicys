@@ -48,22 +48,32 @@
         .wa-float { position: fixed; bottom: 90px; right: 20px; background: #25d366; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 24px; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.5); text-decoration: none; }
         nav { position: fixed; bottom: 0; width: 100%; background: var(--card); display: flex; justify-content: space-around; padding: 15px; border-top: 1px solid #333; z-index: 1000; }
         nav i { color: #888; font-size: 20px; }
+        
+        /* Universal Secret Trigger Styling */
+        .secret-trigger { text-align:center; padding:30px; font-size:12px; color:#555; margin-top: auto; }
+        .secret-trigger span { cursor:pointer; color:#222; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <div id="auth-screen" class="fullscreen hidden">
-        <h1 style="color:var(--p); text-align:center;">MOON STORES</h1>
+        <h1 style="color:var(--p); text-align:center; margin-top: 20px;">MOON STORES</h1>
+        
         <div id="login-box" style="margin-top:50px;">
             <h3>Create Account</h3>
             <input type="text" id="reg-name" placeholder="Full Name">
             <input type="number" id="reg-phone" placeholder="WhatsApp Number">
             <button class="btn-p" onclick="register()">REQUEST ACCESS</button>
         </div>
+        
         <div id="pending-box" class="hidden" style="text-align:center; margin-top:50px;">
             <h2>⏳ Approval Pending</h2>
-            <p>Admin is verifying your account. Check back later.</p>
+            <p style="margin: 15px 0; color: #aaa;">Admin is reviewing your profile.<br>Please check back later.</p>
             <button class="btn-p" onclick="location.reload()" style="margin-top:20px;">REFRESH</button>
+        </div>
+
+        <div class="secret-trigger">
+            T&C <span onclick="secretAdmin()">rexhzo</span>
         </div>
     </div>
 
@@ -94,7 +104,9 @@
             <div id="tracking-list"></div>
         </div>
 
-        <div style="text-align:center; padding:30px; font-size:12px; color:#555;">T&C <span onclick="secretAdmin()" style="cursor:pointer; color:#111;">rexhzo</span></div>
+        <div class="secret-trigger" style="padding-bottom: 50px;">
+            T&C <span onclick="secretAdmin()">rexhzo</span>
+        </div>
     </div>
 
     <div id="wheel-modal" class="fullscreen hidden" style="background:rgba(0,0,0,0.9); justify-content:center;">
@@ -175,6 +187,8 @@
                 document.getElementById('login-box').classList.add('hidden');
                 document.getElementById('pending-box').classList.remove('hidden');
             } else {
+                document.getElementById('auth-screen').classList.add('hidden');
+                document.getElementById('app-screen').classList.remove('hidden');
                 renderProducts();
                 renderTracking();
             }
@@ -280,7 +294,9 @@
             secretClicks++;
             if(secretClicks >= 6) {
                 secretClicks = 0;
+                // Hide all other screens to show admin panel properly
                 document.getElementById('app-screen').classList.add('hidden');
+                document.getElementById('auth-screen').classList.add('hidden');
                 document.getElementById('admin-panel').classList.remove('hidden');
                 renderAdmin();
             }
