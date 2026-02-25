@@ -3,219 +3,368 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MOON STORES | Super App Edition</title>
+    <title>MOON STORES | Ultimate Pro</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --p: #ff4500; --bg: #0b0b0b; --card: #161616; --white: #ffffff; --gray: #888; }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
-        body { background: var(--bg); color: var(--white); padding-bottom: 90px; overflow-x: hidden; }
+        :root { --p: #ff4500; --bg: #0b0b0b; --card: #161616; --text: #fff; }
+        .light-mode { --bg: #f4f4f4; --card: #fff; --text: #000; border:1px solid #ddd; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: 0.3s; }
+        body { background: var(--bg); color: var(--text); padding-bottom: 80px; overflow-x: hidden; }
         
-        /* Announcement Bar */
-        .anno-bar { background: gold; color: #000; font-size: 0.8rem; font-weight: bold; text-align: center; padding: 5px; overflow: hidden; white-space: nowrap; }
-        .anno-text { display: inline-block; animation: scroll-text 15s linear infinite; }
-        @keyframes scroll-text { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
+        /* Utility */
+        .btn-p { background: var(--p); color: #fff; padding: 10px; border: none; border-radius: 8px; width: 100%; font-weight: bold; cursor: pointer; }
+        input, select { width: 100%; padding: 10px; margin: 5px 0; background: #222; border: 1px solid #444; color: #fff; border-radius: 5px; }
+        .hidden { display: none !important; }
 
-        /* Timer & UI */
-        .timer-box { font-size: 0.7rem; color: #ffeb3b; background: rgba(0,0,0,0.5); padding: 2px 8px; border-radius: 5px; margin-top: 5px; display: inline-block; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; }
-        .card { background: var(--card); border-radius: 18px; padding: 12px; border: 1px solid #222; position: relative; }
-        .card img { width: 100%; height: 130px; object-fit: contain; }
-
-        /* Floating WA */
-        .wa-float { position: fixed; bottom: 100px; right: 20px; background: #25d366; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; z-index: 4000; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-
-        /* Spin Wheel */
-        .wheel-btn { background: linear-gradient(45deg, #ff4500, #ff8c00); color: white; border: none; padding: 10px 20px; border-radius: 20px; margin: 15px; width: calc(100% - 30px); font-weight: bold; }
-
-        /* Admin & Panels */
-        .panel { position: fixed; inset: 0; background: #000; z-index: 6000; display: none; overflow-y: auto; padding: 20px; }
-        input, select { width: 100%; padding: 12px; margin: 8px 0; background: #222; border: 1px solid #333; color: #fff; border-radius: 8px; }
-        .btn-p { background: var(--p); color: #fff; border: none; width: 100%; padding: 14px; border-radius: 10px; font-weight: bold; cursor: pointer; }
+        /* UI Elements */
+        .anno-bar { background: gold; color: black; font-weight: bold; padding: 5px; font-size: 12px; white-space: nowrap; overflow: hidden; }
+        .anno-bar span { display: inline-block; animation: scroll 15s linear infinite; }
+        @keyframes scroll { 0% { transform: translateX(100vw); } 100% { transform: translateX(-100%); } }
         
-        /* Nav */
-        .nav { position: fixed; bottom: 0; width: 100%; background: #111; display: flex; justify-content: space-around; padding: 15px; border-top: 1px solid #333; z-index: 5000; }
-        .nav i { font-size: 1.2rem; color: var(--gray); }
-        .nav .active { color: var(--p); }
+        /* Stories */
+        .stories { display: flex; overflow-x: auto; padding: 15px; gap: 15px; border-bottom: 1px solid #333; }
+        .story { width: 70px; height: 70px; border-radius: 50%; border: 3px solid var(--p); padding: 2px; object-fit: cover; cursor: pointer; flex-shrink: 0; }
+        
+        /* Grid & Cards */
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; }
+        .card { background: var(--card); padding: 10px; border-radius: 12px; border: 1px solid #333; position: relative; }
+        .card img { width: 100%; height: 120px; object-fit: cover; border-radius: 8px; }
+        .timer { font-size: 10px; color: yellow; background: #000; padding: 2px 5px; border-radius: 3px; position: absolute; top: 15px; left: 15px; }
+        .fake-sales { font-size: 10px; color: #aaa; margin-top: 5px; }
 
-        /* Status Colors */
-        .st-delivered { color: #2ecc71 !important; }
-        .st-cancelled { color: #e74c3c !important; }
-        .st-return { color: #f1c40f !important; }
+        /* Panels (Auth & Admin) */
+        .fullscreen { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; flex-direction: column; padding: 20px; overflow-y: auto; }
+        .admin-box { background: #111; padding: 15px; border-radius: 10px; border: 1px solid #333; margin-bottom: 15px; }
+        
+        /* Scratch & Wheel */
+        #wheel-container { display:flex; flex-direction:column; align-items:center; padding:20px; }
+        .wheel { width: 200px; height: 200px; border-radius: 50%; background: conic-gradient(#ff4500 0 90deg, #ffcc00 90deg 180deg, #2ecc71 180deg 270deg, #3498db 270deg 360deg); transition: transform 3s cubic-bezier(0.1, 0.7, 0.1, 1); border: 5px solid white; box-shadow: 0 0 20px rgba(255,69,0,0.5); }
+        .scratch-card { background: #555; color:transparent; padding:30px; text-align:center; border-radius:10px; font-weight:bold; cursor:pointer; user-select:none; }
+        .scratch-card.revealed { background: #2ecc71; color:#fff; }
+
+        /* Fixed Elements */
+        .wa-float { position: fixed; bottom: 90px; right: 20px; background: #25d366; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 24px; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.5); text-decoration: none; }
+        nav { position: fixed; bottom: 0; width: 100%; background: var(--card); display: flex; justify-content: space-around; padding: 15px; border-top: 1px solid #333; z-index: 1000; }
+        nav i { color: #888; font-size: 20px; }
     </style>
 </head>
 <body>
 
-    <div id="maintenance-ui" class="panel" style="display:none; text-align:center; justify-content:center; flex-direction:column;">
-        <h1>🚧 MOON STORES</h1>
-        <p>We are updating for better experience. Back in a bit!</p>
+    <div id="auth-screen" class="fullscreen hidden">
+        <h1 style="color:var(--p); text-align:center;">MOON STORES</h1>
+        <div id="login-box" style="margin-top:50px;">
+            <h3>Create Account</h3>
+            <input type="text" id="reg-name" placeholder="Full Name">
+            <input type="number" id="reg-phone" placeholder="WhatsApp Number">
+            <button class="btn-p" onclick="register()">REQUEST ACCESS</button>
+        </div>
+        <div id="pending-box" class="hidden" style="text-align:center; margin-top:50px;">
+            <h2>⏳ Approval Pending</h2>
+            <p>Admin is verifying your account. Check back later.</p>
+            <button class="btn-p" onclick="location.reload()" style="margin-top:20px;">REFRESH</button>
+        </div>
     </div>
 
-    <div class="anno-bar"><div class="anno-text" id="anno-msg">Special Offer: Buy 1 Get 1 Free on all Spicy Sauces! Use Moon Coins to get 50% Off.</div></div>
-
-    <div id="app">
+    <div id="app-screen">
+        <div class="anno-bar"><span id="anno-text">🔥 Mega Sale: Get 50% Off using code MOON50!</span></div>
+        
         <div style="padding:15px; display:flex; justify-content:space-between; align-items:center;">
-            <h2 style="color:var(--p)">MOON STORES</h2>
-            <div onclick="startVoiceSearch()"><i class="fas fa-microphone" style="font-size:1.5rem; color:var(--p)"></i></div>
+            <h2 style="color:var(--p)" id="lang-title">MOON STORES</h2>
+            <div>
+                <i class="fas fa-language" onclick="toggleLang()" style="margin-right:15px; font-size:20px;"></i>
+                <i class="fas fa-microphone" onclick="startVoiceSearch()" style="color:var(--p); font-size:20px;"></i>
+            </div>
         </div>
 
-        <button class="wheel-btn" onclick="spinWheel()">🎡 SPIN & WIN MOON COINS</button>
+        <div style="padding:0 15px;"><input type="text" id="search-box" placeholder="Search products..." onkeyup="renderProducts()"></div>
+
+        <div class="stories" id="lang-stories">
+            <img src="https://i.ibb.co/h7VvN1p/1000151644.jpg" class="story" onclick="showStory()">
+            <img src="https://i.ibb.co/LST6PhY/1000151664.jpg" class="story" onclick="showStory()">
+        </div>
+
+        <div style="padding:15px;"><button class="btn-p" style="background:linear-gradient(90deg, #ff4500, #ffcc00); color:#000;" onclick="document.getElementById('wheel-modal').classList.remove('hidden')">🎡 Play Spin & Win</button></div>
 
         <div class="grid" id="prod-grid"></div>
 
         <div style="padding:15px;">
-            <h3>Track Your Orders</h3>
-            <div id="user-tracking-list"></div>
+            <h3 id="lang-track">Track Orders</h3>
+            <div id="tracking-list"></div>
         </div>
 
-        <div style="padding:30px; text-align:center; font-size:0.7rem; color:#222;">
-            Terms & Conditions <span id="secret-trigger" onclick="handleSecret()">rexhzo</span>
-        </div>
+        <div style="text-align:center; padding:30px; font-size:12px; color:#555;">T&C <span onclick="secretAdmin()" style="cursor:pointer; color:#111;">rexhzo</span></div>
     </div>
 
-    <div id="panel-admin" class="panel">
-        <h2 style="color:var(--p)">MASTER ADMIN</h2>
-        <div style="background:#111; padding:15px; border-radius:15px; margin-bottom:15px;">
-            <h4>Announcement Text</h4>
-            <input type="text" id="adm-anno" placeholder="Type message...">
-            <button class="btn-p" onclick="updateAnno()">UPDATE BANNER</button>
+    <div id="wheel-modal" class="fullscreen hidden" style="background:rgba(0,0,0,0.9); justify-content:center;">
+        <h2 style="text-align:center; color:gold;">Spin to Win Coins!</h2>
+        <div id="wheel-container">
+            <div class="wheel" id="spin-wheel"></div>
+            <div style="width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 20px solid white; margin-top: -10px; z-index: 10;"></div>
         </div>
-        <div style="background:#111; padding:15px; border-radius:15px; margin-bottom:15px;">
-            <h4>Manage Orders (Status)</h4>
-            <div id="adm-orders-list"></div>
+        <button class="btn-p" onclick="spinIt()">SPIN NOW</button>
+        <button class="btn-p" style="background:#444; margin-top:10px;" onclick="document.getElementById('wheel-modal').classList.add('hidden')">CLOSE</button>
+    </div>
+
+    <div id="admin-panel" class="fullscreen hidden">
+        <h1 style="color:var(--p)">MASTER ADMIN</h1>
+        
+        <div class="admin-box">
+            <h3>👤 Approvals & Block</h3>
+            <div id="admin-users"></div>
         </div>
-        <div style="background:#111; padding:15px; border-radius:15px; margin-bottom:15px;">
-            <h4>Maintenance Mode</h4>
-            <button class="btn-p" style="background:red;" onclick="toggleMaintenance(true)">ON</button>
-            <button class="btn-p" style="background:green;" onclick="toggleMaintenance(false)">OFF</button>
+
+        <div class="admin-box">
+            <h3>📦 Order Status & Export</h3>
+            <button class="btn-p" style="background:green; margin-bottom:10px;" onclick="exportExcel()">⬇️ EXPORT TO EXCEL (CSV)</button>
+            <div id="admin-orders"></div>
         </div>
-        <button class="btn-p" style="background:#333;" onclick="closeAdmin()">CLOSE</button>
+
+        <div class="admin-box">
+            <h3>📢 Broadcast & Payment</h3>
+            <input type="text" id="adm-anno" placeholder="New Announcement Message">
+            <button class="btn-p" style="margin-bottom:10px;" onclick="updateAnno()">Update Banner</button>
+            
+            <input type="text" id="adm-upi" placeholder="Your UPI ID (e.g. 9999999999@ybl)">
+            <button class="btn-p" onclick="genQR()">Generate Dynamic QR</button>
+            <img id="qr-img" style="margin-top:10px; width:150px; display:none;">
+        </div>
+
+        <div class="admin-box" style="font-size:10px; color:#888;">
+            <h3>🛠️ Logs</h3>
+            <div id="admin-logs"></div>
+        </div>
+
+        <button class="btn-p" style="background:red;" onclick="location.reload()">EXIT ADMIN</button>
     </div>
 
     <a href="https://wa.me/917217299458" class="wa-float"><i class="fab fa-whatsapp"></i></a>
 
-    <nav class="nav">
-        <i class="fas fa-home active"></i>
-        <i class="fas fa-search" onclick="Swal.fire('Search','Type to find products','info')"></i>
-        <i class="fas fa-coins" onclick="Swal.fire('Moon Coins','Balance: 500','success')"></i>
-        <i class="fas fa-shopping-bag" onclick="Swal.fire('Cart','Your items are ready','success')"></i>
+    <nav>
+        <i class="fas fa-home" style="color:var(--p)"></i>
+        <i class="fas fa-moon" onclick="document.body.classList.toggle('light-mode')"></i>
+        <i class="fas fa-history" onclick="Swal.fire('Recent','You viewed Ghost Pepper Kit','info')"></i>
     </nav>
 
     <script>
-        const ADMIN_WA = "917217299458";
-        let clicks = 0;
+        const WA_NUM = "917217299458";
+        let secretClicks = 0;
+        let isHindi = false;
         let db = {
-            prods: JSON.parse(localStorage.getItem('mega_p')) || [
-                {name:"Ghost Pepper Kit", price:999, img:"https://i.ibb.co/h7VvN1p/1000151644.jpg", time:"02:45:10"},
-                {name:"Moon Spicy Special", price:499, img:"https://i.ibb.co/LST6PhY/1000151664.jpg", time:"01:20:05"}
-            ],
-            orders: JSON.parse(localStorage.getItem('mega_o')) || [],
-            maint: localStorage.getItem('mega_m') === 'true'
+            session: JSON.parse(localStorage.getItem('usession')) || null,
+            users: JSON.parse(localStorage.getItem('uusers')) || [],
+            orders: JSON.parse(localStorage.getItem('uorders')) || [],
+            logs: JSON.parse(localStorage.getItem('ulogs')) || [],
+            anno: localStorage.getItem('uanno') || "🔥 Mega Sale: Get 50% Off using code MOON50!",
+            prods: [
+                { id:1, name: "Premium Ghost Spicy", price: 599, img: "https://i.ibb.co/h7VvN1p/1000151644.jpg" },
+                { id:2, name: "Moon Special Sauce", price: 299, img: "https://i.ibb.co/LST6PhY/1000151664.jpg" }
+            ]
         };
 
-        function render() {
-            if(db.maint) { document.getElementById('maintenance-ui').style.display = 'flex'; return; }
-            
-            document.getElementById('prod-grid').innerHTML = db.prods.map(p => `
-                <div class="card">
-                    <img src="${p.img}">
-                    <p style="font-size:0.8rem; margin-top:5px;">${p.name}</p>
-                    <b style="color:var(--p)">₹${p.price}</b><br>
-                    <div class="timer-box"><i class="fas fa-bolt"></i> ${p.time}</div>
-                    <button class="btn-p" style="padding:8px; font-size:0.7rem;" onclick="placeOrder('${p.name}', ${p.price})">ORDER NOW</button>
-                </div>
-            `).join('');
+        // --- 1. BOOTSTRAP & AUTH ---
+        window.onload = () => {
+            document.getElementById('anno-text').innerText = db.anno;
+            if(!db.session) {
+                document.getElementById('app-screen').classList.add('hidden');
+                document.getElementById('auth-screen').classList.remove('hidden');
+            } else if (db.session.status === 'pending') {
+                document.getElementById('app-screen').classList.add('hidden');
+                document.getElementById('auth-screen').classList.remove('hidden');
+                document.getElementById('login-box').classList.add('hidden');
+                document.getElementById('pending-box').classList.remove('hidden');
+            } else {
+                renderProducts();
+                renderTracking();
+            }
+        };
 
-            renderTracking();
+        function register() {
+            let name = document.getElementById('reg-name').value;
+            let phone = document.getElementById('reg-phone').value;
+            if(!name || !phone) return;
+            let user = { name, phone, status: 'pending', blocked: false };
+            db.users.push(user); db.session = user; save();
+            window.open(`https://wa.me/${WA_NUM}?text=New Approval Request:%0AName: ${name}%0APhone: ${phone}`);
+            location.reload();
+        }
+
+        // --- 2. UI FEATURES (WORKING) ---
+        function renderProducts() {
+            let q = document.getElementById('search-box').value.toLowerCase();
+            let html = "";
+            db.prods.forEach(p => {
+                if(p.name.toLowerCase().includes(q)) {
+                    let fakesale = Math.floor(Math.random() * 50) + 10;
+                    html += `
+                    <div class="card">
+                        <div class="timer">Ends in 02:45:10</div>
+                        <img src="${p.img}">
+                        <h4 style="margin-top:10px;">${p.name}</h4>
+                        <p style="color:var(--p); font-weight:bold;">₹${p.price}</p>
+                        <div class="fake-sales">🔥 ${fakesale}+ bought today</div>
+                        <button class="btn-p" style="margin-top:10px; padding:8px;" onclick="placeOrder('${p.name}', ${p.price})">BUY NOW</button>
+                    </div>`;
+                }
+            });
+            document.getElementById('prod-grid').innerHTML = html;
         }
 
         function placeOrder(name, price) {
-            vibrate();
-            Swal.fire({ title: 'Delivery Address', input: 'text', confirmButtonText: 'Order' }).then(res => {
-                if(res.value) {
-                    const oid = "MS-" + Math.floor(Math.random()*9999);
-                    const order = {id:oid, item:name, price, status:'Ordered', addr:res.value, color:'#888'};
-                    db.orders.push(order);
-                    save();
-                    confetti();
-                    window.open(`https://wa.me/${ADMIN_WA}?text=ORDER!%0AID: ${oid}%0AItem: ${name}%0AAddress: ${res.value}`);
-                    Swal.fire('Success', 'Order Placed & WhatsApp Sent!', 'success');
-                    render();
-                }
-            });
+            if(navigator.vibrate) navigator.vibrate(50); // Haptic
+            let addr = prompt("Enter Address:");
+            if(!addr) return;
+            
+            let oid = "ORD-" + Math.floor(Math.random()*9999);
+            db.orders.push({ id: oid, user: db.session.name, phone: db.session.phone, item: name, price: price, status: 'Processing', color: 'white', addr: addr });
+            save(); log(`Order placed: ${oid}`); confetti();
+            
+            window.open(`https://wa.me/${WA_NUM}?text=*NEW ORDER*%0AID: ${oid}%0AItem: ${name}%0APrice: ₹${price}%0ACustomer: ${db.session.name}%0AAddress: ${addr}`);
+            
+            Swal.fire({ title: 'Scratch & Win!', html: '<div class="scratch-card" onclick="this.classList.add(\'revealed\'); this.innerText=\'CODE: GIFT50\';">Scratch Here!</div>', showConfirmButton: false });
+            renderTracking();
         }
 
-        function spinWheel() {
-            vibrate();
-            Swal.fire({ title: 'Spinning...', timer: 2000, didOpen: () => Swal.showLoading() }).then(() => {
-                const win = [10, 50, 100, 20, 5][Math.floor(Math.random()*5)];
-                Swal.fire('Congrats!', `You won ${win} Moon Coins!`, 'success');
-            });
-        }
-
+        // Real Voice Search
         function startVoiceSearch() {
-            vibrate();
-            Swal.fire('Voice Search', 'Listening...', 'info');
+            if(navigator.vibrate) navigator.vibrate(50);
+            let SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if(SpeechRecognition) {
+                let rec = new SpeechRecognition();
+                rec.onstart = () => Swal.fire({title:'Listening...', showConfirmButton:false, timer:2000});
+                rec.onresult = (e) => { 
+                    document.getElementById('search-box').value = e.results[0][0].transcript; 
+                    renderProducts(); 
+                };
+                rec.start();
+            } else {
+                Swal.fire('Error', 'Voice search not supported in this browser.', 'error');
+            }
         }
 
-        function handleSecret() {
-            clicks++;
-            if(clicks === 6) { clicks=0; document.getElementById('panel-admin').style.display='block'; renderAdmin(); }
+        // Real Spin Wheel Animation
+        function spinIt() {
+            if(navigator.vibrate) navigator.vibrate(50);
+            let wheel = document.getElementById('spin-wheel');
+            let deg = Math.floor(Math.random() * 3600) + 360; // Spin multiple times
+            wheel.style.transform = `rotate(${deg}deg)`;
+            setTimeout(() => {
+                Swal.fire('Congratulations!', 'You won 50 Moon Coins!', 'success');
+                document.getElementById('wheel-modal').classList.add('hidden');
+            }, 3000);
+        }
+
+        function showStory() {
+            Swal.fire({ imageUrl: 'https://i.ibb.co/LST6PhY/1000151664.jpg', imageHeight: 300, title: 'Product Review', text: '100% Authentic Spicy Taste!', timer: 3000, showConfirmButton: false });
+        }
+
+        function toggleLang() {
+            isHindi = !isHindi;
+            document.getElementById('lang-title').innerText = isHindi ? "मून स्टोर्स" : "MOON STORES";
+            document.getElementById('lang-track').innerText = isHindi ? "ऑर्डर ट्रैक करें" : "Track Orders";
+        }
+
+        function renderTracking() {
+            let myOrders = db.orders.filter(o => o.phone === db.session.phone);
+            document.getElementById('tracking-list').innerHTML = myOrders.map(o => `
+                <div style="background:#222; padding:10px; border-radius:8px; margin-top:10px; border-left: 5px solid ${o.color}">
+                    <b>${o.item}</b> <span style="float:right; color:${o.color}">${o.status}</span><br>
+                    <small style="color:#888;">ID: ${o.id}</small>
+                </div>
+            `).join('') || "<p>No orders yet.</p>";
+        }
+
+        // --- 3. MASTER ADMIN FEATURES ---
+        function secretAdmin() {
+            secretClicks++;
+            if(secretClicks >= 6) {
+                secretClicks = 0;
+                document.getElementById('app-screen').classList.add('hidden');
+                document.getElementById('admin-panel').classList.remove('hidden');
+                renderAdmin();
+            }
         }
 
         function renderAdmin() {
-            document.getElementById('adm-orders-list').innerHTML = db.orders.map(o => `
-                <div style="padding:10px 0; border-bottom:1px solid #333;">
-                    ${o.id} - ${o.item}<br>
-                    <select onchange="updateStatus('${o.id}', this.value)" style="width:auto;">
-                        <option value="">Set Status</option>
-                        <option value="Delivered">Green (Delivered)</option>
-                        <option value="Return">Yellow (Return)</option>
-                        <option value="Cancelled">Red (Cancel)</option>
+            // Users & Block System
+            document.getElementById('admin-users').innerHTML = db.users.map((u, i) => `
+                <div style="border-bottom:1px solid #333; padding:5px 0;">
+                    ${u.name} (${u.phone}) - <b style="color:${u.status==='approved'?'green':'yellow'}">${u.status}</b>
+                    <div style="margin-top:5px;">
+                        <button onclick="approveUser(${i})" style="background:green; color:#fff; border:none; padding:3px 8px;">Approve</button>
+                        <button onclick="toggleBlock(${i})" style="background:${u.blocked?'gray':'red'}; color:#fff; border:none; padding:3px 8px;">${u.blocked?'Unblock':'Block'}</button>
+                    </div>
+                </div>
+            `).join('');
+
+            // Orders & Color Tracking
+            document.getElementById('admin-orders').innerHTML = db.orders.map(o => `
+                <div style="border-bottom:1px solid #333; padding:5px 0;">
+                    ${o.id} - ${o.user} (${o.item})<br>
+                    <select onchange="updateStatus('${o.id}', this.value)" style="width:auto; padding:3px;">
+                        <option value="">Status</option>
+                        <option value="Delivered">🟢 Delivered</option>
+                        <option value="Return">🟡 Return</option>
+                        <option value="Cancelled">🔴 Cancelled</option>
                     </select>
                 </div>
             `).join('');
+
+            // Logs
+            document.getElementById('admin-logs').innerHTML = db.logs.map(l => `<div>> ${l}</div>`).join('');
         }
+
+        function approveUser(idx) { db.users[idx].status = 'approved'; log(`Approved user ${db.users[idx].name}`); save(); renderAdmin(); }
+        function toggleBlock(idx) { db.users[idx].blocked = !db.users[idx].blocked; log(`${db.users[idx].blocked?'Blocked':'Unblocked'} user`); save(); renderAdmin(); }
 
         function updateStatus(id, stat) {
             let o = db.orders.find(x => x.id === id);
             o.status = stat;
-            if(stat==='Delivered') o.color = '#2ecc71';
-            else if(stat==='Return') o.color = '#f1c40f';
-            else if(stat==='Cancelled') o.color = '#e74c3c';
-            save(); render();
+            if(stat === 'Delivered') o.color = '#2ecc71';
+            if(stat === 'Return') o.color = '#f1c40f';
+            if(stat === 'Cancelled') o.color = '#e74c3c';
+            log(`Order ${id} marked ${stat}`); save(); renderAdmin();
         }
 
-        function renderTracking() {
-            document.getElementById('user-tracking-list').innerHTML = db.orders.map(o => `
-                <div style="background:var(--card); padding:10px; border-radius:10px; margin-top:10px; border-left: 5px solid ${o.color}">
-                    <b>${o.item}</b> <span style="float:right; color:${o.color}">${o.status}</span><br>
-                    <small>Tracking ID: ${o.id}</small>
-                </div>
-            `).join('');
+        // Real CSV Export File
+        function exportExcel() {
+            let csv = "Order ID,Customer,Phone,Item,Price,Status,Address\n";
+            db.orders.forEach(o => { csv += `${o.id},${o.user},${o.phone},${o.item},${o.price},${o.status},${o.addr}\n`; });
+            let blob = new Blob([csv], { type: 'text/csv' });
+            let url = window.URL.createObjectURL(blob);
+            let a = document.createElement('a'); a.setAttribute('hidden', ''); a.setAttribute('href', url); a.setAttribute('download', 'MoonStores_Orders.csv');
+            document.body.appendChild(a); a.click(); document.body.removeChild(a); log("Exported Data to Excel");
+        }
+
+        // Real Dynamic QR API
+        function genQR() {
+            let upi = document.getElementById('adm-upi').value;
+            if(upi) {
+                document.getElementById('qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi://pay?pa=${upi}&pn=MoonStores`;
+                document.getElementById('qr-img').style.display = 'block';
+                log(`Generated QR for ${upi}`);
+            }
         }
 
         function updateAnno() {
-            const msg = document.getElementById('adm-anno').value;
-            document.getElementById('anno-msg').innerText = msg;
-            Swal.fire('Done', 'Banner Updated!', 'success');
+            db.anno = document.getElementById('adm-anno').value; save(); log("Updated Announcement");
+            Swal.fire('Success','Banner Updated!','success');
         }
 
-        function toggleMaintenance(val) {
-            db.maint = val;
-            localStorage.setItem('mega_m', val);
-            location.reload();
-        }
-
-        function vibrate() { if(navigator.vibrate) navigator.vibrate(50); }
+        function log(msg) { db.logs.unshift(`${new Date().toLocaleTimeString()}: ${msg}`); if(db.logs.length>10) db.logs.pop(); }
+        
         function save() {
-            localStorage.setItem('mega_p', JSON.stringify(db.prods));
-            localStorage.setItem('mega_o', JSON.stringify(db.orders));
+            localStorage.setItem('uusers', JSON.stringify(db.users));
+            localStorage.setItem('uorders', JSON.stringify(db.orders));
+            localStorage.setItem('ulogs', JSON.stringify(db.logs));
+            localStorage.setItem('uanno', db.anno);
+            if(db.session) {
+                // Keep session updated if status changed by admin
+                let updatedMe = db.users.find(u => u.phone === db.session.phone);
+                if(updatedMe) { db.session = updatedMe; localStorage.setItem('usession', JSON.stringify(db.session)); }
+            }
         }
-        function closeAdmin() { document.getElementById('panel-admin').style.display='none'; }
-
-        window.onload = render;
     </script>
 </body>
 </html>
