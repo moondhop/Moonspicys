@@ -3,383 +3,612 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MOON STORES | Ultimate Pro</title>
+    <title>MOON STORES - Official Premium Store</title>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
     <style>
-        :root { --p: #ff4500; --bg: #0b0b0b; --card: #161616; --text: #fff; }
-        .light-mode { --bg: #f4f4f4; --card: #fff; --text: #000; border:1px solid #ddd; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: 0.3s; }
-        body { background: var(--bg); color: var(--text); padding-bottom: 80px; overflow-x: hidden; }
-        
-        /* Utility */
-        .btn-p { background: var(--p); color: #fff; padding: 10px; border: none; border-radius: 8px; width: 100%; font-weight: bold; cursor: pointer; }
-        input, select { width: 100%; padding: 10px; margin: 5px 0; background: #222; border: 1px solid #444; color: #fff; border-radius: 5px; }
+        /* CSS STYLES - CUSTOM UI DESIGN 
+        */
+        :root {
+            --primary-color: #ff4500;
+            --bg-dark: #0b0b0b;
+            --card-bg: #161616;
+            --input-bg: #1a1a1a;
+            --text-white: #ffffff;
+            --accent-gold: #ffd700;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-white);
+            line-height: 1.6;
+            overflow-x: hidden;
+            padding-bottom: 80px;
+        }
+
+        /* Top Banner */
+        .promo-banner {
+            background: linear-gradient(90deg, #ffcc00, #ff9900);
+            color: #000;
+            text-align: center;
+            padding: 8px;
+            font-weight: bold;
+            font-size: 13px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        /* Header Area */
+        header {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-dark);
+            border-bottom: 1px solid #222;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo-text {
+            color: var(--primary-color);
+            font-size: 24px;
+            font-weight: 900;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .mic-btn {
+            background: #222;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            color: var(--primary-color);
+            cursor: pointer;
+            border: 1px solid #333;
+        }
+
+        /* Main Sections */
+        .container {
+            padding: 15px;
+        }
+
+        .spin-trigger-box {
+            margin: 10px 0 25px 0;
+        }
+
+        .main-btn {
+            background: linear-gradient(45deg, #ff4500, #ff8c00);
+            color: white;
+            border: none;
+            padding: 18px;
+            width: 100%;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 69, 0, 0.4);
+            transition: 0.3s;
+        }
+
+        /* Product Grid */
+        .product-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .product-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid #222;
+            transition: 0.3s;
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+        }
+
+        .p-details {
+            padding: 12px;
+        }
+
+        .p-name {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            height: 40px;
+            overflow: hidden;
+        }
+
+        .p-price {
+            color: var(--primary-color);
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .buy-now-btn {
+            background: var(--primary-color);
+            color: #fff;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* ORDER MODAL - AS PER SCREENSHOT */
+        .order-modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 9999;
+            display: none;
+            overflow-y: auto;
+            padding: 20px 0;
+        }
+
+        .order-form-card {
+            background: #000;
+            width: 92%;
+            max-width: 450px;
+            margin: 0 auto;
+            border: 1px solid #333;
+            border-radius: 20px;
+            padding: 25px;
+        }
+
+        .order-form-card h2 {
+            color: var(--primary-color);
+            font-size: 24px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .selected-product-info {
+            background: #1a1a1a;
+            padding: 15px;
+            border-radius: 12px;
+            border-left: 5px solid var(--primary-color);
+            margin-bottom: 25px;
+            font-size: 15px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            color: var(--primary-color);
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            background: #111;
+            border: 1px solid #333;
+            padding: 14px;
+            border-radius: 12px;
+            color: #fff;
+            outline: none;
+        }
+
+        .input-group input:focus {
+            border-color: var(--primary-color);
+        }
+
+        .submit-order-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 16px;
+            width: 100%;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        /* WHEEL MODAL */
+        .wheel-modal {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        #wheel-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 30px auto;
+        }
+
+        #main-wheel {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 10px solid #222;
+            transition: transform 5s cubic-bezier(0.1, 0, 0.1, 1);
+        }
+
+        .wheel-pointer {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            z-index: 10;
+        }
+
+        /* PENDING SCREEN */
+        .pending-screen {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #000;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .pending-logo {
+            color: var(--primary-color);
+            font-size: 35px;
+            font-weight: 900;
+            margin-bottom: 40px;
+        }
+
+        .refresh-btn {
+            background: #ff4500;
+            color: #fff;
+            padding: 15px 60px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 30px;
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: #000;
+            display: flex;
+            justify-content: space-around;
+            padding: 15px;
+            border-top: 1px solid #222;
+        }
+
+        .bottom-nav i {
+            font-size: 22px;
+            color: #555;
+        }
+
+        .bottom-nav i.active {
+            color: var(--primary-color);
+        }
+
         .hidden { display: none !important; }
-
-        /* UI Elements */
-        .anno-bar { background: gold; color: black; font-weight: bold; padding: 5px; font-size: 12px; white-space: nowrap; overflow: hidden; }
-        .anno-bar span { display: inline-block; animation: scroll 15s linear infinite; }
-        @keyframes scroll { 0% { transform: translateX(100vw); } 100% { transform: translateX(-100%); } }
-        
-        /* Stories */
-        .stories { display: flex; overflow-x: auto; padding: 15px; gap: 15px; border-bottom: 1px solid #333; }
-        .story { width: 70px; height: 70px; border-radius: 50%; border: 3px solid var(--p); padding: 2px; object-fit: cover; cursor: pointer; flex-shrink: 0; }
-        
-        /* Grid & Cards */
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; }
-        .card { background: var(--card); padding: 10px; border-radius: 12px; border: 1px solid #333; position: relative; }
-        .card img { width: 100%; height: 120px; object-fit: cover; border-radius: 8px; }
-        .timer { font-size: 10px; color: yellow; background: #000; padding: 2px 5px; border-radius: 3px; position: absolute; top: 15px; left: 15px; }
-        .fake-sales { font-size: 10px; color: #aaa; margin-top: 5px; }
-
-        /* Panels (Auth & Admin) */
-        .fullscreen { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; flex-direction: column; padding: 20px; overflow-y: auto; }
-        .admin-box { background: #111; padding: 15px; border-radius: 10px; border: 1px solid #333; margin-bottom: 15px; }
-        
-        /* Scratch & Wheel */
-        #wheel-container { display:flex; flex-direction:column; align-items:center; padding:20px; }
-        .wheel { width: 200px; height: 200px; border-radius: 50%; background: conic-gradient(#ff4500 0 90deg, #ffcc00 90deg 180deg, #2ecc71 180deg 270deg, #3498db 270deg 360deg); transition: transform 3s cubic-bezier(0.1, 0.7, 0.1, 1); border: 5px solid white; box-shadow: 0 0 20px rgba(255,69,0,0.5); }
-        .scratch-card { background: #555; color:transparent; padding:30px; text-align:center; border-radius:10px; font-weight:bold; cursor:pointer; user-select:none; }
-        .scratch-card.revealed { background: #2ecc71; color:#fff; }
-
-        /* Fixed Elements */
-        .wa-float { position: fixed; bottom: 90px; right: 20px; background: #25d366; color: white; width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 24px; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.5); text-decoration: none; }
-        nav { position: fixed; bottom: 0; width: 100%; background: var(--card); display: flex; justify-content: space-around; padding: 15px; border-top: 1px solid #333; z-index: 1000; }
-        nav i { color: #888; font-size: 20px; }
-        
-        /* Universal Secret Trigger Styling */
-        .secret-trigger { text-align:center; padding:30px; font-size:12px; color:#555; margin-top: auto; }
-        .secret-trigger span { cursor:pointer; color:#222; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <div id="auth-screen" class="fullscreen hidden">
-        <h1 style="color:var(--p); text-align:center; margin-top: 20px;">MOON STORES</h1>
-        
-        <div id="login-box" style="margin-top:50px;">
-            <h3>Create Account</h3>
-            <input type="text" id="reg-name" placeholder="Full Name">
-            <input type="number" id="reg-phone" placeholder="WhatsApp Number">
-            <button class="btn-p" onclick="register()">REQUEST ACCESS</button>
-        </div>
-        
-        <div id="pending-box" class="hidden" style="text-align:center; margin-top:50px;">
-            <h2>⏳ Approval Pending</h2>
-            <p style="margin: 15px 0; color: #aaa;">Admin is reviewing your profile.<br>Please check back later.</p>
-            <button class="btn-p" onclick="location.reload()" style="margin-top:20px;">REFRESH</button>
-        </div>
+    <div id="section-pending" class="pending-screen">
+        <div class="pending-logo">MOON STORES</div>
+        <div style="font-size: 80px; margin-bottom: 20px;">⏳</div>
+        <h2 style="font-size: 28px;">Approval Pending</h2>
+        <p style="color: #888; margin-top: 10px; max-width: 300px;">
+            Admin is verifying your account. Please check back later.
+        </p>
+        <button onclick="location.reload()" class="refresh-btn">REFRESH</button>
 
-        <div class="secret-trigger">
-            T&C <span onclick="secretAdmin()">rexhzo</span>
+        <div style="margin-top: 80px; color: #111; font-size: 11px;">
+            Terms & Conditions <span onclick="handleSecret()">rexhzo</span>
         </div>
     </div>
 
-    <div id="app-screen">
-        <div class="anno-bar"><span id="anno-text">🔥 Mega Sale: Get 50% Off using code MOON50!</span></div>
-        
-        <div style="padding:15px; display:flex; justify-content:space-between; align-items:center;">
-            <h2 style="color:var(--p)" id="lang-title">MOON STORES</h2>
-            <div>
-                <i class="fas fa-language" onclick="toggleLang()" style="margin-right:15px; font-size:20px;"></i>
-                <i class="fas fa-microphone" onclick="startVoiceSearch()" style="color:var(--p); font-size:20px;"></i>
+    <div id="section-app" class="hidden">
+        <div class="promo-banner">
+            Sauces! Use Moon Coins to get 50% Off. Buy 1 Get 1 Free!
+        </div>
+
+        <header>
+            <div class="logo-text">MOON STORES</div>
+            <div class="mic-btn" onclick="triggerVoice()">
+                <i class="fas fa-microphone"></i>
             </div>
+        </header>
+
+        <div class="container">
+            <div class="spin-trigger-box">
+                <button class="main-btn" onclick="openWheel()">
+                    🎡 SPIN & WIN MOON COINS
+                </button>
+            </div>
+
+            <div class="product-grid" id="main-product-list">
+                </div>
         </div>
 
-        <div style="padding:0 15px;"><input type="text" id="search-box" placeholder="Search products..." onkeyup="renderProducts()"></div>
-
-        <div class="stories" id="lang-stories">
-            <img src="https://i.ibb.co/h7VvN1p/1000151644.jpg" class="story" onclick="showStory()">
-            <img src="https://i.ibb.co/LST6PhY/1000151664.jpg" class="story" onclick="showStory()">
-        </div>
-
-        <div style="padding:15px;"><button class="btn-p" style="background:linear-gradient(90deg, #ff4500, #ffcc00); color:#000;" onclick="document.getElementById('wheel-modal').classList.remove('hidden')">🎡 Play Spin & Win</button></div>
-
-        <div class="grid" id="prod-grid"></div>
-
-        <div style="padding:15px;">
-            <h3 id="lang-track">Track Orders</h3>
-            <div id="tracking-list"></div>
-        </div>
-
-        <div class="secret-trigger" style="padding-bottom: 50px;">
-            T&C <span onclick="secretAdmin()">rexhzo</span>
-        </div>
+        <nav class="bottom-nav">
+            <i class="fas fa-home active"></i>
+            <i class="fas fa-search" onclick="Swal.fire('Search','Type to find products','info')"></i>
+            <i class="fas fa-coins" onclick="Swal.fire('Moon Coins','Your Balance: 500','success')"></i>
+            <i class="fas fa-shopping-bag" onclick="Swal.fire('Cart','Your items are ready','success')"></i>
+        </nav>
     </div>
 
-    <div id="wheel-modal" class="fullscreen hidden" style="background:rgba(0,0,0,0.9); justify-content:center;">
-        <h2 style="text-align:center; color:gold;">Spin to Win Coins!</h2>
-        <div id="wheel-container">
-            <div class="wheel" id="spin-wheel"></div>
-            <div style="width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 20px solid white; margin-top: -10px; z-index: 10;"></div>
-        </div>
-        <button class="btn-p" onclick="spinIt()">SPIN NOW</button>
-        <button class="btn-p" style="background:#444; margin-top:10px;" onclick="document.getElementById('wheel-modal').classList.add('hidden')">CLOSE</button>
-    </div>
-
-    <div id="admin-panel" class="fullscreen hidden">
-        <h1 style="color:var(--p)">MASTER ADMIN</h1>
-        
-        <div class="admin-box">
-            <h3>👤 Approvals & Block</h3>
-            <div id="admin-users"></div>
-        </div>
-
-        <div class="admin-box">
-            <h3>📦 Order Status & Export</h3>
-            <button class="btn-p" style="background:green; margin-bottom:10px;" onclick="exportExcel()">⬇️ EXPORT TO EXCEL (CSV)</button>
-            <div id="admin-orders"></div>
-        </div>
-
-        <div class="admin-box">
-            <h3>📢 Broadcast & Payment</h3>
-            <input type="text" id="adm-anno" placeholder="New Announcement Message">
-            <button class="btn-p" style="margin-bottom:10px;" onclick="updateAnno()">Update Banner</button>
+    <div id="order-modal" class="order-modal-overlay">
+        <div class="order-form-card">
+            <h2><i class="fas fa-shopping-cart"></i> Your Order Details</h2>
             
-            <input type="text" id="adm-upi" placeholder="Your UPI ID (e.g. 9999999999@ybl)">
-            <button class="btn-p" onclick="genQR()">Generate Dynamic QR</button>
-            <img id="qr-img" style="margin-top:10px; width:150px; display:none;">
-        </div>
+            <div class="selected-product-info" id="selected-item-box">
+                </div>
 
-        <div class="admin-box" style="font-size:10px; color:#888;">
-            <h3>🛠️ Logs</h3>
-            <div id="admin-logs"></div>
-        </div>
+            <div class="input-group">
+                <label>Full Name</label>
+                <input type="text" id="form-name" placeholder="Enter Your Name">
+            </div>
 
-        <button class="btn-p" style="background:red;" onclick="location.reload()">EXIT ADMIN</button>
+            <div class="input-group">
+                <label>Phone Number</label>
+                <input type="number" id="form-phone" placeholder="WhatsApp Number">
+            </div>
+
+            <div class="input-group">
+                <label>Gaon / Shahar</label>
+                <input type="text" id="form-village" placeholder="Village or City Name">
+            </div>
+
+            <div class="input-group">
+                <label>Tehsil</label>
+                <input type="text" id="form-tehsil" placeholder="Enter Your Tehsil">
+            </div>
+
+            <div class="input-group">
+                <label>Jila (District)</label>
+                <input type="text" id="form-district" placeholder="Enter Your District">
+            </div>
+
+            <div class="input-group">
+                <label>Rajye (State)</label>
+                <input type="text" id="form-state" value="Uttar Pradesh">
+            </div>
+
+            <div class="input-group">
+                <label>Pin Code</label>
+                <input type="number" id="form-pin" placeholder="000000">
+            </div>
+
+            <div class="input-group">
+                <label>Kab tak chahiye? (Urgency)</label>
+                <select id="form-urgency">
+                    <option value="urgent">Urgent (Today)</option>
+                    <option value="fast">Within 24 Hours</option>
+                    <option value="normal">Standard (2-3 Days)</option>
+                </select>
+            </div>
+
+            <button class="submit-order-btn" onclick="confirmOrderAction()">PLACE ORDER</button>
+            <button class="submit-order-btn" style="background:#222; margin-top:10px;" onclick="closeOrderModal()">CANCEL</button>
+        </div>
     </div>
 
-    <a href="https://wa.me/917217299458" class="wa-float"><i class="fab fa-whatsapp"></i></a>
+    <div id="spin-modal" class="order-modal-overlay">
+        <div class="wheel-modal">
+            <h1 style="color: gold; margin-bottom: 10px;">Lucky Spin</h1>
+            <p style="color: #aaa;">Win up to 100 Moon Coins!</p>
 
-    <nav>
-        <i class="fas fa-home" style="color:var(--p)"></i>
-        <i class="fas fa-moon" onclick="document.body.classList.toggle('light-mode')"></i>
-        <i class="fas fa-history" onclick="Swal.fire('Recent','You viewed Ghost Pepper Kit','info')"></i>
-    </nav>
+            <div id="wheel-container">
+                <img src="https://cdn-icons-png.flaticon.com/512/2823/2823016.png" class="wheel-pointer">
+                <canvas id="wheel-canvas" width="500" height="500" style="width:300px; height:300px;"></canvas>
+            </div>
+
+            <button id="spin-go-btn" class="main-btn" style="width: 200px;" onclick="executeSpin()">SPIN NOW</button>
+            <br>
+            <button class="main-btn" style="width: 200px; background:#333; margin-top: 15px;" onclick="closeWheel()">CLOSE</button>
+        </div>
+    </div>
 
     <script>
-        const WA_NUM = "917217299458";
+        // Configuration
+        const COINS = [5, 25, 43, 48, 1, 100, 78];
+        const COLORS = ["#ff4500", "#222", "#ff8c00", "#111", "#ff4500", "#ffd700", "#444"];
+        
+        const products = [
+            { id: 101, name: "Premium Ghost Spicy Kit", price: 599, img: "https://i.ibb.co/h7VvN1p/1000151644.jpg" },
+            { id: 102, name: "Moon Special Masala Sauce", price: 299, img: "https://i.ibb.co/LST6PhY/1000151664.jpg" },
+            { id: 103, name: "Royal Biryani Combo Pack", price: 399, img: "https://i.ibb.co/h7VvN1p/1000151644.jpg" },
+            { id: 104, name: "Dragon Breath Hot Oil", price: 450, img: "https://i.ibb.co/LST6PhY/1000151664.jpg" }
+        ];
+
         let secretClicks = 0;
-        let isHindi = false;
-        let db = {
-            session: JSON.parse(localStorage.getItem('usession')) || null,
-            users: JSON.parse(localStorage.getItem('uusers')) || [],
-            orders: JSON.parse(localStorage.getItem('uorders')) || [],
-            logs: JSON.parse(localStorage.getItem('ulogs')) || [],
-            anno: localStorage.getItem('uanno') || "🔥 Mega Sale: Get 50% Off using code MOON50!",
-            prods: [
-                { id:1, name: "Premium Ghost Spicy", price: 599, img: "https://i.ibb.co/h7VvN1p/1000151644.jpg" },
-                { id:2, name: "Moon Special Sauce", price: 299, img: "https://i.ibb.co/LST6PhY/1000151664.jpg" }
-            ]
+        let selectedProduct = null;
+
+        // Initialize App
+        window.onload = function() {
+            // Check status from storage
+            const status = localStorage.getItem('moon_user_status');
+            if(status === 'approved') {
+                showMainApp();
+            }
+            loadProducts();
+            initWheelCanvas();
         };
 
-        // --- 1. BOOTSTRAP & AUTH ---
-        window.onload = () => {
-            document.getElementById('anno-text').innerText = db.anno;
-            if(!db.session) {
-                document.getElementById('app-screen').classList.add('hidden');
-                document.getElementById('auth-screen').classList.remove('hidden');
-            } else if (db.session.status === 'pending') {
-                document.getElementById('app-screen').classList.add('hidden');
-                document.getElementById('auth-screen').classList.remove('hidden');
-                document.getElementById('login-box').classList.add('hidden');
-                document.getElementById('pending-box').classList.remove('hidden');
-            } else {
-                document.getElementById('auth-screen').classList.add('hidden');
-                document.getElementById('app-screen').classList.remove('hidden');
-                renderProducts();
-                renderTracking();
-            }
-        };
-
-        function register() {
-            let name = document.getElementById('reg-name').value;
-            let phone = document.getElementById('reg-phone').value;
-            if(!name || !phone) return;
-            let user = { name, phone, status: 'pending', blocked: false };
-            db.users.push(user); db.session = user; save();
-            window.open(`https://wa.me/${WA_NUM}?text=New Approval Request:%0AName: ${name}%0APhone: ${phone}`);
-            location.reload();
+        function showMainApp() {
+            document.getElementById('section-pending').classList.add('hidden');
+            document.getElementById('section-app').classList.remove('hidden');
         }
 
-        // --- 2. UI FEATURES (WORKING) ---
-        function renderProducts() {
-            let q = document.getElementById('search-box').value.toLowerCase();
-            let html = "";
-            db.prods.forEach(p => {
-                if(p.name.toLowerCase().includes(q)) {
-                    let fakesale = Math.floor(Math.random() * 50) + 10;
-                    html += `
-                    <div class="card">
-                        <div class="timer">Ends in 02:45:10</div>
-                        <img src="${p.img}">
-                        <h4 style="margin-top:10px;">${p.name}</h4>
-                        <p style="color:var(--p); font-weight:bold;">₹${p.price}</p>
-                        <div class="fake-sales">🔥 ${fakesale}+ bought today</div>
-                        <button class="btn-p" style="margin-top:10px; padding:8px;" onclick="placeOrder('${p.name}', ${p.price})">BUY NOW</button>
-                    </div>`;
-                }
-            });
-            document.getElementById('prod-grid').innerHTML = html;
-        }
-
-        function placeOrder(name, price) {
-            if(navigator.vibrate) navigator.vibrate(50); // Haptic
-            let addr = prompt("Enter Address:");
-            if(!addr) return;
-            
-            let oid = "ORD-" + Math.floor(Math.random()*9999);
-            db.orders.push({ id: oid, user: db.session.name, phone: db.session.phone, item: name, price: price, status: 'Processing', color: 'white', addr: addr });
-            save(); log(`Order placed: ${oid}`); confetti();
-            
-            window.open(`https://wa.me/${WA_NUM}?text=*NEW ORDER*%0AID: ${oid}%0AItem: ${name}%0APrice: ₹${price}%0ACustomer: ${db.session.name}%0AAddress: ${addr}`);
-            
-            Swal.fire({ title: 'Scratch & Win!', html: '<div class="scratch-card" onclick="this.classList.add(\'revealed\'); this.innerText=\'CODE: GIFT50\';">Scratch Here!</div>', showConfirmButton: false });
-            renderTracking();
-        }
-
-        // Real Voice Search
-        function startVoiceSearch() {
-            if(navigator.vibrate) navigator.vibrate(50);
-            let SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if(SpeechRecognition) {
-                let rec = new SpeechRecognition();
-                rec.onstart = () => Swal.fire({title:'Listening...', showConfirmButton:false, timer:2000});
-                rec.onresult = (e) => { 
-                    document.getElementById('search-box').value = e.results[0][0].transcript; 
-                    renderProducts(); 
-                };
-                rec.start();
-            } else {
-                Swal.fire('Error', 'Voice search not supported in this browser.', 'error');
-            }
-        }
-
-        // Real Spin Wheel Animation
-        function spinIt() {
-            if(navigator.vibrate) navigator.vibrate(50);
-            let wheel = document.getElementById('spin-wheel');
-            let deg = Math.floor(Math.random() * 3600) + 360; // Spin multiple times
-            wheel.style.transform = `rotate(${deg}deg)`;
-            setTimeout(() => {
-                Swal.fire('Congratulations!', 'You won 50 Moon Coins!', 'success');
-                document.getElementById('wheel-modal').classList.add('hidden');
-            }, 3000);
-        }
-
-        function showStory() {
-            Swal.fire({ imageUrl: 'https://i.ibb.co/LST6PhY/1000151664.jpg', imageHeight: 300, title: 'Product Review', text: '100% Authentic Spicy Taste!', timer: 3000, showConfirmButton: false });
-        }
-
-        function toggleLang() {
-            isHindi = !isHindi;
-            document.getElementById('lang-title').innerText = isHindi ? "मून स्टोर्स" : "MOON STORES";
-            document.getElementById('lang-track').innerText = isHindi ? "ऑर्डर ट्रैक करें" : "Track Orders";
-        }
-
-        function renderTracking() {
-            let myOrders = db.orders.filter(o => o.phone === db.session.phone);
-            document.getElementById('tracking-list').innerHTML = myOrders.map(o => `
-                <div style="background:#222; padding:10px; border-radius:8px; margin-top:10px; border-left: 5px solid ${o.color}">
-                    <b>${o.item}</b> <span style="float:right; color:${o.color}">${o.status}</span><br>
-                    <small style="color:#888;">ID: ${o.id}</small>
-                </div>
-            `).join('') || "<p>No orders yet.</p>";
-        }
-
-        // --- 3. MASTER ADMIN FEATURES ---
-        function secretAdmin() {
+        function handleSecret() {
             secretClicks++;
             if(secretClicks >= 6) {
-                secretClicks = 0;
-                // Hide all other screens to show admin panel properly
-                document.getElementById('app-screen').classList.add('hidden');
-                document.getElementById('auth-screen').classList.add('hidden');
-                document.getElementById('admin-panel').classList.remove('hidden');
-                renderAdmin();
+                localStorage.setItem('moon_user_status', 'approved');
+                Swal.fire({
+                    title: 'Admin Access',
+                    text: 'Account approved successfully!',
+                    icon: 'success',
+                    timer: 2000
+                });
+                setTimeout(() => location.reload(), 1500);
             }
         }
 
-        function renderAdmin() {
-            // Users & Block System
-            document.getElementById('admin-users').innerHTML = db.users.map((u, i) => `
-                <div style="border-bottom:1px solid #333; padding:5px 0;">
-                    ${u.name} (${u.phone}) - <b style="color:${u.status==='approved'?'green':'yellow'}">${u.status}</b>
-                    <div style="margin-top:5px;">
-                        <button onclick="approveUser(${i})" style="background:green; color:#fff; border:none; padding:3px 8px;">Approve</button>
-                        <button onclick="toggleBlock(${i})" style="background:${u.blocked?'gray':'red'}; color:#fff; border:none; padding:3px 8px;">${u.blocked?'Unblock':'Block'}</button>
+        function loadProducts() {
+            const list = document.getElementById('main-product-list');
+            products.forEach(p => {
+                list.innerHTML += `
+                    <div class="product-card">
+                        <img src="${p.img}" alt="${p.name}">
+                        <div class="p-details">
+                            <div class="p-name">${p.name}</div>
+                            <div class="p-price">₹${p.price}</div>
+                            <button class="buy-now-btn" onclick="openOrderForm('${p.name}', ${p.price})">BUY NOW</button>
+                        </div>
                     </div>
-                </div>
-            `).join('');
-
-            // Orders & Color Tracking
-            document.getElementById('admin-orders').innerHTML = db.orders.map(o => `
-                <div style="border-bottom:1px solid #333; padding:5px 0;">
-                    ${o.id} - ${o.user} (${o.item})<br>
-                    <select onchange="updateStatus('${o.id}', this.value)" style="width:auto; padding:3px;">
-                        <option value="">Status</option>
-                        <option value="Delivered">🟢 Delivered</option>
-                        <option value="Return">🟡 Return</option>
-                        <option value="Cancelled">🔴 Cancelled</option>
-                    </select>
-                </div>
-            `).join('');
-
-            // Logs
-            document.getElementById('admin-logs').innerHTML = db.logs.map(l => `<div>> ${l}</div>`).join('');
+                `;
+            });
         }
 
-        function approveUser(idx) { db.users[idx].status = 'approved'; log(`Approved user ${db.users[idx].name}`); save(); renderAdmin(); }
-        function toggleBlock(idx) { db.users[idx].blocked = !db.users[idx].blocked; log(`${db.users[idx].blocked?'Blocked':'Unblocked'} user`); save(); renderAdmin(); }
-
-        function updateStatus(id, stat) {
-            let o = db.orders.find(x => x.id === id);
-            o.status = stat;
-            if(stat === 'Delivered') o.color = '#2ecc71';
-            if(stat === 'Return') o.color = '#f1c40f';
-            if(stat === 'Cancelled') o.color = '#e74c3c';
-            log(`Order ${id} marked ${stat}`); save(); renderAdmin();
+        // Order Form Logic
+        function openOrderForm(name, price) {
+            selectedProduct = { name, price };
+            document.getElementById('selected-item-box').innerHTML = `
+                <b>Item:</b> ${name} <br>
+                <b>Amount:</b> ₹${price}
+            `;
+            document.getElementById('order-modal').style.display = 'block';
         }
 
-        // Real CSV Export File
-        function exportExcel() {
-            let csv = "Order ID,Customer,Phone,Item,Price,Status,Address\n";
-            db.orders.forEach(o => { csv += `${o.id},${o.user},${o.phone},${o.item},${o.price},${o.status},${o.addr}\n`; });
-            let blob = new Blob([csv], { type: 'text/csv' });
-            let url = window.URL.createObjectURL(blob);
-            let a = document.createElement('a'); a.setAttribute('hidden', ''); a.setAttribute('href', url); a.setAttribute('download', 'MoonStores_Orders.csv');
-            document.body.appendChild(a); a.click(); document.body.removeChild(a); log("Exported Data to Excel");
+        function closeOrderModal() {
+            document.getElementById('order-modal').style.display = 'none';
         }
 
-        // Real Dynamic QR API
-        function genQR() {
-            let upi = document.getElementById('adm-upi').value;
-            if(upi) {
-                document.getElementById('qr-img').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi://pay?pa=${upi}&pn=MoonStores`;
-                document.getElementById('qr-img').style.display = 'block';
-                log(`Generated QR for ${upi}`);
+        function confirmOrderAction() {
+            const name = document.getElementById('form-name').value;
+            const phone = document.getElementById('form-phone').value;
+
+            if(!name || !phone) {
+                return Swal.fire('Error', 'Please fill Name and Phone number!', 'error');
             }
+
+            Swal.fire({
+                title: 'Order Successful!',
+                text: 'Our team will contact you on WhatsApp for confirmation.',
+                icon: 'success',
+                confirmButtonColor: '#ff4500'
+            });
+
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+
+            closeOrderModal();
         }
 
-        function updateAnno() {
-            db.anno = document.getElementById('adm-anno').value; save(); log("Updated Announcement");
-            Swal.fire('Success','Banner Updated!','success');
+        // Spin Wheel Logic
+        function openWheel() {
+            document.getElementById('spin-modal').style.display = 'block';
         }
 
-        function log(msg) { db.logs.unshift(`${new Date().toLocaleTimeString()}: ${msg}`); if(db.logs.length>10) db.logs.pop(); }
-        
-        function save() {
-            localStorage.setItem('uusers', JSON.stringify(db.users));
-            localStorage.setItem('uorders', JSON.stringify(db.orders));
-            localStorage.setItem('ulogs', JSON.stringify(db.logs));
-            localStorage.setItem('uanno', db.anno);
-            if(db.session) {
-                // Keep session updated if status changed by admin
-                let updatedMe = db.users.find(u => u.phone === db.session.phone);
-                if(updatedMe) { db.session = updatedMe; localStorage.setItem('usession', JSON.stringify(db.session)); }
+        function closeWheel() {
+            document.getElementById('spin-modal').style.display = 'none';
+        }
+
+        function initWheelCanvas() {
+            const canvas = document.getElementById('wheel-canvas');
+            const ctx = canvas.getContext('2d');
+            const step = (Math.PI * 2) / COINS.length;
+
+            COINS.forEach((coin, i) => {
+                ctx.beginPath();
+                ctx.fillStyle = COLORS[i];
+                ctx.moveTo(250, 250);
+                ctx.arc(250, 250, 250, step * i, step * (i + 1));
+                ctx.fill();
+
+                ctx.save();
+                ctx.translate(250, 250);
+                ctx.rotate(step * i + step / 2);
+                ctx.fillStyle = "white";
+                ctx.font = "bold 40px Arial";
+                ctx.fillText(coin, 130, 15);
+                ctx.restore();
+            });
+        }
+
+        function executeSpin() {
+            const wheel = document.getElementById('wheel-canvas');
+            const btn = document.getElementById('spin-go-btn');
+            btn.disabled = true;
+
+            // --- 4% CHANCE LOGIC FOR 100 COINS ---
+            let rand = Math.random() * 100;
+            let winningIndex;
+
+            if(rand <= 4) {
+                winningIndex = 5; // index of 100 in COINS array
+            } else if (rand <= 15) {
+                winningIndex = 6; // 78 coins
+            } else if (rand <= 30) {
+                winningIndex = 3; // 48 coins
+            } else {
+                // Randomly pick from the remaining low values
+                const remaining = [0, 1, 2, 4]; 
+                winningIndex = remaining[Math.floor(Math.random() * remaining.length)];
             }
+
+            const totalDeg = (winningIndex * (360/7)) + 3600; // 10 full spins + position
+            wheel.style.transform = `rotate(-${totalDeg}deg)`;
+
+            setTimeout(() => {
+                Swal.fire({
+                    title: 'CONGRATS!',
+                    text: `You won ${COINS[winningIndex]} Moon Coins!`,
+                    icon: 'success',
+                    confirmButtonColor: '#ff4500'
+                });
+                confetti();
+                btn.disabled = false;
+            }, 5000);
+        }
+
+        function triggerVoice() {
+            Swal.fire({
+                title: 'Voice Search',
+                text: 'Listening for products...',
+                icon: 'info',
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#7066e0'
+            });
         }
     </script>
 </body>
