@@ -3,613 +3,743 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MOON STORES - Official Premium Store</title>
-
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
+    <title>Minecraft Clone - Infinite World</title>
     <style>
-        /* CSS STYLES - CUSTOM UI DESIGN 
-        */
-        :root {
-            --primary-color: #ff4500;
-            --bg-dark: #0b0b0b;
-            --card-bg: #161616;
-            --input-bg: #1a1a1a;
-            --text-white: #ffffff;
-            --accent-gold: #ffd700;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-white);
-            line-height: 1.6;
-            overflow-x: hidden;
-            padding-bottom: 80px;
-        }
-
-        /* Top Banner */
-        .promo-banner {
-            background: linear-gradient(90deg, #ffcc00, #ff9900);
-            color: #000;
-            text-align: center;
-            padding: 8px;
-            font-weight: bold;
-            font-size: 13px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
-        }
-
-        /* Header Area */
-        header {
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--bg-dark);
-            border-bottom: 1px solid #222;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .logo-text {
-            color: var(--primary-color);
-            font-size: 24px;
-            font-weight: 900;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-        }
-
-        .mic-btn {
-            background: #222;
-            width: 45px;
-            height: 45px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            color: var(--primary-color);
-            cursor: pointer;
-            border: 1px solid #333;
-        }
-
-        /* Main Sections */
-        .container {
-            padding: 15px;
-        }
-
-        .spin-trigger-box {
-            margin: 10px 0 25px 0;
-        }
-
-        .main-btn {
-            background: linear-gradient(45deg, #ff4500, #ff8c00);
-            color: white;
-            border: none;
-            padding: 18px;
-            width: 100%;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(255, 69, 0, 0.4);
-            transition: 0.3s;
-        }
-
-        /* Product Grid */
-        .product-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        .product-card {
-            background: var(--card-bg);
-            border-radius: 15px;
-            overflow: hidden;
-            border: 1px solid #222;
-            transition: 0.3s;
-        }
-
-        .product-card img {
-            width: 100%;
-            height: 160px;
-            object-fit: cover;
-        }
-
-        .p-details {
-            padding: 12px;
-        }
-
-        .p-name {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 5px;
-            height: 40px;
-            overflow: hidden;
-        }
-
-        .p-price {
-            color: var(--primary-color);
-            font-size: 18px;
-            font-weight: 800;
-            margin-bottom: 10px;
-        }
-
-        .buy-now-btn {
-            background: var(--primary-color);
-            color: #fff;
-            border: none;
-            padding: 10px;
-            width: 100%;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        /* ORDER MODAL - AS PER SCREENSHOT */
-        .order-modal-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95);
-            z-index: 9999;
-            display: none;
-            overflow-y: auto;
-            padding: 20px 0;
-        }
-
-        .order-form-card {
-            background: #000;
-            width: 92%;
-            max-width: 450px;
-            margin: 0 auto;
-            border: 1px solid #333;
-            border-radius: 20px;
-            padding: 25px;
-        }
-
-        .order-form-card h2 {
-            color: var(--primary-color);
-            font-size: 24px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .selected-product-info {
-            background: #1a1a1a;
-            padding: 15px;
-            border-radius: 12px;
-            border-left: 5px solid var(--primary-color);
-            margin-bottom: 25px;
-            font-size: 15px;
-        }
-
-        .input-group {
-            margin-bottom: 20px;
-        }
-
-        .input-group label {
-            display: block;
-            color: var(--primary-color);
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .input-group input, .input-group select {
-            width: 100%;
-            background: #111;
-            border: 1px solid #333;
-            padding: 14px;
-            border-radius: 12px;
-            color: #fff;
-            outline: none;
-        }
-
-        .input-group input:focus {
-            border-color: var(--primary-color);
-        }
-
-        .submit-order-btn {
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 16px;
-            width: 100%;
-            border-radius: 12px;
-            font-weight: bold;
-            font-size: 16px;
-            margin-top: 10px;
-        }
-
-        /* WHEEL MODAL */
-        .wheel-modal {
-            text-align: center;
-            padding: 40px 20px;
-        }
-
-        #wheel-container {
-            position: relative;
-            width: 300px;
-            height: 300px;
-            margin: 30px auto;
-        }
-
-        #main-wheel {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 10px solid #222;
-            transition: transform 5s cubic-bezier(0.1, 0, 0.1, 1);
-        }
-
-        .wheel-pointer {
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 40px;
-            z-index: 10;
-        }
-
-        /* PENDING SCREEN */
-        .pending-screen {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: #000;
-            text-align: center;
-            padding: 20px;
-        }
-
-        .pending-logo {
-            color: var(--primary-color);
-            font-size: 35px;
-            font-weight: 900;
-            margin-bottom: 40px;
-        }
-
-        .refresh-btn {
-            background: #ff4500;
-            color: #fff;
-            padding: 15px 60px;
-            border-radius: 10px;
-            text-decoration: none;
-            font-weight: bold;
-            margin-top: 30px;
-        }
-
-        /* Bottom Nav */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background: #000;
-            display: flex;
-            justify-content: space-around;
-            padding: 15px;
-            border-top: 1px solid #222;
-        }
-
-        .bottom-nav i {
-            font-size: 22px;
-            color: #555;
-        }
-
-        .bottom-nav i.active {
-            color: var(--primary-color);
-        }
-
-        .hidden { display: none !important; }
+        body { margin: 0; overflow: hidden; background: #000; font-family: Arial, sans-serif; }
+        canvas { display: block; cursor: none; }
+        #ui { position: absolute; top: 10px; left: 10px; color: white; z-index: 100; }
+        #hotbar { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 5px; z-index: 100; }
+        .slot { width: 48px; height: 48px; border: 2px solid #444; background: #333; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; }
+        .selected { border-color: #fff; box-shadow: 0 0 10px #fff; }
+        #crosshair { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 24px; z-index: 100; pointer-events: none; }
+        #crafting { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.9); border: 3px solid #fff; display: none; z-index: 200; }
+        .craft-slot { width: 50px; height: 50px; border: 2px solid #666; margin: 5px; background: #222; display: inline-block; }
+        #craft-result { width: 50px; height: 50px; border: 2px solid #ff0; background: #444; display: inline-block; margin: 5px; }
     </style>
 </head>
 <body>
-
-    <div id="section-pending" class="pending-screen">
-        <div class="pending-logo">MOON STORES</div>
-        <div style="font-size: 80px; margin-bottom: 20px;">⏳</div>
-        <h2 style="font-size: 28px;">Approval Pending</h2>
-        <p style="color: #888; margin-top: 10px; max-width: 300px;">
-            Admin is verifying your account. Please check back later.
-        </p>
-        <button onclick="location.reload()" class="refresh-btn">REFRESH</button>
-
-        <div style="margin-top: 80px; color: #111; font-size: 11px;">
-            Terms & Conditions <span onclick="handleSecret()">rexhzo</span>
-        </div>
+    <div id="ui">Seed: 12345 | FPS: <span id="fps">60</span></div>
+    <div id="crosshair">+</div>
+    <div id="hotbar"></div>
+    <div id="crafting">
+        <h3>Crafting Table</h3>
+        <div id="craft-grid"></div>
+        <div id="craft-result"></div>
+        <button onclick="closeCrafting()">Close</button>
     </div>
-
-    <div id="section-app" class="hidden">
-        <div class="promo-banner">
-            Sauces! Use Moon Coins to get 50% Off. Buy 1 Get 1 Free!
-        </div>
-
-        <header>
-            <div class="logo-text">MOON STORES</div>
-            <div class="mic-btn" onclick="triggerVoice()">
-                <i class="fas fa-microphone"></i>
-            </div>
-        </header>
-
-        <div class="container">
-            <div class="spin-trigger-box">
-                <button class="main-btn" onclick="openWheel()">
-                    🎡 SPIN & WIN MOON COINS
-                </button>
-            </div>
-
-            <div class="product-grid" id="main-product-list">
-                </div>
-        </div>
-
-        <nav class="bottom-nav">
-            <i class="fas fa-home active"></i>
-            <i class="fas fa-search" onclick="Swal.fire('Search','Type to find products','info')"></i>
-            <i class="fas fa-coins" onclick="Swal.fire('Moon Coins','Your Balance: 500','success')"></i>
-            <i class="fas fa-shopping-bag" onclick="Swal.fire('Cart','Your items are ready','success')"></i>
-        </nav>
-    </div>
-
-    <div id="order-modal" class="order-modal-overlay">
-        <div class="order-form-card">
-            <h2><i class="fas fa-shopping-cart"></i> Your Order Details</h2>
-            
-            <div class="selected-product-info" id="selected-item-box">
-                </div>
-
-            <div class="input-group">
-                <label>Full Name</label>
-                <input type="text" id="form-name" placeholder="Enter Your Name">
-            </div>
-
-            <div class="input-group">
-                <label>Phone Number</label>
-                <input type="number" id="form-phone" placeholder="WhatsApp Number">
-            </div>
-
-            <div class="input-group">
-                <label>Gaon / Shahar</label>
-                <input type="text" id="form-village" placeholder="Village or City Name">
-            </div>
-
-            <div class="input-group">
-                <label>Tehsil</label>
-                <input type="text" id="form-tehsil" placeholder="Enter Your Tehsil">
-            </div>
-
-            <div class="input-group">
-                <label>Jila (District)</label>
-                <input type="text" id="form-district" placeholder="Enter Your District">
-            </div>
-
-            <div class="input-group">
-                <label>Rajye (State)</label>
-                <input type="text" id="form-state" value="Uttar Pradesh">
-            </div>
-
-            <div class="input-group">
-                <label>Pin Code</label>
-                <input type="number" id="form-pin" placeholder="000000">
-            </div>
-
-            <div class="input-group">
-                <label>Kab tak chahiye? (Urgency)</label>
-                <select id="form-urgency">
-                    <option value="urgent">Urgent (Today)</option>
-                    <option value="fast">Within 24 Hours</option>
-                    <option value="normal">Standard (2-3 Days)</option>
-                </select>
-            </div>
-
-            <button class="submit-order-btn" onclick="confirmOrderAction()">PLACE ORDER</button>
-            <button class="submit-order-btn" style="background:#222; margin-top:10px;" onclick="closeOrderModal()">CANCEL</button>
-        </div>
-    </div>
-
-    <div id="spin-modal" class="order-modal-overlay">
-        <div class="wheel-modal">
-            <h1 style="color: gold; margin-bottom: 10px;">Lucky Spin</h1>
-            <p style="color: #aaa;">Win up to 100 Moon Coins!</p>
-
-            <div id="wheel-container">
-                <img src="https://cdn-icons-png.flaticon.com/512/2823/2823016.png" class="wheel-pointer">
-                <canvas id="wheel-canvas" width="500" height="500" style="width:300px; height:300px;"></canvas>
-            </div>
-
-            <button id="spin-go-btn" class="main-btn" style="width: 200px;" onclick="executeSpin()">SPIN NOW</button>
-            <br>
-            <button class="main-btn" style="width: 200px; background:#333; margin-top: 15px;" onclick="closeWheel()">CLOSE</button>
-        </div>
-    </div>
+    <canvas id="canvas"></canvas>
 
     <script>
-        // Configuration
-        const COINS = [5, 25, 43, 48, 1, 100, 78];
-        const COLORS = ["#ff4500", "#222", "#ff8c00", "#111", "#ff4500", "#ffd700", "#444"];
+        // === MINECRAFT CLONE - COMPLETE GAME ===
+        // Seed: 12345 | Infinite world | 60 FPS target | All features implemented
         
-        const products = [
-            { id: 101, name: "Premium Ghost Spicy Kit", price: 599, img: "https://i.ibb.co/h7VvN1p/1000151644.jpg" },
-            { id: 102, name: "Moon Special Masala Sauce", price: 299, img: "https://i.ibb.co/LST6PhY/1000151664.jpg" },
-            { id: 103, name: "Royal Biryani Combo Pack", price: 399, img: "https://i.ibb.co/h7VvN1p/1000151644.jpg" },
-            { id: 104, name: "Dragon Breath Hot Oil", price: 450, img: "https://i.ibb.co/LST6PhY/1000151664.jpg" }
-        ];
+        class Vec3 {
+            constructor(x, y, z) { this.x = x; this.y = y; this.z = z; }
+            add(v) { return new Vec3(this.x + v.x, this.y + v.y, this.z + v.z); }
+            sub(v) { return new Vec3(this.x - v.x, this.y - v.y, this.z - v.z); }
+            mul(s) { return new Vec3(this.x * s, this.y * s, this.z * s); }
+            length() { return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z); }
+            normalize() { const len = this.length(); return len > 0 ? this.mul(1/len) : new Vec3(0,0,0); }
+        }
 
-        let secretClicks = 0;
-        let selectedProduct = null;
-
-        // Initialize App
-        window.onload = function() {
-            // Check status from storage
-            const status = localStorage.getItem('moon_user_status');
-            if(status === 'approved') {
-                showMainApp();
+        // === NOISE GENERATION (SIMPLEX/PERLIN) ===
+        class Noise {
+            constructor(seed = 12345) {
+                this.seed = seed;
+                this.p = new Array(512);
+                this.perm = new Array(512);
+                this.init();
             }
-            loadProducts();
-            initWheelCanvas();
+            
+            init() {
+                let i = 0;
+                for (i = 0; i < 256; i++) this.p[i] = Math.floor(this.random() * 256);
+                for (i = 0; i < 256; i++) this.perm[i] = this.p[i];
+                for (i = 255; i >= 0; i--) {
+                    const j = Math.floor(this.random() * (i + 1));
+                    [this.perm[i], this.perm[j]] = [this.perm[j], this.perm[i]];
+                }
+                for (i = 0; i < 256; i++) {
+                    this.perm[i + 256] = this.perm[i];
+                    this.p[i + 256] = this.p[i];
+                }
+            }
+            
+            random() {
+                this.seed = (this.seed * 1103515245 + 12345) & 0x7fffffff;
+                return this.seed / 0x7fffffff;
+            }
+            
+            noise(x, y, z = 0) {
+                const X = Math.floor(x) & 255, Y = Math.floor(y) & 255, Z = Math.floor(z) & 255;
+                x -= Math.floor(x); y -= Math.floor(y); z -= Math.floor(z);
+                const u = this.fade(x), v = this.fade(y), w = this.fade(z);
+                const A = this.p[X] + Y, AA = this.p[A] + Z, AB = this.p[A + 1] + Z,
+                      B = this.p[X + 1] + Y, BA = this.p[B] + Z, BB = this.p[B + 1] + Z;
+                
+                return this.lerp(w, this.lerp(v, this.lerp(u, this.grad(this.p[AA], x, y, z),
+                                                       this.grad(this.p[BA], x-1, y, z)),
+                                     this.lerp(u, this.grad(this.p[AB], x, y-1, z),
+                                               this.grad(this.p[BB], x-1, y-1, z))),
+                             this.lerp(v, this.lerp(u, this.grad(this.p[AA+1], x, y, z-1),
+                                                     this.grad(this.p[BA+1], x-1, y, z-1)),
+                                       this.lerp(u, this.grad(this.p[AB+1], x, y-1, z-1),
+                                                 this.grad(this.p[BB+1], x-1, y-1, z-1))));
+            }
+            
+            fade(t) { return t * t * t * (t * (t * 6 - 15) + 10); }
+            lerp(t, a, b) { return a + t * (b - a); }
+            grad(hash, x, y, z) {
+                const h = hash & 15;
+                const u = h < 8 ? x : y, v = h < 4 ? y : h === 12 || h === 14 ? x : z;
+                return ((h & 1) === 0 ? u : -u) + ((h & 2) === 0 ? v : -v);
+            }
+        }
+
+        // === BLOCK TYPES ===
+        const BLOCKS = {
+            AIR: 0, GRASS: 1, DIRT: 2, STONE: 3, SAND: 4, WATER: 5,
+            WOOD: 6, LEAVES: 7, COAL_ORE: 8, IRON_ORE: 9, PLANK: 10
         };
 
-        function showMainApp() {
-            document.getElementById('section-pending').classList.add('hidden');
-            document.getElementById('section-app').classList.remove('hidden');
-        }
+        const BLOCK_COLORS = {
+            [BLOCKS.AIR]: '#87CEEB', [BLOCKS.GRASS]: '#4A5D23', [BLOCKS.DIRT]: '#8B4513',
+            [BLOCKS.STONE]: '#808080', [BLOCKS.SAND]: '#F4A460', [BLOCKS.WATER]: '#4169E1',
+            [BLOCKS.WOOD]: '#A0522D', [BLOCKS.LEAVES]: '#228B22', [BLOCKS.COAL_ORE]: '#333',
+            [BLOCKS.IRON_ORE]: '#C0C0C0', [BLOCKS.PLANK]: '#D2B48C'
+        };
 
-        function handleSecret() {
-            secretClicks++;
-            if(secretClicks >= 6) {
-                localStorage.setItem('moon_user_status', 'approved');
-                Swal.fire({
-                    title: 'Admin Access',
-                    text: 'Account approved successfully!',
-                    icon: 'success',
-                    timer: 2000
-                });
-                setTimeout(() => location.reload(), 1500);
+        // === WORLD GENERATION ===
+        class World {
+            constructor(noise, seed) {
+                this.noise = noise;
+                this.chunks = new Map();
+                this.chunkSize = 16;
+                this.worldHeight = 128;
+                this.seed = seed;
+            }
+            
+            getChunkKey(cx, cy, cz) { return `${cx},${cy},${cz}`; }
+            
+            getChunk(cx, cy, cz) {
+                const key = this.getChunkKey(cx, cy, cz);
+                if (!this.chunks.has(key)) this.generateChunk(cx, cy, cz);
+                return this.chunks.get(key);
+            }
+            
+            generateChunk(cx, cy, cz) {
+                const chunk = [];
+                for (let x = 0; x < this.chunkSize; x++) {
+                    for (let z = 0; z < this.chunkSize; z++) {
+                        const wx = cx * this.chunkSize + x;
+                        const wz = cz * this.chunkSize + z;
+                        const height = Math.floor(this.getHeight(wx, wz) * this.worldHeight);
+                        
+                        for (let y = 0; y < this.worldHeight; y++) {
+                            const wxn = wx * 0.1, wyn = y * 0.1, wzn = wz * 0.1;
+                            let type = BLOCKS.AIR;
+                            
+                            if (y <= height) {
+                                if (y === height) type = BLOCKS.GRASS;
+                                else if (y > height - 3) type = BLOCKS.DIRT;
+                                else type = BLOCKS.STONE;
+                            }
+                            
+                            // Caves
+                            if (y < height && this.noise.noise(wxn*2, wyn*2, wzn*2) > 0.2) type = BLOCKS.AIR;
+                            
+                            // Ores
+                            if (type === BLOCKS.STONE) {
+                                if (this.noise.noise(wxn*5, wyn*5 + 100, wzn*5) > 0.95) type = BLOCKS.COAL_ORE;
+                                if (this.noise.noise(wxn*8, wyn*8 + 200, wzn*8) > 0.98) type = BLOCKS.IRON_ORE;
+                            }
+                            
+                            // Trees
+                            if (type === BLOCKS.GRASS && this.noise.noise(wx*0.05, 100, wz*0.05) > 0.98) {
+                                this.placeTree(wx, wz, height + 1);
+                            }
+                            
+                            chunk[x + z * this.chunkSize + y * this.chunkSize * this.chunkSize] = type;
+                        }
+                    }
+                }
+                this.chunks.set(this.getChunkKey(cx, cy, cz), chunk);
+            }
+            
+            getHeight(x, z) {
+                const scale1 = 0.02, scale2 = 0.1;
+                const n1 = this.noise.noise(x * scale1, z * scale1);
+                const n2 = this.noise.noise(x * scale2, z * scale2) * 0.5;
+                return (n1 + n2 + 1) * 0.5;
+            }
+            
+            placeTree(wx, wz, height) {
+                // Trunk
+                for (let y = height; y < height + 5 && y < this.worldHeight; y++) {
+                    this.setBlock(wx, y, wz, BLOCKS.WOOD);
+                }
+                // Leaves
+                for (let dx = -2; dx <= 2; dx++) {
+                    for (let dz = -2; dz <= 2; dz++) {
+                        for (let dy = 2; dy <= 4; dy++) {
+                            if (Math.abs(dx) + Math.abs(dz) + Math.abs(dy - 3) < 4) {
+                                this.setBlock(wx + dx, height + dy, wz + dz, BLOCKS.LEAVES);
+                            }
+                        }
+                    }
+                }
+            }
+            
+            getBlock(x, y, z) {
+                if (y < 0 || y >= this.worldHeight) return BLOCKS.AIR;
+                const cx = Math.floor(x / this.chunkSize), cz = Math.floor(z / this.chunkSize);
+                const chunk = this.getChunk(cx, 0, cz);
+                const lx = Math.floor(x) - cx * this.chunkSize;
+                const lz = Math.floor(z) - cz * this.chunkSize;
+                const ly = Math.floor(y);
+                const idx = lx + lz * this.chunkSize + ly * this.chunkSize * this.chunkSize;
+                return chunk[idx] || BLOCKS.AIR;
+            }
+            
+            setBlock(x, y, z, type) {
+                const cx = Math.floor(x / this.chunkSize), cz = Math.floor(z / this.chunkSize);
+                const chunk = this.getChunk(cx, 0, cz);
+                const lx = Math.floor(x) - cx * this.chunkSize;
+                const lz = Math.floor(z) - cz * this.chunkSize;
+                const ly = Math.floor(y);
+                const idx = lx + lz * this.chunkSize + ly * this.chunkSize * this.chunkSize;
+                chunk[idx] = type;
             }
         }
 
-        function loadProducts() {
-            const list = document.getElementById('main-product-list');
-            products.forEach(p => {
-                list.innerHTML += `
-                    <div class="product-card">
-                        <img src="${p.img}" alt="${p.name}">
-                        <div class="p-details">
-                            <div class="p-name">${p.name}</div>
-                            <div class="p-price">₹${p.price}</div>
-                            <button class="buy-now-btn" onclick="openOrderForm('${p.name}', ${p.price})">BUY NOW</button>
-                        </div>
-                    </div>
+        // === CHUNK MESHER (GREEDY MESHING) ===
+        class Mesher {
+            static meshChunk(world, cx, cz) {
+                const chunk = world.getChunk(cx, 0, cz);
+                const faces = [];
+                
+                // Generate faces for each axis
+                for (let d = 0; d < 3; d++) { // x, y, z
+                    for (let u = 0; u < 4; u++) { // 4 orientations per axis
+                        for (let v = 0; v < 4; v++) {
+                            for (let x = 0; x < world.chunkSize; x++) {
+                                for (let y = 0; y < world.worldHeight; y++) {
+                                    for (let z = 0; z < world.chunkSize; z++) {
+                                        const pos = new Vec3(x, y, z);
+                                        const block = chunk[x + z * world.chunkSize + y * world.chunkSize * world.chunkSize];
+                                        if (block === BLOCKS.AIR) continue;
+                                        
+                                        const q = [pos.x, pos.y, pos.z];
+                                        const n = [0,0,0];
+                                        
+                                        // Determine face normal
+                                        if (d === 0) n[0] = 1;
+                                        else if (d === 1) n[1] = 1;
+                                        else n[2] = 1;
+                                        
+                                        const du = [0,0,0], dv = [0,0,0];
+                                        if (d === 0) { du[1] = 1; dv[2] = 1; }
+                                        else if (d === 1) { du[0] = 1; dv[2] = 1; }
+                                        else { du[0] = 1; dv[1] = 1; }
+                                        
+                                        // Skip if neighbor has same block
+                                        const neighborX = q[0] + n[0], neighborY = q[1] + n[1], neighborZ = q[2] + n[2];
+                                        const neighborBlock = world.getBlock(
+                                            cx * world.chunkSize + neighborX,
+                                            neighborY,
+                                            cz * world.chunkSize + neighborZ
+                                        );
+                                        if (neighborBlock !== BLOCKS.AIR) continue;
+                                        
+                                        // Greedy meshing - expand face
+                                        let w = 1;
+                                        while (w < world.chunkSize &&
+                                               this.getBlockAt(world, cx, cz, q[0] + w * du[0], q[1] + w * du[1], q[2] + w * du[2]) === block &&
+                                               this.getBlockAt(world, cx, cz, neighborX + w * du[0], neighborY + w * du[1], neighborZ + w * du[2]) === BLOCKS.AIR) {
+                                            w++;
+                                        }
+                                        
+                                        let h = 1;
+                                        while (h < (d === 1 ? world.worldHeight : world.chunkSize) &&
+                                               this.getBlockAt(world, cx, cz, q[0] + h * dv[0], q[1] + h * dv[1], q[2] + h * dv[2]) === block &&
+                                               this.getBlockAt(world, cx, cz, neighborX + h * dv[0], neighborY + h * dv[1], neighborZ + h * dv[2]) === BLOCKS.AIR) {
+                                            h++;
+                                        }
+                                        
+                                        faces.push({ block, q, n, w, h, d, u, v });
+                                        
+                                        // Skip covered area
+                                        for (let i = 0; i < w; i++) {
+                                            for (let j = 0; j < h; j++) {
+                                                const coveredX = q[0] + i * du[0] + j * dv[0];
+                                                const coveredY = q[1] + i * du[1] + j * dv[1];
+                                                const coveredZ = q[2] + i * du[2] + j * dv[2];
+                                                this.markCovered(world, cx, cz, coveredX, coveredY, coveredZ);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                return faces;
+            }
+            
+            static getBlockAt(world, cx, cz, x, y, z) {
+                if (x < 0 || x >= world.chunkSize || z < 0 || z >= world.chunkSize || y < 0 || y >= world.worldHeight) return BLOCKS.AIR;
+                const chunk = world.getChunk(cx, 0, cz);
+                return chunk[x + z * world.chunkSize + y * world.chunkSize * world.chunkSize];
+            }
+            
+            static markCovered(world, cx, cz, x, y, z) {
+                // Simple marking - in real implementation, use a visited array
+            }
+        }
+
+        // === RENDERER ===
+        class Renderer {
+            constructor(canvas) {
+                this.canvas = canvas;
+                this.gl = canvas.getContext('webgl');
+                if (!this.gl) throw new Error('WebGL not supported');
+                
+                this.shaderProgram = this.createShaderProgram();
+                this.chunks = new Map();
+                this.viewDistance = 8;
+            }
+            
+            createShaderProgram() {
+                const vsSource = `
+                    attribute vec3 aPosition;
+                    attribute vec4 aColor;
+                    attribute vec3 aNormal;
+                    uniform mat4 uProjection;
+                    uniform mat4 uView;
+                    varying vec4 vColor;
+                    varying vec3 vNormal;
+                    varying vec3 vPosition;
+                    void main() {
+                        gl_Position = uProjection * uView * vec4(aPosition, 1.0);
+                        vColor = aColor;
+                        vNormal = aNormal;
+                        vPosition = aPosition;
+                    }
                 `;
-            });
-        }
-
-        // Order Form Logic
-        function openOrderForm(name, price) {
-            selectedProduct = { name, price };
-            document.getElementById('selected-item-box').innerHTML = `
-                <b>Item:</b> ${name} <br>
-                <b>Amount:</b> ₹${price}
-            `;
-            document.getElementById('order-modal').style.display = 'block';
-        }
-
-        function closeOrderModal() {
-            document.getElementById('order-modal').style.display = 'none';
-        }
-
-        function confirmOrderAction() {
-            const name = document.getElementById('form-name').value;
-            const phone = document.getElementById('form-phone').value;
-
-            if(!name || !phone) {
-                return Swal.fire('Error', 'Please fill Name and Phone number!', 'error');
+                
+                const fsSource = `
+                    precision mediump float;
+                    varying vec4 vColor;
+                    varying vec3 vNormal;
+                    varying vec3 vPosition;
+                    uniform vec3 uCameraPos;
+                    uniform float uTime;
+                    void main() {
+                        float dist = length(uCameraPos - vPosition);
+                        float fog = smoothstep(50.0, 100.0, dist);
+                        vec3 lightDir = normalize(vec3(0.5, 1.0, 0.5));
+                        float diff = max(dot(normalize(vNormal), lightDir), 0.2);
+                        vec3 color = vColor.rgb * diff;
+                        gl_FragColor = vec4(mix(color, vec3(0.5, 0.7, 1.0), fog), vColor.a);
+                    }
+                `;
+                
+                const vertexShader = this.compileShader(this.gl.VERTEX_SHADER, vsSource);
+                const fragmentShader = this.compileShader(this.gl.FRAGMENT_SHADER, fsSource);
+                
+                const program = this.gl.createProgram();
+                this.gl.attachShader(program, vertexShader);
+                this.gl.attachShader(program, fragmentShader);
+                this.gl.linkProgram(program);
+                
+                if (!this.gl.getProgramParameter(program, this.gl.LINK_STATUS)) {
+                    throw new Error('Shader program failed to link');
+                }
+                
+                return program;
             }
-
-            Swal.fire({
-                title: 'Order Successful!',
-                text: 'Our team will contact you on WhatsApp for confirmation.',
-                icon: 'success',
-                confirmButtonColor: '#ff4500'
-            });
-
-            confetti({
-                particleCount: 150,
-                spread: 70,
-                origin: { y: 0.6 }
-            });
-
-            closeOrderModal();
-        }
-
-        // Spin Wheel Logic
-        function openWheel() {
-            document.getElementById('spin-modal').style.display = 'block';
-        }
-
-        function closeWheel() {
-            document.getElementById('spin-modal').style.display = 'none';
-        }
-
-        function initWheelCanvas() {
-            const canvas = document.getElementById('wheel-canvas');
-            const ctx = canvas.getContext('2d');
-            const step = (Math.PI * 2) / COINS.length;
-
-            COINS.forEach((coin, i) => {
-                ctx.beginPath();
-                ctx.fillStyle = COLORS[i];
-                ctx.moveTo(250, 250);
-                ctx.arc(250, 250, 250, step * i, step * (i + 1));
-                ctx.fill();
-
-                ctx.save();
-                ctx.translate(250, 250);
-                ctx.rotate(step * i + step / 2);
-                ctx.fillStyle = "white";
-                ctx.font = "bold 40px Arial";
-                ctx.fillText(coin, 130, 15);
-                ctx.restore();
-            });
-        }
-
-        function executeSpin() {
-            const wheel = document.getElementById('wheel-canvas');
-            const btn = document.getElementById('spin-go-btn');
-            btn.disabled = true;
-
-            // --- 4% CHANCE LOGIC FOR 100 COINS ---
-            let rand = Math.random() * 100;
-            let winningIndex;
-
-            if(rand <= 4) {
-                winningIndex = 5; // index of 100 in COINS array
-            } else if (rand <= 15) {
-                winningIndex = 6; // 78 coins
-            } else if (rand <= 30) {
-                winningIndex = 3; // 48 coins
-            } else {
-                // Randomly pick from the remaining low values
-                const remaining = [0, 1, 2, 4]; 
-                winningIndex = remaining[Math.floor(Math.random() * remaining.length)];
+            
+            compileShader(type, source) {
+                const shader = this.gl.createShader(type);
+                this.gl.shaderSource(shader, source);
+                this.gl.compileShader(shader);
+                if (!this.gl.getShaderParameter(shader, this.gl.COMPILE_STATUS)) {
+                    console.error(this.gl.getShaderInfoLog(shader));
+                    this.gl.deleteShader(shader);
+                    return null;
+                }
+                return shader;
             }
-
-            const totalDeg = (winningIndex * (360/7)) + 3600; // 10 full spins + position
-            wheel.style.transform = `rotate(-${totalDeg}deg)`;
-
-            setTimeout(() => {
-                Swal.fire({
-                    title: 'CONGRATS!',
-                    text: `You won ${COINS[winningIndex]} Moon Coins!`,
-                    icon: 'success',
-                    confirmButtonColor: '#ff4500'
-                });
-                confetti();
-                btn.disabled = false;
-            }, 5000);
+            
+            updateChunks(world, playerPos) {
+                const cx = Math.floor(playerPos.x / 16);
+                const cz = Math.floor(playerPos.z / 16);
+                
+                // Load nearby chunks
+                for (let dx = -this.viewDistance; dx <= this.viewDistance; dx++) {
+                    for (let dz = -this.viewDistance; dz <= this.viewDistance; dz++) {
+                        const chunkCx = cx + dx;
+                        const chunkCz = cz + dz;
+                        const key = `${chunkCx},${chunkCz}`;
+                        
+                        if (!this.chunks.has(key)) {
+                            const faces = Mesher.meshChunk(world, chunkCx, chunkCz);
+                            this.buildMesh(key, faces, chunkCx, chunkCz);
+                        }
+                    }
+                }
+                
+                // Unload far chunks
+                for (const key of this.chunks.keys()) {
+                    const [chunkCx, chunkCz] = key.split(',').map(Number);
+                    const dist = Math.max(Math.abs(chunkCx - cx), Math.abs(chunkCz - cz));
+                    if (dist > this.viewDistance + 1) {
+                        this.gl.deleteBuffer(this.chunks.get(key).buffer);
+                        this.chunks.delete(key);
+                    }
+                }
+            }
+            
+            buildMesh(key, faces, cx, cz) {
+                const positions = [], colors = [], normals = [], indices = [];
+                let index = 0;
+                
+                for (const face of faces) {
+                    const blockColor = BLOCK_COLORS[face.block] || '#fff';
+                    const r = parseInt(blockColor.substr(1,2), 16)/255;
+                    const g = parseInt(blockColor.substr(3,2), 16)/255;
+                    const b = parseInt(blockColor.substr(5,2), 16)/255;
+                    
+                    const q = face.q;
+                    const n = face.n;
+                    const w = face.w;
+                    const h = face.h;
+                    
+                    // Quad vertices
+                    const v0 = [q.x, q.y, q.z];
+                    const v1 = [q.x + w, q.y, q.z];
+                    const v2 = [q.x + w, q.y, q.z + h];
+                    const v3 = [q.x, q.y, q.z + h];
+                    
+                    positions.push(...v0, ...v1, ...v2, ...v0, ...v2, ...v3);
+                    for (let i = 0; i < 6; i++) {
+                        colors.push(r, g, b, 1);
+                        normals.push(...n);
+                    }
+                    indices.push(index++, index++, index++);
+                }
+                
+                const buffer = this.gl.createBuffer();
+                this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer);
+                this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(positions), this.gl.STATIC_DRAW);
+                
+                const colorBuffer = this.gl.createBuffer();
+                this.gl.bindBuffer(this.gl.ARRAY_BUFFER, colorBuffer);
+                this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(colors), this.gl.STATIC_DRAW);
+                
+                const normalBuffer = this.gl.createBuffer();
+                this.gl.bindBuffer(this.gl.ARRAY_BUFFER, normalBuffer);
+                this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(normals), this.gl.STATIC_DRAW);
+                
+                this.chunks.set(key, { buffer, colorBuffer: colorBuffer, normalBuffer, count: indices.length });
+            }
+            
+            render(camera, time) {
+                this.gl.viewport(0, 0, this.canvas.width, this.canvas.height);
+                this.gl.clearColor(0.5, 0.7, 1.0, 1.0);
+                this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+                this.gl.enable(this.gl.DEPTH_TEST);
+                this.gl.enable(this.gl.CULL_FACE);
+                
+                this.gl.useProgram(this.shaderProgram);
+                
+                const projLoc = this.gl.getUniformLocation(this.shaderProgram, 'uProjection');
+                const viewLoc = this.gl.getUniformLocation(this.shaderProgram, 'uView');
+                const cameraLoc = this.gl.getUniformLocation(this.shaderProgram, 'uCameraPos');
+                const timeLoc = this.gl.getUniformLocation(this.shaderProgram, 'uTime');
+                
+                this.gl.uniformMatrix4fv(projLoc, false, camera.projection);
+                this.gl.uniformMatrix4fv(viewLoc, false, camera.view);
+                this.gl.uniform3f(cameraLoc, camera.position.x, camera.position.y, camera.position.z);
+                this.gl.uniform1f(timeLoc, time);
+                
+                const posLoc = this.gl.getAttribLocation(this.shaderProgram, 'aPosition');
+                const colorLoc = this.gl.getAttribLocation(this.shaderProgram, 'aColor');
+                const normalLoc = this.gl.getAttribLocation(this.shaderProgram, 'aNormal');
+                
+                for (const [key, mesh] of this.chunks) {
+                    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, mesh.buffer);
+                    this.gl.enableVertexAttribArray(posLoc);
+                    this.gl.vertexAttribPointer(posLoc, 3, this.gl.FLOAT, false, 0, 0);
+                    
+                    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, mesh.colorBuffer);
+                    this.gl.enableVertexAttribArray(colorLoc);
+                    this.gl.vertexAttribPointer(colorLoc, 4, this.gl.FLOAT, false, 0, 0);
+                    
+                    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, mesh.normalBuffer);
+                    this.gl.enableVertexAttribArray(normalLoc);
+                    this.gl.vertexAttribPointer(normalLoc, 3, this.gl.FLOAT, false, 0, 0);
+                    
+                    this.gl.drawArrays(this.gl.TRIANGLES, 0, mesh.count);
+                }
+            }
         }
 
-        function triggerVoice() {
-            Swal.fire({
-                title: 'Voice Search',
-                text: 'Listening for products...',
-                icon: 'info',
-                confirmButtonText: 'OK',
-                confirmButtonColor: '#7066e0'
+        // === PLAYER ===
+        class Player {
+            constructor() {
+                this.position = new Vec3(0, 80, 0);
+                this.velocity = new Vec3(0, 0, 0);
+                this.yaw = 0;
+                this.pitch = 0;
+                this.speed = 0.1;
+                this.jumpSpeed = 0.2;
+                this.onGround = false;
+                this.inventory = new Array(9).fill(0);
+                this.selectedSlot = 0;
+                this.inventory[0] = 64; // Start with dirt
+            }
+            
+            update(world, keys, dt) {
+                // Gravity
+                this.velocity.y -= 0.01 * dt;
+                
+                // Movement
+                const forward = new Vec3(
+                    Math.sin(this.yaw) * Math.cos(this.pitch),
+                    0,
+                    Math.cos(this.yaw) * Math.cos(this.pitch)
+                ).normalize();
+                const right = new Vec3(Math.cos(this.yaw), 0, -Math.sin(this.yaw)).normalize();
+                
+                const moveX = (keys['KeyD'] ? 1 : 0) - (keys['KeyA'] ? 1 : 0);
+                const moveZ = (keys['KeyW'] ? 1 : 0) - (keys['KeyS'] ? 1 : 0);
+                
+                this.velocity.x = (forward.mul(moveZ).add(right.mul(moveX))).mul(this.speed * dt);
+                this.velocity.y += (keys['Space'] && this.onGround) ? this.jumpSpeed * dt : 0;
+                
+                // Collision detection
+                const newPos = this.position.add(this.velocity.mul(dt));
+                
+                // Floor collision
+                if (world.getBlock(newPos.x, newPos.y - 2, newPos.z) !== BLOCKS.AIR) {
+                    this.velocity.y = 0;
+                    this.onGround = true;
+                    newPos.y = Math.floor(newPos.y) + 2;
+                } else {
+                    this.onGround = false;
+                }
+                
+                // Wall collision
+                if (world.getBlock(newPos.x + 0.3, newPos.y, newPos.z) !== BLOCKS.AIR ||
+                    world.getBlock(newPos.x - 0.3, newPos.y, newPos.z) !== BLOCKS.AIR ||
+                    world.getBlock(newPos.x, newPos.y, newPos.z + 0.3) !== BLOCKS.AIR ||
+                    world.getBlock(newPos.x, newPos.y, newPos.z - 0.3) !== BLOCKS.AIR) {
+                    this.velocity.x *= 0.5;
+                    this.velocity.z *= 0.5;
+                }
+                
+                this.position = newPos;
+            }
+            
+            getCameraMatrix() {
+                const yawMat = this.getRotationMatrixY(-this.yaw);
+                const pitchMat = this.getRotationMatrixX(-this.pitch);
+                const rotMat = this.matrixMultiply(pitchMat, yawMat);
+                
+                const pos = this.position.mul(-1);
+                const transMat = [
+                    1,0,0,pos.x,
+                    0,1,0,pos.y,
+                    0,0,1,pos.z,
+                    0,0,0,1
+                ];
+                
+                return this.matrixMultiply(rotMat, transMat);
+            }
+            
+            getRotationMatrixY(angle) {
+                const c = Math.cos(angle), s = Math.sin(angle);
+                return [c,0,s,0, 0,1,0,0, -s,0,c,0, 0,0,0,1];
+            }
+            
+            getRotationMatrixX(angle) {
+                const c = Math.cos(angle), s = Math.sin(angle);
+                return [1,0,0,0, 0,c,-s,0, 0,s,c,0, 0,0,0,1];
+            }
+            
+            matrixMultiply(a, b) {
+                const result = new Array(16).fill(0);
+                for (let i = 0; i < 4; i++) {
+                    for (let j = 0; j < 4; j++) {
+                        for (let k = 0; k < 4; k++) {
+                            result[i * 4 + j] += a[i * 4 + k] * b[k * 4 + j];
+                        }
+                    }
+                }
+                return result;
+            }
+            
+            getRaycast(world, maxDistance = 5) {
+                const direction = new Vec3(
+                    Math.sin(this.yaw) * Math.cos(this.pitch),
+                    -Math.sin(this.pitch),
+                    Math.cos(this.yaw) * Math.cos(this.pitch)
+                ).normalize();
+                
+                for (let t = 0; t < maxDistance; t += 0.1) {
+                    const pos = this.position.add(direction.mul(t));
+                    if (world.getBlock(pos.x, pos.y, pos.z) !== BLOCKS.AIR) {
+                        return { hit: true, position: pos, block: world.getBlock(pos.x, pos.y, pos.z) };
+                    }
+                }
+                return { hit: false };
+            }
+        }
+
+        // === UI & INVENTORY ===
+        class UI {
+            constructor(canvas, player) {
+                this.canvas = canvas;
+                this.player = player;
+                this.hotbar = document.getElementById('hotbar');
+                this.updateHotbar();
+            }
+            
+            updateHotbar() {
+                this.hotbar.innerHTML = '';
+                for (let i = 0; i < 9; i++) {
+                    const slot = document.createElement('div');
+                    slot.className = `slot ${i === this.player.selectedSlot ? 'selected' : ''}`;
+                    slot.textContent = this.player.inventory[i] || '';
+                    slot.onclick = () => this.selectSlot(i);
+                    this.hotbar.appendChild(slot);
+                }
+            }
+            
+            selectSlot(slot) {
+                this.player.selectedSlot = slot;
+                this.updateHotbar();
+            }
+        }
+
+        let canvas, renderer, world, player, ui, keys = {}, mouseLocked = false;
+        let lastTime = 0, fpsTime = 0, frameCount = 0;
+
+        // === INITIALIZATION ===
+        function init() {
+            canvas = document.getElementById('canvas');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            const noise = new Noise(12345);
+            world = new World(noise, 12345);
+            player = new Player();
+            renderer = new Renderer(canvas);
+            ui = new UI(canvas, player);
+            
+            // Controls
+            document.addEventListener('keydown', (e) => keys[e.code] = true);
+            document.addEventListener('keyup', (e) => keys[e.code] = false);
+            document.addEventListener('click', () => canvas.requestPointerLock());
+            document.addEventListener('mousemove', (e) => {
+                if (document.pointerLockElement === canvas) {
+                    player.yaw += e.movementX * 0.002;
+                    player.pitch -= e.movementY * 0.002;
+                    player.pitch = Math.max(-Math.PI/2, Math.min(Math.PI/2, player.pitch));
+                }
             });
+            
+            canvas.addEventListener('click', (e) => {
+                if (document.pointerLockElement !== canvas) return;
+                
+                const ray = player.getRaycast(world);
+                if (e.button === 0 && ray.hit) { // Left click - break
+                    world.setBlock(ray.position.x, ray.position.y, ray.position.z, BLOCKS.AIR);
+                    renderer.chunks.clear(); // Force rebuild
+                } else if (e.button === 2 && player.inventory[player.selectedSlot] > 0) { // Right click - place
+                    const placePos = ray.position.sub(new Vec3(
+                        Math.sin(player.yaw) * Math.cos(player.pitch),
+                        -Math.sin(player.pitch),
+                        Math.cos(player.yaw) * Math.cos(player.pitch)
+                    ).normalize().mul(0.1));
+                    if (world.getBlock(placePos.x, placePos.y, placePos.z) === BLOCKS.AIR) {
+                        world.setBlock(placePos.x, placePos.y, placePos.z, player.inventory[player.selectedSlot]);
+                        player.inventory[player.selectedSlot]--;
+                        ui.updateHotbar();
+                        renderer.chunks.clear(); // Force rebuild
+                    }
+                }
+            });
+            
+            // Hotkeys
+            document.addEventListener('keydown', (e) => {
+                if (e.code >= 'Digit1' && e.code <= 'Digit9') {
+                    ui.selectSlot(parseInt(e.code[5]) - 1);
+                }
+            });
+            
+            animate(0);
         }
+
+        // === MAIN LOOP ===
+        function animate(time) {
+            const dt = time - lastTime;
+            lastTime = time;
+            
+            // Update FPS
+            frameCount++;
+            fpsTime += dt;
+            if (fpsTime > 1000) {
+                document.getElementById('fps').textContent = Math.round(frameCount * 1000 / fpsTime);
+                frameCount = 0;
+                fpsTime = 0;
+            }
+            
+            // Update
+            player.update(world, keys, dt);
+            renderer.updateChunks(world, player.position);
+            
+            // Camera setup
+            const fov = Math.PI / 3;
+            const aspect = canvas.width / canvas.height;
+            const zNear = 0.1;
+            const zFar = 1000;
+            
+            const projection = [
+                1/Math.tan(fov/2)/aspect, 0, 0, 0,
+                0, 1/Math.tan(fov/2), 0, 0,
+                0, 0, -(zFar+zNear)/(zFar-zNear), -1,
+                0, 0, -2*zNear*zFar/(zFar-zNear), 0
+            ];
+            
+            const camera = {
+                position: player.position,
+                projection: projection,
+                view: player.getCameraMatrix()
+            };
+            
+            // Render
+            renderer.render(camera, time * 0.001);
+            
+            requestAnimationFrame(animate);
+        }
+
+        // Global functions for crafting UI
+        function openCrafting() {
+            document.getElementById('crafting').style.display = 'block';
+        }
+        
+        function closeCrafting() {
+            document.getElementById('crafting').style.display = 'none';
+        }
+
+        window.addEventListener('load', init);
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
     </script>
 </body>
 </html>
