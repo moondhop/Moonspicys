@@ -1,0 +1,2338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A premium romantic birthday website with admin panel">
+    <meta name="theme-color" content="#ff1493">
+    <title>🎂 Happy Birthday My Love ❤️</title>
+    
+    <style>
+        /* ========== GLOBAL STYLES ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #ff1493;
+            --secondary-color: #ff69b4;
+            --accent-color: #ff8fd3;
+            --dark-bg: #0a0a0a;
+            --light-bg: #fff5f9;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --text-light: #fff;
+            --text-dark: #333;
+            --gradient-1: linear-gradient(135deg, #ff1493 0%, #ff69b4 100%);
+            --gradient-2: linear-gradient(135deg, #ff69b4 0%, #ff8fd3 100%);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0a1a 100%);
+            color: var(--text-light);
+            overflow-x: hidden;
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        body.light-mode {
+            background: linear-gradient(135deg, #fff5f9 0%, #ffe0ec 100%);
+            color: var(--text-dark);
+        }
+
+        /* ========== ANIMATIONS ========== */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 10px rgba(255, 20, 147, 0.5); }
+            50% { text-shadow: 0 0 20px rgba(255, 20, 147, 1); }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.3); }
+            50% { transform: scale(1); }
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+
+        /* ========== FLOATING HEARTS ========== */
+        .floating-hearts {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.6;
+            animation: float 3s ease-in-out infinite, spin 8s linear infinite;
+        }
+
+        .heart:hover {
+            animation: heartBeat 0.6s ease-in-out;
+        }
+
+        /* ========== SPARKLES ========== */
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle 2s ease-in-out infinite;
+        }
+
+        /* ========== HERO SECTION ========== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 20, 147, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulse 4s ease-in-out infinite;
+            z-index: 0;
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+            animation: fadeInUp 1.5s ease-out;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glow 3s ease-in-out infinite;
+            letter-spacing: 2px;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            color: var(--accent-color);
+            margin-bottom: 3rem;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
+
+        .cake-container {
+            margin: 2rem 0;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        .cake-emoji {
+            font-size: 6rem;
+            filter: drop-shadow(0 0 20px rgba(255, 20, 147, 0.5));
+        }
+
+        /* ========== GLASS MORPHISM ========== */
+        .glass {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        /* ========== LOVE MESSAGE SECTION ========== */
+        .section {
+            padding: 4rem 2rem;
+            margin: 2rem 0;
+            border-radius: 20px;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .message-card {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem;
+            glass-morphism: true;
+            text-align: center;
+        }
+
+        .message-card.glass {
+            background: rgba(255, 20, 147, 0.1);
+            border: 2px solid var(--accent-color);
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 2rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .typing-text {
+            font-size: 1.5rem;
+            font-weight: 300;
+            min-height: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .typing-text::after {
+            content: '|';
+            animation: blink 0.7s infinite;
+            margin-left: 5px;
+        }
+
+        @keyframes blink {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0; }
+        }
+
+        /* ========== FUNNY LOVE CARDS ========== */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .love-card {
+            padding: 2rem;
+            text-align: center;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .love-card.glass {
+            background: rgba(255, 105, 180, 0.1);
+            border: 2px solid rgba(255, 20, 147, 0.3);
+        }
+
+        .love-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(255, 20, 147, 0.3);
+            background: rgba(255, 20, 147, 0.2);
+        }
+
+        .love-card-emoji {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: bounce 1s ease-in-out infinite;
+        }
+
+        .love-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .love-card p {
+            font-size: 0.95rem;
+            opacity: 0.8;
+        }
+
+        /* ========== MEMORY GALLERY ========== */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            cursor: pointer;
+            aspect-ratio: 1;
+            background: var(--glass-bg);
+            border: 2px solid var(--glass-border);
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        .gallery-overlay-text {
+            color: white;
+            font-size: 1rem;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        /* ========== LIGHTBOX ========== */
+        .lightbox {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            animation: fadeInDown 0.3s ease;
+        }
+
+        .lightbox.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-content {
+            position: relative;
+            max-width: 90vw;
+            max-height: 90vh;
+        }
+
+        .lightbox-image {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 10px;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .lightbox-close:hover {
+            transform: scale(1.2);
+        }
+
+        /* ========== TIMELINE ========== */
+        .timeline {
+            position: relative;
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background: var(--gradient-1);
+        }
+
+        .timeline-item {
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(odd) {
+            text-align: right;
+            padding-right: 52%;
+        }
+
+        .timeline-item:nth-child(even) {
+            text-align: left;
+            padding-left: 52%;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 30px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(255, 20, 147, 0.6);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .timeline-content {
+            padding: 2rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .timeline-date {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--accent-color);
+        }
+
+        /* ========== COUNTDOWN ========== */
+        .countdown {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 1rem;
+            padding: 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .countdown-item {
+            text-align: center;
+            padding: 2rem;
+            background: var(--glass-bg);
+            border: 2px solid var(--accent-color);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .countdown-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 20, 147, 0.5);
+        }
+
+        .countdown-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        .countdown-label {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* ========== SURPRISE BOX ========== */
+        .surprise-container {
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+
+        .gift-box {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 2rem;
+            cursor: pointer;
+            perspective: 1000px;
+        }
+
+        .gift-box-inner {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+        }
+
+        .gift-box.opened .gift-box-inner {
+            transform: rotateX(90deg);
+        }
+
+        .gift-box-front {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #ff1493 0%, #ff69b4 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            backface-visibility: hidden;
+            box-shadow: 0 10px 30px rgba(255, 20, 147, 0.3);
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        .gift-box-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: var(--glass-bg);
+            border: 2px solid var(--glass-border);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backface-visibility: hidden;
+            transform: rotateX(180deg);
+            padding: 1.5rem;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .surprise-message {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: var(--glass-bg);
+            border: 2px solid var(--accent-color);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: var(--accent-color);
+        }
+
+        /* ========== LOVE METER ========== */
+        .love-meter {
+            max-width: 600px;
+            margin: 2rem auto;
+            text-align: center;
+        }
+
+        .meter-bar {
+            width: 100%;
+            height: 40px;
+            background: var(--glass-bg);
+            border: 2px solid var(--accent-color);
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .meter-fill {
+            height: 100%;
+            background: var(--gradient-1);
+            width: 0%;
+            animation: fillMeter 2s ease-out forwards;
+            position: relative;
+        }
+
+        @keyframes fillMeter {
+            to { width: 100%; }
+        }
+
+        .meter-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        .meter-text {
+            font-size: 1.2rem;
+            color: var(--accent-color);
+            margin-top: 1rem;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        /* ========== WISH WALL ========== */
+        .wish-wall {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .wish-card {
+            padding: 2rem;
+            background: var(--glass-bg);
+            border: 2px solid var(--accent-color);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wish-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            animation: shimmer 3s infinite;
+        }
+
+        .wish-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(255, 20, 147, 0.3);
+        }
+
+        .wish-card-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .wish-emoji {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .wish-card h3 {
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .wish-card p {
+            font-size: 0.95rem;
+            opacity: 0.8;
+        }
+
+        /* ========== GRAND FINALE ========== */
+        .grand-finale {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .finale-text {
+            font-size: clamp(2rem, 8vw, 4rem);
+            font-weight: 800;
+            background: linear-gradient(45deg, #ff1493, #ff69b4, #ff8fd3, #ff1493);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glow 3s ease-in-out infinite, gradient-shift 5s ease infinite;
+            letter-spacing: 2px;
+            z-index: 2;
+            position: relative;
+        }
+
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* ========== MUSIC PLAYER ========== */
+        .music-player {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 500;
+            background: var(--glass-bg);
+            border: 2px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            min-width: 300px;
+            max-width: 350px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .music-player audio {
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        .player-title {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .music-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* ========== THEME TOGGLE ========== */
+        .theme-toggle {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            z-index: 500;
+            width: 60px;
+            height: 60px;
+            background: var(--glass-bg);
+            border: 2px solid var(--glass-border);
+            border-radius: 50%;
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            animation: fadeInDown 0.5s ease-out;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(255, 20, 147, 0.5);
+        }
+
+        /* ========== BUTTONS ========== */
+        button {
+            padding: 0.8rem 1.5rem;
+            background: var(--gradient-1);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(255, 20, 147, 0.3);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 20, 147, 0.5);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        /* ========== FOOTER ========== */
+        .footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            position: relative;
+        }
+
+        .creator-name {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff1493, #ff69b4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glow 3s ease-in-out infinite;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .creator-name:hover {
+            text-shadow: 0 0 20px rgba(255, 20, 147, 0.5);
+        }
+
+        /* ========== ADMIN PANEL ========== */
+        .admin-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 9999;
+            animation: fadeInDown 0.3s ease;
+        }
+
+        .admin-overlay.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .admin-panel {
+            width: 90%;
+            max-width: 1000px;
+            max-height: 90vh;
+            background: var(--glass-bg);
+            border: 2px solid var(--accent-color);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            overflow-y: auto;
+            padding: 3rem;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .admin-title {
+            font-size: 2rem;
+            color: var(--primary-color);
+        }
+
+        .admin-close {
+            font-size: 2rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: var(--accent-color);
+            padding: 0;
+            width: auto;
+            box-shadow: none;
+        }
+
+        .admin-close:hover {
+            transform: scale(1.2);
+        }
+
+        .admin-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .admin-tab {
+            padding: 0.8rem 1.5rem;
+            background: var(--glass-bg);
+            border: 2px solid var(--glass-border);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .admin-tab.active {
+            background: var(--gradient-1);
+            border-color: var(--primary-color);
+        }
+
+        .admin-content {
+            display: none;
+        }
+
+        .admin-content.active {
+            display: block;
+        }
+
+        .admin-form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .admin-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--accent-color);
+            font-weight: 600;
+        }
+
+        .admin-input,
+        .admin-textarea {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid var(--glass-border);
+            border-radius: 10px;
+            color: var(--text-light);
+            font-family: inherit;
+            transition: border-color 0.3s ease;
+        }
+
+        .admin-input:focus,
+        .admin-textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .admin-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .admin-button {
+            margin-right: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .admin-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .admin-gallery-item {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .admin-gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .admin-gallery-delete {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: #ff0000;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1rem;
+            box-shadow: none;
+        }
+
+        /* ========== PASSWORD POPUP ========== */
+        .password-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--glass-bg);
+            border: 2px solid var(--accent-color);
+            border-radius: 20px;
+            padding: 3rem;
+            z-index: 10000;
+            backdrop-filter: blur(10px);
+            animation: fadeInUp 0.3s ease;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .password-popup.active {
+            display: block;
+        }
+
+        .password-popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 9998;
+        }
+
+        .password-popup-overlay.active {
+            display: block;
+        }
+
+        .password-popup h2 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid var(--glass-border);
+            border-radius: 10px;
+            color: var(--text-light);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .password-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .password-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .password-buttons button {
+            flex: 1;
+            margin: 0;
+        }
+
+        .error-message {
+            color: #ff0000;
+            text-align: center;
+            margin-top: 1rem;
+            animation: pulse 0.5s ease;
+        }
+
+        /* ========== FIREWORKS ========== */
+        .firework {
+            position: absolute;
+            pointer-events: none;
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 768px) {
+            .music-player {
+                bottom: 20px;
+                right: 20px;
+                min-width: 250px;
+                max-width: 280px;
+                padding: 1rem;
+            }
+
+            .theme-toggle {
+                top: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+
+            .timeline::before {
+                left: 0;
+            }
+
+            .timeline-item {
+                padding-left: 50px !important;
+                padding-right: 0 !important;
+                text-align: left !important;
+            }
+
+            .timeline-dot {
+                left: -15px;
+            }
+
+            .hero-title {
+                font-size: 1.8rem;
+            }
+
+            .admin-panel {
+                width: 95%;
+                padding: 1.5rem;
+            }
+
+            .admin-tabs {
+                flex-direction: column;
+            }
+
+            .admin-tab {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .countdown {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .hero-title {
+                font-size: 1.5rem;
+            }
+
+            .section {
+                padding: 2rem 1rem;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ========== UTILITIES ========== */
+        .text-center {
+            text-align: center;
+        }
+
+        .mt-3 {
+            margin-top: 3rem;
+        }
+
+        .mb-3 {
+            margin-bottom: 3rem;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .cursor-glow {
+            position: fixed;
+            width: 30px;
+            height: 30px;
+            border: 2px solid rgba(255, 20, 147, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10;
+            animation: cursorGlow 0.1s ease-out forwards;
+        }
+
+        @keyframes cursorGlow {
+            from {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+            to {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 0;
+            }
+        }
+
+        /* Loading Animation */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0a1a 100%);
+            z-index: 10001;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            animation: fadeInDown 0.5s ease;
+        }
+
+        .loading-screen.hidden {
+            animation: fadeInDown 0.5s ease reverse;
+            pointer-events: none;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid var(--glass-border);
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        .loading-text {
+            font-size: 1.2rem;
+            color: var(--accent-color);
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Loading Your Special Gift...</div>
+    </div>
+
+    <!-- Floating Hearts Background -->
+    <div class="floating-hearts" id="floatingHeartsContainer"></div>
+
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" id="themeToggle" title="Toggle Dark/Light Mode">
+        🌙
+    </button>
+
+    <!-- Password Popup -->
+    <div class="password-popup-overlay" id="passwordOverlay"></div>
+    <div class="password-popup" id="passwordPopup">
+        <h2>🔐 Admin Access</h2>
+        <input type="password" class="password-input" id="passwordInput" placeholder="Enter password...">
+        <div class="password-buttons">
+            <button onclick="checkPassword()">Unlock</button>
+            <button onclick="closePasswordPopup()" style="background: var(--accent-color);">Cancel</button>
+        </div>
+        <div class="error-message" id="errorMessage"></div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div class="admin-overlay" id="adminOverlay">
+        <div class="admin-panel">
+            <div class="admin-header">
+                <h1 class="admin-title">💎 Admin Dashboard</h1>
+                <button class="admin-close" onclick="closeAdmin()">✕</button>
+            </div>
+
+            <div class="admin-tabs">
+                <div class="admin-tab active" onclick="switchAdminTab('gallery')">📷 Gallery</div>
+                <div class="admin-tab" onclick="switchAdminTab('music')">🎵 Music</div>
+                <div class="admin-tab" onclick="switchAdminTab('messages')">💌 Messages</div>
+                <div class="admin-tab" onclick="switchAdminTab('timeline')">📅 Timeline</div>
+                <div class="admin-tab" onclick="switchAdminTab('wishes')">🎁 Wishes</div>
+                <div class="admin-tab" onclick="switchAdminTab('settings')">⚙️ Settings</div>
+                <div class="admin-tab" onclick="switchAdminTab('backup')">💾 Backup</div>
+            </div>
+
+            <!-- Gallery Tab -->
+            <div class="admin-content active" id="galleryTab">
+                <h2 style="color: var(--accent-color); margin-bottom: 1rem;">📷 Manage Photos</h2>
+                <div class="admin-form-group">
+                    <label class="admin-label">Upload Photo:</label>
+                    <input type="file" id="photoUpload" accept="image/*" class="admin-input">
+                    <button class="admin-button" onclick="uploadPhoto()">Upload</button>
+                </div>
+                <div id="adminGallery" class="admin-gallery"></div>
+            </div>
+
+            <!-- Music Tab -->
+            <div class="admin-content" id="musicTab">
+                <h2 style="color: var(--accent-color); margin-bottom: 1rem;">🎵 Upload Music</h2>
+                <div class="admin-form-group">
+                    <label class="admin-label">Music File:</label>
+                    <input type="file" id="musicUpload" accept="audio/*" class="admin-input">
+                    <button class="admin-button" onclick="uploadMusic()">Upload</button>
+                </div>
+                <div class="admin-form-group">
+                    <label class="admin-label">Current Music: <span id="currentMusic">None</span></label>
+                </div>
+            </div>
+
+            <!-- Messages Tab -->
+            <div class="admin-content" id="messagesTab">
+                <h2 style="color: var(--accent-color); margin-bottom: 1rem;">💌 Birthday Messages</h2>
+                <div class="admin-form-group">
+                    <label class="admin-label">Main Message:</label>
+                    <textarea id="mainMessage" class="admin-textarea" placeholder="Edit the main birthday message..."></textarea>
+                    <button class="admin-button" onclick="saveMainMessage()">Save</button>
+                </div>
+                <div class="admin-form-group">
+                    <label class="admin-label">Messages:</label>
+                    <div id="messagesContainer"></div>
+                    <button class="admin-button" onclick="addMessage()">+ Add Message</button>
+                </div>
+            </div>
+
+            <!-- Timeline Tab -->
+            <div class="admin-content" id="timelineTab">
+                <h2 style="color: var(--accent-color); margin-bottom: 1rem;">📅 Timeline Memories</h2>
+                <div class="admin-form-group">
+                    <label class="admin-label">Add Memory:</label>
+                    <input type="text" id="memoryDate" class="admin-input" placeholder="Date (e.g., May 15, 2023)">
+                    <input type="text" id="memoryTitle" class="admin-input" placeholder="Title">
+                    <textarea id="memoryText" class="admin-textarea" placeholder="Memory description..."></textarea>
+                    <button class="admin-button" onclick="addMemory()">Add</button>
+                </div>
+                <div id="timelineContainer"></div>
+            </div>
+
+            <!-- Wishes Tab -->
+            <div class="admin-content" id="wishesTab">
+                <h2 style="color: var(--accent-color); margin-bottom: 1rem;">🎁 Wish Cards</h2>
+                <div class="admin-form-group">
+                    <label class="admin-label">Add Wish:</label>
+                    <input type="text" id="wishEmoji" class="admin-input" placeholder="Emoji" maxlength="3">
+                    <input type="text" id="wishTitle" class="admin-input" placeholder="Title">
+                    <textarea id="wishText" class="admin-textarea" placeholder="Wish text..."></textarea>
+                    <button class="admin-button" onclick="addWish()">Add</button>
+                </div>
+                <div id="wishesContainer"></div>
+            </div>
+
+            <!-- Settings Tab -->
+            <div class="admin-content" id="settingsTab">
+                <h2 style="color: var(--accent-color); margin-bottom: 1rem;">⚙️ Settings</h2>
+                <div class="admin-form-group">
+                    <label class="admin-label">Website Title:</label>
+                    <input type="text" id="siteTitle" class="admin-input" placeholder="Site title">
+                    <button class="admin-button" onclick="saveTitle()">Save</button>
+                </div>
+                <div class="admin-form-group">
+                    <label class="admin-label">Birthday Person Name:</label>
+                    <input type="text" id="personName" class="admin-input" placeholder="Name">
+                    <button class="admin-button" onclick="saveName()">Save</button>
+                </div>
+                <div class="admin-form-group">
+                    <label class="admin-label">Birthday Date:</label>
+                    <input type="datetime-local" id="birthdayDate" class="admin-input">
+                    <button class="admin-button" onclick="saveBirthdayDate()">Save</button>
+                </div>
+                <div class="admin-form-group">
+                    <label class="admin-label">Primary Color (Hex):</label>
+                    <input type="color" id="primaryColor" class="admin-input">
+                    <button class="admin-button" onclick="savePrimaryColor()">Apply</button>
+                </div>
+                <div class="admin-form-group">
+                    <button class="admin-button" onclick="resetData()" style="background: #ff0000;">Reset All Data</button>
+                </div>
+            </div>
+
+            <!-- Backup Tab -->
+            <div class="admin-content" id="backupTab">
+                <h2 style="color: var(--accent-color); margin-bottom: 1rem;">💾 Backup</h2>
+                <div class="admin-form-group">
+                    <button class="admin-button" onclick="exportBackup()">📥 Export Backup</button>
+                    <button class="admin-button" onclick="document.getElementById('backupUpload').click()">📤 Import Backup</button>
+                    <input type="file" id="backupUpload" accept=".json" style="display: none;" onchange="importBackup(this)">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Music Player -->
+    <div class="music-player">
+        <div class="player-title">🎵 Birthday Music</div>
+        <audio id="bgMusic" controls style="width: 100%; margin-bottom: 0.5rem;">
+            <source src="" type="audio/mpeg">
+        </audio>
+    </div>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1 class="hero-title">🎂 Happy Birthday My Love ❤️</h1>
+                <p class="hero-subtitle">Today is all about the most beautiful person in my life.</p>
+                <div class="cake-container">
+                    <div class="cake-emoji">🎂</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Love Message Section -->
+        <section class="section" style="background: var(--glass-bg);">
+            <div class="message-card glass">
+                <h2 class="section-title">💌 For You</h2>
+                <p class="typing-text" id="typingText"></p>
+            </div>
+        </section>
+
+        <!-- Funny Love Cards -->
+        <section class="section">
+            <h2 class="section-title text-center">😂 You Are...</h2>
+            <div class="cards-grid" id="funnyCardsContainer"></div>
+        </section>
+
+        <!-- Memory Gallery -->
+        <section class="section">
+            <h2 class="section-title text-center">📸 Our Memories</h2>
+            <div class="gallery" id="galleryContainer"></div>
+            <div class="lightbox" id="lightbox">
+                <div class="lightbox-content">
+                    <span class="lightbox-close" onclick="closeLightbox()">✕</span>
+                    <img class="lightbox-image" id="lightboxImage" src="">
+                </div>
+            </div>
+        </section>
+
+        <!-- Timeline -->
+        <section class="section">
+            <h2 class="section-title text-center">📅 Our Timeline</h2>
+            <div class="timeline" id="timelineContainer"></div>
+        </section>
+
+        <!-- Countdown -->
+        <section class="section">
+            <h2 class="section-title text-center">⏰ Time Until Your Special Day</h2>
+            <div class="countdown" id="countdownContainer"></div>
+        </section>
+
+        <!-- Love Meter -->
+        <section class="section">
+            <h2 class="section-title text-center">❤️ Love Meter</h2>
+            <div class="love-meter">
+                <div class="meter-bar">
+                    <div class="meter-fill"></div>
+                </div>
+                <div class="meter-text">System Scan Complete: Unlimited Love Detected ❤️</div>
+            </div>
+        </section>
+
+        <!-- Surprise Section -->
+        <section class="section">
+            <h2 class="section-title text-center">🎁 Surprise</h2>
+            <div class="surprise-container">
+                <div class="gift-box" id="giftBox">
+                    <div class="gift-box-inner">
+                        <div class="gift-box-front">🎁</div>
+                        <div class="gift-box-back">
+                            <div id="surpriseMessage">Click me to reveal your surprise!</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="surprise-message" id="surpriseMessageDisplay"></div>
+            </div>
+        </section>
+
+        <!-- Wish Wall -->
+        <section class="section">
+            <h2 class="section-title text-center">🎊 Birthday Wishes</h2>
+            <div class="wish-wall" id="wishWallContainer"></div>
+        </section>
+
+        <!-- Grand Finale -->
+        <section class="grand-finale">
+            <div class="finale-text">🎉 Happy Birthday My Princess 👑❤️ 🎉</div>
+        </section>
+
+        <!-- Final Message -->
+        <section class="section" style="background: var(--glass-bg);">
+            <div style="text-align: center; padding: 3rem;">
+                <p style="font-size: 1.3rem; line-height: 1.8;">
+                    No matter how many birthdays come, you will always be my favorite person.
+                    <br><br>
+                    <strong style="color: var(--primary-color);">Happy Birthday My Love ❤️🎂</strong>
+                </p>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="creator-name" id="creatorName">Created By REXHZO</div>
+            <p style="margin-top: 1rem; opacity: 0.7;">Made with ❤️ for the most special person</p>
+        </footer>
+    </main>
+
+    <script>
+        // ========== CONFIGURATION & STATE ==========
+        const CONFIG = {
+            personName: 'My Love',
+            birthdayDate: new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate() + 1),
+            primaryColor: '#ff1493',
+            secondaryColor: '#ff69b4',
+            accentColor: '#ff8fd3'
+        };
+
+        let state = {
+            isAdminOpen: false,
+            isLightMode: false,
+            creatorClickCount: 0,
+            creatorClickTimeout: null,
+            gallery: [],
+            timeline: [],
+            wishes: [],
+            messages: [],
+            mainMessage: `Wishing you the most beautiful day filled with love, laughter, and magic. You deserve all the happiness in the world! 💕`
+        };
+
+        // ========== INITIALIZATION ==========
+        window.addEventListener('DOMContentLoaded', () => {
+            loadFromLocalStorage();
+            initializeUI();
+            createFloatingHearts();
+            startCountdown();
+            typeWriterAnimation();
+            setupEventListeners();
+            createSparkles();
+            setupConfettiTriggers();
+            hideLoadingScreen();
+            updateCreatorName();
+        });
+
+        // ========== LOADING SCREEN ==========
+        function hideLoadingScreen() {
+            const loadingScreen = document.getElementById('loadingScreen');
+            setTimeout(() => {
+                loadingScreen.style.animation = 'fadeInDown 0.5s ease reverse forwards';
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                }, 500);
+            }, 1500);
+        }
+
+        // ========== INITIALIZATION FUNCTIONS ==========
+        function initializeUI() {
+            updateFunnyCards();
+            updateGallery();
+            updateTimeline();
+            updateWishWall();
+            updateMessages();
+            updateMainMessage();
+            document.title = CONFIG.personName + ' Birthday';
+        }
+
+        function setupEventListeners() {
+            // Theme toggle
+            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+
+            // Gift box
+            document.getElementById('giftBox').addEventListener('click', openGiftBox);
+
+            // Creator name
+            document.getElementById('creatorName').addEventListener('click', handleCreatorClick);
+
+            // Password input
+            document.getElementById('passwordInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') checkPassword();
+            });
+
+            // Admin overlay click to close
+            document.getElementById('adminOverlay').addEventListener('click', (e) => {
+                if (e.target.id === 'adminOverlay') closeAdmin();
+            });
+
+            // Cursor glow on mouse move
+            document.addEventListener('mousemove', createCursorGlow);
+        }
+
+        // ========== FLOATING HEARTS ==========
+        function createFloatingHearts() {
+            const container = document.getElementById('floatingHeartsContainer');
+            const hearts = ['❤️', '💕', '💖', '💗', '💝'];
+
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.top = '-50px';
+                heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                heart.style.fontSize = (Math.random() * 1.5 + 1) + 'rem';
+                
+                container.appendChild(heart);
+                
+                setTimeout(() => heart.remove(), 6000);
+            }, 300);
+        }
+
+        // ========== SPARKLES ==========
+        function createSparkles() {
+            setInterval(() => {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.left = Math.random() * window.innerWidth + 'px';
+                sparkle.style.top = Math.random() * window.innerHeight + 'px';
+                sparkle.style.animationDuration = (Math.random() * 2 + 1) + 's';
+                
+                document.body.appendChild(sparkle);
+                
+                setTimeout(() => sparkle.remove(), 3000);
+            }, 500);
+        }
+
+        // ========== COUNTDOWN TIMER ==========
+        function startCountdown() {
+            function updateCountdown() {
+                const now = new Date().getTime();
+                const distance = CONFIG.birthdayDate - now;
+
+                if (distance < 0) {
+                    document.getElementById('countdownContainer').innerHTML = `
+                        <div style="text-align: center; padding: 2rem; grid-column: 1/-1;">
+                            <p style="font-size: 2rem; color: var(--primary-color);">🎉 It's Your Birthday! 🎉</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                document.getElementById('countdownContainer').innerHTML = `
+                    <div class="countdown-item">
+                        <div class="countdown-number">${days}</div>
+                        <div class="countdown-label">Days</div>
+                    </div>
+                    <div class="countdown-item">
+                        <div class="countdown-number">${hours}</div>
+                        <div class="countdown-label">Hours</div>
+                    </div>
+                    <div class="countdown-item">
+                        <div class="countdown-number">${minutes}</div>
+                        <div class="countdown-label">Minutes</div>
+                    </div>
+                    <div class="countdown-item">
+                        <div class="countdown-number">${seconds}</div>
+                        <div class="countdown-label">Seconds</div>
+                    </div>
+                `;
+            }
+
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+        }
+
+        // ========== TYPEWRITER ANIMATION ==========
+        function typeWriterAnimation() {
+            const typingText = document.getElementById('typingText');
+            const text = state.mainMessage;
+            let index = 0;
+
+            typingText.textContent = '';
+
+            function type() {
+                if (index < text.length) {
+                    typingText.textContent += text.charAt(index);
+                    index++;
+                    setTimeout(type, 50);
+                }
+            }
+
+            type();
+        }
+
+        function updateMainMessage() {
+            document.getElementById('typingText').textContent = '';
+            typeWriterAnimation();
+        }
+
+        // ========== GIFT BOX ==========
+        function openGiftBox() {
+            const giftBox = document.getElementById('giftBox');
+            giftBox.classList.toggle('opened');
+            
+            if (giftBox.classList.contains('opened')) {
+                triggerConfetti();
+                playCheeringSound();
+                showSurpriseMessage();
+            }
+        }
+
+        function showSurpriseMessage() {
+            const messages = [
+                '🎂 You make every day feel like a celebration!',
+                '💕 My heart is 100% yours forever!',
+                '✨ You are my greatest gift!',
+                '👑 The queen of my heart!',
+                '🌟 You make my world magical!'
+            ];
+            
+            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+            document.getElementById('surpriseMessageDisplay').textContent = randomMessage;
+        }
+
+        // ========== CONFETTI EFFECT ==========
+        function triggerConfetti() {
+            const canvas = document.createElement('canvas');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            canvas.style.position = 'fixed';
+            canvas.style.top = '0';
+            canvas.style.left = '0';
+            canvas.style.pointerEvents = 'none';
+            canvas.style.zIndex = '100';
+            document.body.appendChild(canvas);
+
+            const ctx = canvas.getContext('2d');
+            const particles = [];
+
+            for (let i = 0; i < 100; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height,
+                    width: Math.random() * 10 + 5,
+                    height: Math.random() * 10 + 5,
+                    opacity: 1,
+                    color: ['#ff1493', '#ff69b4', '#ff8fd3', '#ffb6d9', '#ffc0d9'][Math.floor(Math.random() * 5)],
+                    vx: (Math.random() - 0.5) * 8,
+                    vy: Math.random() * 5 + 2,
+                    rotation: Math.random() * Math.PI * 2,
+                    rotationSpeed: (Math.random() - 0.5) * 0.3
+                });
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                for (let i = particles.length - 1; i >= 0; i--) {
+                    const p = particles[i];
+
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vy += 0.1;
+                    p.rotation += p.rotationSpeed;
+                    p.opacity -= 0.01;
+
+                    ctx.save();
+                    ctx.globalAlpha = p.opacity;
+                    ctx.fillStyle = p.color;
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate(p.rotation);
+                    ctx.fillRect(-p.width / 2, -p.height / 2, p.width, p.height);
+                    ctx.restore();
+
+                    if (p.opacity <= 0 || p.y > canvas.height) {
+                        particles.splice(i, 1);
+                    }
+                }
+
+                if (particles.length > 0) {
+                    requestAnimationFrame(animate);
+                } else {
+                    canvas.remove();
+                }
+            }
+
+            animate();
+        }
+
+        function setupConfettiTriggers() {
+            setInterval(() => {
+                if (Math.random() > 0.95 && !state.isAdminOpen) {
+                    triggerConfetti();
+                }
+            }, 5000);
+        }
+
+        // ========== CHEERING SOUND ==========
+        function playCheeringSound() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const now = audioContext.currentTime;
+
+                // First beep
+                const osc1 = audioContext.createOscillator();
+                const gain1 = audioContext.createGain();
+                osc1.connect(gain1);
+                gain1.connect(audioContext.destination);
+                osc1.frequency.setValueAtTime(600, now);
+                osc1.frequency.exponentialRampToValueAtTime(800, now + 0.3);
+                gain1.gain.setValueAtTime(0.3, now);
+                gain1.gain.exponentialRampToValueAtTime(0, now + 0.3);
+                osc1.start(now);
+                osc1.stop(now + 0.3);
+
+                // Second beep
+                setTimeout(() => {
+                    const osc2 = audioContext.createOscillator();
+                    const gain2 = audioContext.createGain();
+                    osc2.connect(gain2);
+                    gain2.connect(audioContext.destination);
+                    osc2.frequency.setValueAtTime(400, now + 0.4);
+                    osc2.frequency.exponentialRampToValueAtTime(600, now + 0.7);
+                    gain2.gain.setValueAtTime(0.3, now + 0.4);
+                    gain2.gain.exponentialRampToValueAtTime(0, now + 0.7);
+                    osc2.start(now + 0.4);
+                    osc2.stop(now + 0.7);
+                }, 150);
+            } catch (e) {
+                console.log('Audio not supported');
+            }
+        }
+
+        // ========== THEME TOGGLE ==========
+        function toggleTheme() {
+            state.isLightMode = !state.isLightMode;
+            document.body.classList.toggle('light-mode');
+            document.getElementById('themeToggle').textContent = state.isLightMode ? '🌙' : '☀️';
+            saveToLocalStorage();
+        }
+
+        // ========== CURSOR GLOW ==========
+        function createCursorGlow(e) {
+            if (Math.random() > 0.8) {
+                const glow = document.createElement('div');
+                glow.className = 'cursor-glow';
+                glow.style.left = e.clientX + 'px';
+                glow.style.top = e.clientY + 'px';
+                document.body.appendChild(glow);
+                setTimeout(() => glow.remove(), 500);
+            }
+        }
+
+        // ========== FUNNY CARDS ==========
+        function updateFunnyCards() {
+            const cards = [
+                { emoji: '❤️', title: 'CEO of My Heart', description: 'Running my life since day one!' },
+                { emoji: '😜', title: 'Official Trouble Maker', description: 'Making every moment unforgettable!' },
+                { emoji: '😂', title: 'Professional Mood Changer', description: 'Turning sad days into happy ones!' },
+                { emoji: '👑', title: 'Queen of My Life', description: 'Always royalty in my eyes!' }
+            ];
+
+            const container = document.getElementById('funnyCardsContainer');
+            container.innerHTML = cards.map(card => `
+                <div class="love-card glass">
+                    <div class="love-card-emoji">${card.emoji}</div>
+                    <h3>${card.title}</h3>
+                    <p>${card.description}</p>
+                </div>
+            `).join('');
+        }
+
+        // ========== GALLERY ==========
+        function updateGallery() {
+            const container = document.getElementById('galleryContainer');
+            
+            if (state.gallery.length === 0) {
+                container.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 2rem;">
+                        <p style="opacity: 0.7;">📸 No photos yet. Add some memories through the admin panel!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = state.gallery.map((photo, index) => `
+                <div class="gallery-item" onclick="openLightbox(${index})">
+                    <img src="${photo}" alt="Memory">
+                    <div class="gallery-overlay">
+                        <div class="gallery-overlay-text">Click to view</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openLightbox(index) {
+            document.getElementById('lightbox').classList.add('active');
+            document.getElementById('lightboxImage').src = state.gallery[index];
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+        }
+
+        // ========== TIMELINE ==========
+        function updateTimeline() {
+            const container = document.getElementById('timelineContainer');
+            
+            const defaultTimeline = [
+                { date: 'First Moment', title: 'The Beginning', text: 'When our hearts first met...' },
+                { date: 'Every Day', title: 'Growing Love', text: 'With every passing day, my love grows stronger...' },
+                { date: 'Forever', title: 'Till the End', text: 'And I will love you forever...' }
+            ];
+
+            const timeline = state.timeline.length > 0 ? state.timeline : defaultTimeline;
+
+            container.innerHTML = timeline.map(item => `
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-date">${item.date}</div>
+                        <div class="timeline-title">${item.title}</div>
+                        <div>${item.text}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ========== WISHES ==========
+        function updateWishWall() {
+            const container = document.getElementById('wishWallContainer');
+            
+            const defaultWishes = [
+                { emoji: '💪', title: 'Strength', text: 'To face any challenge with confidence!' },
+                { emoji: '😊', title: 'Happiness', text: 'Every single day of your life!' },
+                { emoji: '🌍', title: 'Adventure', text: 'To explore and enjoy this beautiful world!' },
+                { emoji: '🎯', title: 'Success', text: 'In everything you pursue!' },
+                { emoji: '👨‍👩‍👧‍👦', title: 'Family', text: 'Forever surrounded by loved ones!' },
+                { emoji: '✨', title: 'Magic', text: 'To always believe in the impossible!' }
+            ];
+
+            const wishes = state.wishes.length > 0 ? state.wishes : defaultWishes;
+
+            container.innerHTML = wishes.map(wish => `
+                <div class="wish-card">
+                    <div class="wish-card-content">
+                        <div class="wish-emoji">${wish.emoji}</div>
+                        <h3>${wish.title}</h3>
+                        <p>${wish.text}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ========== CREATOR NAME ==========
+        function updateCreatorName() {
+            document.getElementById('creatorName').textContent = 'Created By REXHZO';
+        }
+
+        function handleCreatorClick() {
+            state.creatorClickCount++;
+
+            clearTimeout(state.creatorClickTimeout);
+
+            if (state.creatorClickCount >= 5) {
+                openPasswordPopup();
+                state.creatorClickCount = 0;
+            } else {
+                state.creatorClickTimeout = setTimeout(() => {
+                    state.creatorClickCount = 0;
+                }, 3000);
+            }
+        }
+
+        // ========== ADMIN PANEL ==========
+        function openPasswordPopup() {
+            document.getElementById('passwordOverlay').classList.add('active');
+            document.getElementById('passwordPopup').classList.add('active');
+            document.getElementById('passwordInput').focus();
+        }
+
+        function closePasswordPopup() {
+            document.getElementById('passwordOverlay').classList.remove('active');
+            document.getElementById('passwordPopup').classList.remove('active');
+            document.getElementById('errorMessage').textContent = '';
+            document.getElementById('passwordInput').value = '';
+        }
+
+        function checkPassword() {
+            const password = document.getElementById('passwordInput').value;
+            
+            if (password === 'REHAN') {
+                closePasswordPopup();
+                openAdmin();
+            } else {
+                const errorMsg = document.getElementById('errorMessage');
+                errorMsg.textContent = '❌ Wrong password! Try again.';
+                document.getElementById('passwordInput').value = '';
+                
+                setTimeout(() => {
+                    errorMsg.textContent = '';
+                }, 2000);
+            }
+        }
+
+        function openAdmin() {
+            state.isAdminOpen = true;
+            document.getElementById('adminOverlay').classList.add('active');
+            loadAdminData();
+        }
+
+        function closeAdmin() {
+            state.isAdminOpen = false;
+            document.getElementById('adminOverlay').classList.remove('active');
+            saveToLocalStorage();
+        }
+
+        function switchAdminTab(tabName) {
+            // Remove active from all tabs
+            document.querySelectorAll('.admin-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.admin-content').forEach(content => content.classList.remove('active'));
+
+            // Add active to selected
+            event.target.classList.add('active');
+            document.getElementById(tabName + 'Tab').classList.add('active');
+        }
+
+        function loadAdminData() {
+            // Gallery
+            updateAdminGallery();
+
+            // Music
+            const audio = document.getElementById('bgMusic');
+            document.getElementById('currentMusic').textContent = audio.src ? 'Uploaded' : 'None';
+
+            // Messages
+            document.getElementById('mainMessage').value = state.mainMessage;
+            updateMessagesContainer();
+
+            // Timeline
+            updateTimelineContainer();
+
+            // Wishes
+            updateWishesContainer();
+
+            // Settings
+            document.getElementById('siteTitle').value = document.title;
+            document.getElementById('personName').value = CONFIG.personName;
+            document.getElementById('primaryColor').value = CONFIG.primaryColor;
+        }
+
+        // ========== GALLERY ADMIN ==========
+        function uploadPhoto() {
+            const input = document.getElementById('photoUpload');
+            const file = input.files[0];
+
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                state.gallery.push(e.target.result);
+                updateGallery();
+                updateAdminGallery();
+                saveToLocalStorage();
+                input.value = '';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function updateAdminGallery() {
+            const container = document.getElementById('adminGallery');
+            container.innerHTML = state.gallery.map((photo, index) => `
+                <div class="admin-gallery-item">
+                    <img src="${photo}" alt="Photo">
+                    <button class="admin-gallery-delete" onclick="deletePhoto(${index})">✕</button>
+                </div>
+            `).join('');
+        }
+
+        function deletePhoto(index) {
+            state.gallery.splice(index, 1);
+            updateGallery();
+            updateAdminGallery();
+            saveToLocalStorage();
+        }
+
+        // ========== MUSIC ADMIN ==========
+        function uploadMusic() {
+            const input = document.getElementById('musicUpload');
+            const file = input.files[0];
+
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const audio = document.getElementById('bgMusic');
+                audio.src = e.target.result;
+                document.getElementById('currentMusic').textContent = file.name;
+                saveToLocalStorage();
+                input.value = '';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // ========== MESSAGES ADMIN ==========
+        function saveMainMessage() {
+            state.mainMessage = document.getElementById('mainMessage').value;
+            updateMainMessage();
+            saveToLocalStorage();
+            alert('✅ Message saved!');
+        }
+
+        function updateMessagesContainer() {
+            const container = document.getElementById('messagesContainer');
+            container.innerHTML = state.messages.map((msg, index) => `
+                <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
+                    <input type="text" value="${msg}" class="admin-input" 
+                        onchange="state.messages[${index}] = this.value; saveToLocalStorage();" style="flex: 1;">
+                    <button class="admin-button" onclick="deleteMessage(${index})">Delete</button>
+                </div>
+            `).join('');
+        }
+
+        function addMessage() {
+            const msg = prompt('Enter message:');
+            if (msg) {
+                state.messages.push(msg);
+                updateMessagesContainer();
+                saveToLocalStorage();
+            }
+        }
+
+        function deleteMessage(index) {
+            state.messages.splice(index, 1);
+            updateMessagesContainer();
+            saveToLocalStorage();
+        }
+
+        // ========== TIMELINE ADMIN ==========
+        function updateTimelineContainer() {
+            const container = document.getElementById('timelineContainer');
+            container.innerHTML = state.timeline.map((item, index) => `
+                <div style="background: var(--glass-bg); padding: 1rem; border-radius: 10px; margin-bottom: 1rem;">
+                    <input type="text" placeholder="Date" value="${item.date}" class="admin-input" 
+                        onchange="state.timeline[${index}].date = this.value; saveToLocalStorage();" 
+                        style="margin-bottom: 0.5rem;">
+                    <input type="text" placeholder="Title" value="${item.title}" class="admin-input" 
+                        onchange="state.timeline[${index}].title = this.value; saveToLocalStorage();" 
+                        style="margin-bottom: 0.5rem;">
+                    <textarea class="admin-textarea" placeholder="Text"
+                        onchange="state.timeline[${index}].text = this.value; saveToLocalStorage();">${item.text}</textarea>
+                    <button class="admin-button" onclick="deleteTimeline(${index})">Delete</button>
+                </div>
+            `).join('');
+        }
+
+        function addMemory() {
+            const date = document.getElementById('memoryDate').value;
+            const title = document.getElementById('memoryTitle').value;
+            const text = document.getElementById('memoryText').value;
+
+            if (date && title && text) {
+                state.timeline.push({ date, title, text });
+                updateTimeline();
+                updateTimelineContainer();
+                saveToLocalStorage();
+                
+                document.getElementById('memoryDate').value = '';
+                document.getElementById('memoryTitle').value = '';
+                document.getElementById('memoryText').value = '';
+            }
+        }
+
+        function deleteTimeline(index) {
+            state.timeline.splice(index, 1);
+            updateTimeline();
+            updateTimelineContainer();
+            saveToLocalStorage();
+        }
+
+        // ========== WISHES ADMIN ==========
+        function updateWishesContainer() {
+            const container = document.getElementById('wishesContainer');
+            container.innerHTML = state.wishes.map((wish, index) => `
+                <div style="background: var(--glass-bg); padding: 1rem; border-radius: 10px; margin-bottom: 1rem;">
+                    <input type="text" placeholder="Emoji" value="${wish.emoji}" maxlength="3" class="admin-input" 
+                        onchange="state.wishes[${index}].emoji = this.value; saveToLocalStorage();" 
+                        style="margin-bottom: 0.5rem;">
+                    <input type="text" placeholder="Title" value="${wish.title}" class="admin-input" 
+                        onchange="state.wishes[${index}].title = this.value; saveToLocalStorage();" 
+                        style="margin-bottom: 0.5rem;">
+                    <textarea class="admin-textarea" placeholder="Text"
+                        onchange="state.wishes[${index}].text = this.value; saveToLocalStorage();">${wish.text}</textarea>
+                    <button class="admin-button" onclick="deleteWish(${index})">Delete</button>
+                </div>
+            `).join('');
+        }
+
+        function addWish() {
+            const emoji = document.getElementById('wishEmoji').value;
+            const title = document.getElementById('wishTitle').value;
+            const text = document.getElementById('wishText').value;
+
+            if (emoji && title && text) {
+                state.wishes.push({ emoji, title, text });
+                updateWishWall();
+                updateWishesContainer();
+                saveToLocalStorage();
+                
+                document.getElementById('wishEmoji').value = '';
+                document.getElementById('wishTitle').value = '';
+                document.getElementById('wishText').value = '';
+            }
+        }
+
+        function deleteWish(index) {
+            state.wishes.splice(index, 1);
+            updateWishWall();
+            updateWishesContainer();
+            saveToLocalStorage();
+        }
+
+        // ========== SETTINGS ADMIN ==========
+        function saveTitle() {
+            document.title = document.getElementById('siteTitle').value;
+            saveToLocalStorage();
+            alert('✅ Title saved!');
+        }
+
+        function saveName() {
+            CONFIG.personName = document.getElementById('personName').value;
+            saveToLocalStorage();
+            alert('✅ Name saved!');
+        }
+
+        function saveBirthdayDate() {
+            const dateValue = document.getElementById('birthdayDate').value;
+            if (dateValue) {
+                CONFIG.birthdayDate = new Date(dateValue);
+                saveToLocalStorage();
+                alert('✅ Birthday date saved!');
+            }
+        }
+
+        function savePrimaryColor() {
+            const color = document.getElementById('primaryColor').value;
+            CONFIG.primaryColor = color;
+            document.documentElement.style.setProperty('--primary-color', color);
+            saveToLocalStorage();
+            alert('✅ Color applied!');
+        }
+
+        function resetData() {
+            if (confirm('Are you sure? This will reset all data!')) {
+                state = {
+                    isAdminOpen: false,
+                    isLightMode: false,
+                    creatorClickCount: 0,
+                    creatorClickTimeout: null,
+                    gallery: [],
+                    timeline: [],
+                    wishes: [],
+                    messages: [],
+                    mainMessage: `Wishing you the most beautiful day filled with love, laughter, and magic. You deserve all the happiness in the world! 💕`
+                };
+                localStorage.clear();
+                location.reload();
+            }
+        }
+
+        // ========== BACKUP ==========
+        function exportBackup() {
+            const backup = {
+                config: CONFIG,
+                state: state,
+                music: document.getElementById('bgMusic').src
+            };
+
+            const dataStr = JSON.stringify(backup, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'birthday-website-backup.json';
+            link.click();
+        }
+
+        function importBackup(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const backup = JSON.parse(e.target.result);
+                    Object.assign(CONFIG, backup.config);
+                    state = backup.state;
+                    if (backup.music) {
+                        document.getElementById('bgMusic').src = backup.music;
+                    }
+                    saveToLocalStorage();
+                    location.reload();
+                } catch (error) {
+                    alert('❌ Invalid backup file!');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // ========== STORAGE ==========
+        function saveToLocalStorage() {
+            localStorage.setItem('birthdayWebsiteConfig', JSON.stringify(CONFIG));
+            localStorage.setItem('birthdayWebsiteState', JSON.stringify(state));
+            localStorage.setItem('birthdayWebsiteTheme', state.isLightMode ? 'light' : 'dark');
+        }
+
+        function loadFromLocalStorage() {
+            const savedConfig = localStorage.getItem('birthdayWebsiteConfig');
+            const savedState = localStorage.getItem('birthdayWebsiteState');
+            const savedTheme = localStorage.getItem('birthdayWebsiteTheme');
+
+            if (savedConfig) Object.assign(CONFIG, JSON.parse(savedConfig));
+            if (savedState) Object.assign(state, JSON.parse(savedState));
+            if (savedTheme === 'light') {
+                state.isLightMode = true;
+                document.body.classList.add('light-mode');
+                document.getElementById('themeToggle').textContent = '☀️';
+            }
+        }
+
+        // Autosave on scroll
+        window.addEventListener('scroll', () => {
+            if (Math.random() > 0.95) saveToLocalStorage();
+        });
+    </script>
+</body>
+</html>
