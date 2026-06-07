@@ -2333,6 +2333,21 @@
         window.addEventListener('scroll', () => {
             if (Math.random() > 0.95) saveToLocalStorage();
         });
+        <script>
+  // Hide loading screen and show content after page loads
+  window.addEventListener('load', function() {
+    // Assuming you have a loading/splash screen element
+    const loadingScreen = document.querySelector('.loading-screen') || document.querySelector('[data-loading]');
+    if (loadingScreen) {
+      loadingScreen.style.display = 'none';
+    }
+  });
+
+  // Or set a timeout as fallback
+  setTimeout(function() {
+    document.body.style.visibility = 'visible';
+  }, 2000)
+        
     </script>
 </body>
 </html>
