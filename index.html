@@ -1,61 +1,137 @@
-<html>
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Happy Birthday</title>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎉 Happy Birthday SABA! 🎊</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-
 <body>
-    <div class="container">
-        <div class="row">
-            <div class="loader">
-                <button id="play">Start</button>
+    <!-- Splash Screen -->
+    <div class="splash-screen" id="splashScreen">
+        <div class="splash-content">
+            <div class="birthday-icon">
+                <i class="fas fa-birthday-cake"></i>
             </div>
+            <h1 class="splash-title">🎉 Happy Birthday 🎉</h1>
+            <p class="splash-subtitle">To someone special...</p>
+            <button id="play-btn" class="btn-play">
+                <span>Click to Begin</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
         </div>
     </div>
-    <audio class="song" controls loop>
-        <source src="music.mp3">
-        </source>
-        Your browser isn't invited for super fun audio time.
-    </audio>
-    <canvas id="confetti"></canvas>
-    <div class="main">
-        <div class="container pt-5">
-            <div class="row">
 
-                <div class="col-12 col-xl-6 mx-auto">
-                    <img src="img/banner.png" alt="">
+    <!-- Main Content -->
+    <div class="main-container" id="mainContainer" style="display: none;">
+        <!-- Audio Player -->
+        <audio id="bgMusic" class="hidden-audio">
+            <source src="music.mp3" type="audio/mpeg">
+        </audio>
+
+        <!-- Canvas for Effects -->
+        <canvas id="confetti"></canvas>
+        <div id="particles"></div>
+
+        <!-- Header -->
+        <header class="birthday-header">
+            <div class="floating-balloons">
+                <div class="balloon" style="--delay: 0s; --color: #ff6b6b;"></div>
+                <div class="balloon" style="--delay: 0.5s; --color: #4ecdc4;"></div>
+                <div class="balloon" style="--delay: 1s; --color: #ffe66d;"></div>
+                <div class="balloon" style="--delay: 1.5s; --color: #95e1d3;"></div>
+                <div class="balloon" style="--delay: 2s; --color: #f38181;"></div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="container main-content">
+            <!-- Banner Section -->
+            <div class="banner-section">
+                <div class="banner-image">
+                    <img src="img/banner.png" alt="Birthday Banner" class="bounce-in">
                 </div>
+            </div>
 
-                <div class="col-12  text-center">
-                    <div id="name" class="area">SABA</div>
-                </div>
+            <!-- Name Section -->
+            <div class="name-section">
+                <div class="name-display" id="nameDisplay">SABA</div>
+                <div class="name-subtitle">✨ Queen of Hearts ✨</div>
+            </div>
 
-                <div class="col-12 text-center">
-                    <div class="type-wrap">
-                        <div id="typed-strings" class="typing">
-                            <h2>Happy Birthday <i id="nae">SABA</i></h2>
-                            <h2>Have a wonderful day</h2>
-                            <h2>Filled with joy and happiness.</h2>
-                        </div>
-                        <span id="typed" style="white-space:pre;"></span>
+            <!-- Typing Animation Section -->
+            <div class="typing-section">
+                <div class="typing-container">
+                    <div id="typed-strings" class="sr-only">
+                        <p>Happy Birthday SABA! 🎂</p>
+                        <p>Wishing you a year full of joy!</p>
+                        <p>May all your dreams come true!</p>
+                        <p>You deserve the best today!</p>
+                        <p>Let's celebrate YOU! 🥳</p>
                     </div>
-                </div>
-
-                <div class="col-12 col-xl-3 cake">
-                    <img src="img/cake.gif" alt="">
+                    <span id="typed" class="typing-text"></span>
                 </div>
             </div>
-        </div>
-        <img src="img/Balloon-Border.png" width="100%" class="balloon-border">
-    </div>
-</body>
-<script src="https://unpkg.com/magic-snowflakes/dist/snowflakes.min.js"></script>
-<script src="js/jquery.js"></script>
-<script src="js/typed.min.js"></script>
-<script src="js/script.js"></script>
 
+            <!-- Cake Section -->
+            <div class="cake-section">
+                <div class="cake-image">
+                    <img src="img/cake.gif" alt="Birthday Cake" class="cake-bounce">
+                </div>
+                <div class="candles">
+                    <div class="candle"></div>
+                    <div class="candle"></div>
+                    <div class="candle"></div>
+                </div>
+            </div>
+
+            <!-- Wishes Section -->
+            <div class="wishes-section">
+                <div class="wish-card">
+                    <i class="fas fa-heart"></i>
+                    <h3>Health & Happiness</h3>
+                    <p>May you stay healthy and happy always!</p>
+                </div>
+                <div class="wish-card">
+                    <i class="fas fa-star"></i>
+                    <h3>Success & Dreams</h3>
+                    <p>May all your dreams come true this year!</p>
+                </div>
+                <div class="wish-card">
+                    <i class="fas fa-gift"></i>
+                    <h3>Love & Laughter</h3>
+                    <p>Surrounded by love and laughter always!</p>
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="controls-section">
+                <button id="musicToggle" class="btn-control" title="Toggle Music">
+                    <i class="fas fa-music"></i> Music
+                </button>
+                <button id="confettiBtn" class="btn-control" title="Celebrate">
+                    <i class="fas fa-wand-magic-sparkles"></i> Celebrate
+                </button>
+                <button id="soundBtn" class="btn-control" title="Cheers Sound">
+                    <i class="fas fa-volume-up"></i> Cheers
+                </button>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="birthday-footer">
+            <p>✨ Wishing you the most amazing birthday! ✨</p>
+            <p class="footer-small">Made with <i class="fas fa-heart"></i> for SABA</p>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="js/confetti.js"></script>
+    <script src="js/script.js"></script>
+</body>
 </html>
