@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="A premium romantic birthday website with admin panel">
+    <meta name="description" content="A premium romantic birthday website with advanced admin panel">
     <meta name="theme-color" content="#ff1493">
-    <title>🎂 Happy Birthday My Love ❤️</title>
+    <title id="page-title">🎂 Happy Birthday My Love ❤️</title>
     
     <style>
         /* ========== GLOBAL STYLES ========== */
@@ -194,6 +194,28 @@
             100% {
                 transform: translate(var(--tx), var(--ty));
                 opacity: 0;
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
             }
         }
 
@@ -764,6 +786,7 @@
             cursor: pointer;
             position: relative;
             overflow: hidden;
+            animation: slideIn 0.5s ease-out;
         }
 
         .wish-card::before {
@@ -796,11 +819,33 @@
         .wish-card h3 {
             color: var(--accent-color);
             margin-bottom: 0.5rem;
+            word-break: break-word;
         }
 
         .wish-card p {
             font-size: 0.95rem;
             opacity: 0.8;
+            word-break: break-word;
+        }
+
+        .wish-delete-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff4444;
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .wish-card:hover .wish-delete-btn {
+            opacity: 1;
         }
 
         /* ========== GRAND FINALE ========== */
@@ -862,6 +907,13 @@
             margin-bottom: 0.5rem;
             text-transform: uppercase;
             letter-spacing: 1px;
+        }
+
+        .player-status {
+            font-size: 0.85rem;
+            color: var(--accent-color);
+            text-align: center;
+            padding: 0.5rem;
         }
 
         /* ========== THEME TOGGLE ========== */
@@ -982,15 +1034,15 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0, 0, 0, 0.95);
             z-index: 9999;
             animation: fadeInDown 0.3s ease;
-            overflow: auto;
+            overflow-y: auto;
         }
 
         .admin-overlay.active {
             display: flex;
-            align-items: flex-start;
+            align-items: center;
             justify-content: center;
             padding: 2rem;
         }
@@ -998,84 +1050,85 @@
         .admin-panel {
             width: 100%;
             max-width: 1000px;
-            max-height: 95vh;
-            background: var(--glass-bg);
+            background: rgba(20, 10, 30, 0.9);
             border: 2px solid var(--accent-color);
-            border-radius: 20px;
+            border-radius: 25px;
+            padding: 3rem 2rem;
             backdrop-filter: blur(10px);
-            overflow-y: auto;
-            padding: 3rem;
-            animation: fadeInUp 0.5s ease-out;
-        }
-
-        .admin-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid var(--accent-color);
-        }
-
-        .admin-title {
-            font-size: 2rem;
-            color: var(--primary-color);
+            position: relative;
+            animation: slideDown 0.5s ease-out;
         }
 
         .admin-close {
-            font-size: 2rem;
-            cursor: pointer;
-            background: none;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #ff4444;
+            color: white;
             border: none;
-            color: var(--accent-color);
-            padding: 0;
-            width: auto;
-            box-shadow: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
             transition: all 0.3s ease;
         }
 
         .admin-close:hover {
-            transform: scale(1.2);
-            text-shadow: 0 0 10px rgba(255, 20, 147, 0.5);
+            background: #ff6666;
+            transform: scale(1.1);
         }
 
-        .admin-tabs {
-            display: flex;
-            gap: 1rem;
+        .admin-header {
+            text-align: center;
             margin-bottom: 2rem;
-            flex-wrap: wrap;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid var(--accent-color);
         }
 
-        .admin-tab {
-            padding: 0.8rem 1.5rem;
-            background: var(--glass-bg);
-            border: 2px solid var(--glass-border);
-            border-radius: 15px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text-light);
-        }
-
-        .admin-tab.active {
+        .admin-title {
+            font-size: 2.5rem;
+            font-weight: 800;
             background: var(--gradient-1);
-            border-color: var(--primary-color);
-            box-shadow: 0 0 20px rgba(255, 20, 147, 0.5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
         }
 
-        .admin-content {
-            display: none;
+        .admin-subtitle {
+            color: var(--accent-color);
+            font-size: 1rem;
+            letter-spacing: 2px;
         }
 
-        .admin-content.active {
-            display: block;
-            animation: fadeInUp 0.3s ease-out;
+        .admin-creator-label {
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #888;
+            letter-spacing: 1px;
+        }
+
+        .admin-section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: rgba(255, 20, 147, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+        }
+
+        .admin-section-title {
+            font-size: 1.3rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .admin-form-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
         }
 
         .admin-form-group label {
@@ -1085,233 +1138,207 @@
             font-weight: 600;
         }
 
-        .admin-photos {
+        .admin-btn {
+            background: var(--gradient-1);
+            padding: 0.8rem 1.5rem;
+            margin: 0.5rem 0.5rem 0.5rem 0;
+            border: none;
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .admin-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 20, 147, 0.5);
+        }
+
+        .admin-btn-danger {
+            background: #ff4444;
+        }
+
+        .admin-btn-danger:hover {
+            background: #ff6666;
+        }
+
+        .admin-btn-success {
+            background: #44ff44;
+            color: #000;
+        }
+
+        .admin-btn-success:hover {
+            background: #66ff66;
+        }
+
+        .admin-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1rem;
             margin-top: 1rem;
         }
 
-        .admin-photo-item {
-            position: relative;
+        .admin-item {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
             border-radius: 10px;
-            overflow: hidden;
-            aspect-ratio: 1;
-            cursor: pointer;
-            border: 2px solid var(--accent-color);
+            padding: 1rem;
+            position: relative;
         }
 
-        .admin-photo-item img {
+        .admin-item img {
             width: 100%;
-            height: 100%;
+            height: 150px;
             object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
         }
 
-        .admin-photo-delete {
+        .admin-item-delete {
             position: absolute;
             top: 5px;
             right: 5px;
-            background: rgba(255, 0, 0, 0.7);
+            background: #ff4444;
             color: white;
             border: none;
-            border-radius: 50%;
-            width: 25px;
-            height: 25px;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            transition: all 0.3s ease;
+            font-size: 0.8rem;
         }
 
-        .admin-photo-delete:hover {
-            background: rgba(255, 0, 0, 1);
-        }
-
-        .wishes-list {
-            display: grid;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .wish-item {
-            padding: 1rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--accent-color);
+        .admin-list {
+            max-height: 300px;
+            overflow-y: auto;
+            background: var(--glass-bg);
             border-radius: 10px;
+            padding: 1rem;
+        }
+
+        .admin-list-item {
+            background: rgba(255, 20, 147, 0.1);
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--accent-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 1rem;
         }
 
-        .wish-item-text {
+        .admin-list-item-text {
             flex: 1;
-            text-align: left;
+            word-break: break-word;
         }
 
-        .wish-item-delete {
-            background: rgba(255, 0, 0, 0.5);
+        .admin-list-item-delete {
+            background: #ff4444;
             color: white;
             border: none;
-            border-radius: 5px;
             padding: 0.5rem 1rem;
+            border-radius: 5px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            white-space: nowrap;
+            font-size: 0.8rem;
+            margin-left: 1rem;
         }
 
-        .wish-item-delete:hover {
-            background: rgba(255, 0, 0, 0.8);
-        }
-
-        /* ========== PASSWORD POPUP ========== */
-        .password-popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: var(--glass-bg);
-            border: 2px solid var(--accent-color);
-            border-radius: 20px;
-            padding: 2rem;
-            z-index: 10001;
-            backdrop-filter: blur(10px);
-            animation: fadeInUp 0.5s ease-out;
-            min-width: 300px;
-        }
-
-        .password-popup.active {
-            display: block;
-        }
-
-        .password-popup-overlay {
+        .modal-backdrop {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 10000;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 8999;
         }
 
-        .password-popup-overlay.active {
+        .modal-backdrop.active {
             display: block;
         }
 
-        .password-popup h2 {
-            margin-bottom: 1rem;
-            color: var(--primary-color);
+        .admin-password-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--dark-bg);
+            border: 2px solid var(--accent-color);
+            padding: 2rem;
+            border-radius: 15px;
+            z-index: 9998;
+            max-width: 400px;
+            width: 90%;
+            animation: zoomIn 0.3s ease-out;
         }
 
-        .password-popup input {
-            margin-bottom: 1rem;
+        .admin-password-modal.active {
+            display: block;
         }
 
-        .password-popup-buttons {
+        .admin-password-modal h2 {
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .admin-password-modal input {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid var(--accent-color);
+            border-radius: 10px;
+            color: white;
+        }
+
+        .admin-password-modal input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 20px rgba(255, 20, 147, 0.5);
+        }
+
+        .admin-password-buttons {
             display: flex;
             gap: 1rem;
+            justify-content: center;
         }
 
-        .error-message {
-            color: #ff6b6b;
-            margin-top: 0.5rem;
-            font-weight: 600;
-            animation: pulse 0.5s ease-in-out;
+        .admin-password-buttons button {
+            flex: 1;
         }
 
         /* ========== RESPONSIVE ========== */
         @media (max-width: 768px) {
-            .music-player {
-                bottom: 20px;
-                right: 20px;
-                min-width: 250px;
-                padding: 1rem;
-            }
-
-            .theme-toggle {
-                top: 20px;
-                right: 20px;
-                width: 50px;
-                height: 50px;
-                font-size: 1.2rem;
-            }
-
-            .admin-panel {
-                padding: 2rem 1rem;
-            }
-
             .timeline::before {
-                left: 10px;
+                left: 20px;
             }
 
             .timeline-item:nth-child(odd),
             .timeline-item:nth-child(even) {
                 text-align: left;
-                padding-left: 50px;
+                padding-left: 80px;
                 padding-right: 0;
             }
 
             .timeline-dot {
-                left: 0;
-            }
-
-            .countdown {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .cards-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .footer {
-                padding: 2rem 1rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .hero-title {
-                font-size: 1.8rem;
-            }
-
-            .hero-subtitle {
-                font-size: 1rem;
-            }
-
-            .cake-emoji {
-                font-size: 4rem;
+                left: 10px;
+                transform: translateX(0);
             }
 
             .music-player {
-                min-width: auto;
-                width: 90%;
-                bottom: 10px;
-                right: 5%;
+                bottom: 20px;
+                right: 20px;
+                min-width: 250px;
             }
 
-            .theme-toggle {
-                width: 45px;
-                height: 45px;
-                font-size: 1rem;
+            .admin-panel {
+                padding: 1.5rem 1rem;
             }
 
-            .section-title {
-                font-size: 1.5rem;
-            }
-
-            .countdown {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 0.5rem;
-            }
-
-            .countdown-item {
-                padding: 1rem;
-            }
-
-            .countdown-number {
+            .admin-title {
                 font-size: 1.8rem;
             }
         }
@@ -1324,491 +1351,369 @@
         <div class="loading-text">Loading Magic...</div>
     </div>
 
-    <!-- Floating Hearts -->
+    <!-- Floating Elements -->
     <div class="floating-hearts" id="floatingHearts"></div>
-
-    <!-- Theme Toggle -->
-    <button class="theme-toggle" id="themeToggle" title="Toggle Theme">🌙</button>
-
-    <!-- Music Player -->
-    <div class="music-player">
-        <div class="player-title">🎵 Birthday Soundtrack</div>
-        <audio id="birthAudio" controls>
-            <source src="" type="audio/mpeg">
-            Your browser does not support the audio element.
-        </audio>
-    </div>
-
-    <!-- Main Content -->
-    <div class="hero" id="heroSection">
-        <div class="hero-content">
-            <h1 class="hero-title" id="heroTitle">🎂 Happy Birthday My Love ❤️</h1>
-            <p class="hero-subtitle" id="heroSubtitle">Today is all about the most beautiful person in my life.</p>
-            <div class="cake-container">
-                <div class="cake-emoji">🎂</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Love Message Section -->
-    <section class="section" id="messageSection">
-        <div class="message-card glass">
-            <h2 class="section-title">💌 A Special Message</h2>
-            <div class="typing-text" id="typingText">Starting...</div>
-        </div>
-    </section>
-
-    <!-- Funny Love Section -->
-    <section class="section" id="funnySection">
-        <h2 class="section-title">😂 Why I Love You</h2>
-        <div class="cards-grid" id="loveCardsGrid">
-            <!-- Dynamic content from admin panel -->
-        </div>
-    </section>
-
-    <!-- Gallery Section -->
-    <section class="section" id="gallerySection">
-        <h2 class="section-title">📸 Our Memories</h2>
-        <div class="gallery" id="galleryGrid">
-            <!-- Dynamic gallery items -->
-        </div>
-    </section>
 
     <!-- Lightbox -->
     <div class="lightbox" id="lightbox">
         <div class="lightbox-content">
-            <span class="lightbox-close" id="lightboxClose">&times;</span>
-            <img class="lightbox-image" id="lightboxImage" src="" alt="">
+            <img class="lightbox-image" id="lightboxImage" src="" alt="Gallery Image">
+            <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
         </div>
     </div>
 
-    <!-- Timeline Section -->
-    <section class="section" id="timelineSection">
-        <h2 class="section-title">💑 Our Story</h2>
-        <div class="timeline" id="timeline">
-            <!-- Dynamic timeline items -->
-        </div>
-    </section>
-
-    <!-- Countdown Section -->
-    <section class="section" id="countdownSection">
-        <h2 class="section-title">⏱️ Time's Magical</h2>
-        <div class="countdown">
-            <div class="countdown-item">
-                <div class="countdown-number" id="countdownDays">0</div>
-                <div class="countdown-label">Days</div>
-            </div>
-            <div class="countdown-item">
-                <div class="countdown-number" id="countdownHours">0</div>
-                <div class="countdown-label">Hours</div>
-            </div>
-            <div class="countdown-item">
-                <div class="countdown-number" id="countdownMinutes">0</div>
-                <div class="countdown-label">Minutes</div>
-            </div>
-            <div class="countdown-item">
-                <div class="countdown-number" id="countdownSeconds">0</div>
-                <div class="countdown-label">Seconds</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Surprise Section -->
-    <section class="section" id="surpriseSection">
-        <h2 class="section-title">🎁 Open Your Surprise</h2>
-        <div class="surprise-container">
-            <div class="gift-box" id="giftBox">
-                <div class="gift-box-inner">
-                    <div class="gift-box-front">🎁</div>
-                    <div class="gift-box-back" id="surpriseContent">Your special surprise message</div>
-                </div>
-            </div>
-            <div class="surprise-message" id="surpriseMessageDisplay"></div>
-        </div>
-    </section>
-
-    <!-- Love Meter Section -->
-    <section class="section" id="loveSection">
-        <h2 class="section-title">❤️ Love Meter</h2>
-        <div class="love-meter">
-            <div class="meter-bar">
-                <div class="meter-fill"></div>
-            </div>
-            <div class="meter-text" id="meterText">System Scan Complete: Unlimited Love Detected ❤️</div>
-        </div>
-    </section>
-
-    <!-- Wish Wall -->
-    <section class="section" id="wishSection">
-        <h2 class="section-title">✨ Wish Wall</h2>
-        <div class="wish-wall" id="wishWall">
-            <!-- Dynamic wish cards -->
-        </div>
-    </section>
-
-    <!-- Grand Finale -->
-    <section class="grand-finale" id="finaleSection">
-        <div class="finale-text" id="finaleText">Happy Birthday My Princess 👑❤️</div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="creator-name" id="creatorName">Created By REXHZO</div>
-    </footer>
-
-    <!-- Admin Overlay & Panel -->
-    <div class="password-popup-overlay" id="passwordOverlay"></div>
-    <div class="password-popup" id="passwordPopup">
+    <!-- Admin Password Modal -->
+    <div class="modal-backdrop" id="modalBackdrop"></div>
+    <div class="admin-password-modal" id="adminPasswordModal">
         <h2>🔐 Admin Access</h2>
-        <input type="password" id="passwordInput" placeholder="Enter Password" />
-        <div id="errorMessage"></div>
-        <div class="password-popup-buttons">
-            <button onclick="checkPassword()">Unlock</button>
-            <button onclick="closePassword()" style="background: #666;">Cancel</button>
+        <input type="password" id="adminPassword" placeholder="Enter Password" onkeypress="handlePasswordKeypress(event)">
+        <div class="admin-password-buttons">
+            <button onclick="submitAdminPassword()">Enter</button>
+            <button onclick="closePasswordModal()" style="background: #ff4444;">Cancel</button>
         </div>
+        <div id="passwordError" style="color: #ff4444; margin-top: 1rem; text-align: center; display: none;"></div>
     </div>
 
+    <!-- Admin Overlay -->
     <div class="admin-overlay" id="adminOverlay">
         <div class="admin-panel" id="adminPanel">
+            <button class="admin-close" onclick="closeAdminPanel()">&times;</button>
+            
             <div class="admin-header">
-                <h1 class="admin-title">🎨 Admin Dashboard</h1>
-                <button class="admin-close" onclick="closeAdmin()">×</button>
+                <div class="admin-title">🎨 Admin Dashboard</div>
+                <div class="admin-subtitle">Customize Everything</div>
+                <div class="admin-creator-label">🎂 Created By REXHZO 🎂</div>
             </div>
 
-            <div class="admin-tabs">
-                <div class="admin-tab active" onclick="switchTab(event, 'photos')">📸 Photos</div>
-                <div class="admin-tab" onclick="switchTab(event, 'music')">🎵 Music</div>
-                <div class="admin-tab" onclick="switchTab(event, 'messages')">💌 Messages</div>
-                <div class="admin-tab" onclick="switchTab(event, 'timeline')">📅 Timeline</div>
-                <div class="admin-tab" onclick="switchTab(event, 'wishes')">✨ Wishes</div>
-                <div class="admin-tab" onclick="switchTab(event, 'settings')">⚙️ Settings</div>
-                <div class="admin-tab" onclick="switchTab(event, 'backup')">💾 Backup</div>
-            </div>
-
-            <!-- Photos Tab -->
-            <div class="admin-content active" id="photos">
-                <h3 style="margin-bottom: 1rem; color: var(--primary-color);">📸 Manage Photos</h3>
-                <div class="admin-form-group">
-                    <label>Upload New Photo</label>
-                    <input type="file" id="photoInput" accept="image/*" onchange="uploadPhoto()" />
-                </div>
-                <div class="admin-photos" id="adminPhotos"></div>
-            </div>
-
-            <!-- Music Tab -->
-            <div class="admin-content" id="music">
-                <h3 style="margin-bottom: 1rem; color: var(--primary-color);">🎵 Manage Music</h3>
-                <div class="admin-form-group">
-                    <label>Upload Music File</label>
-                    <input type="file" id="musicInput" accept="audio/*" onchange="uploadMusic()" />
-                </div>
-                <div style="margin-top: 1rem; padding: 1rem; background: rgba(255,255,255,0.1); border-radius: 10px;">
-                    <p id="musicStatus">No music uploaded yet</p>
-                </div>
-            </div>
-
-            <!-- Messages Tab -->
-            <div class="admin-content" id="messages">
-                <h3 style="margin-bottom: 1rem; color: var(--primary-color);">💌 Manage Messages</h3>
-                <div class="admin-form-group">
-                    <label>Main Birthday Message</label>
-                    <textarea id="mainMessage" rows="4" placeholder="Enter birthday message"></textarea>
-                </div>
-                <div class="admin-form-group">
-                    <label>Surprise Gift Message</label>
-                    <textarea id="surpriseMessage" rows="4" placeholder="Enter surprise message"></textarea>
-                </div>
-                <button onclick="saveMessages()" style="width: 100%;">Save Messages</button>
-            </div>
-
-            <!-- Timeline Tab -->
-            <div class="admin-content" id="timeline">
-                <h3 style="margin-bottom: 1rem; color: var(--primary-color);">📅 Manage Timeline</h3>
-                <div class="admin-form-group">
-                    <label>Add Timeline Memory</label>
-                    <input type="date" id="memoryDate" />
-                    <input type="text" id="memoryTitle" placeholder="Memory Title" />
-                    <textarea id="memoryDescription" rows="3" placeholder="Memory Description"></textarea>
-                    <button onclick="addTimeline()" style="width: 100%; margin-top: 0.5rem;">Add Memory</button>
-                </div>
-                <div id="timelineList" style="margin-top: 1rem;"></div>
-            </div>
-
-            <!-- Wishes Tab -->
-            <div class="admin-content" id="wishes">
-                <h3 style="margin-bottom: 1rem; color: var(--primary-color);">✨ Manage Wishes</h3>
-                <div class="admin-form-group">
-                    <label>Add New Wish</label>
-                    <input type="text" id="wishEmoji" placeholder="Emoji" maxlength="2" />
-                    <input type="text" id="wishTitle" placeholder="Wish Title" />
-                    <textarea id="wishDescription" rows="2" placeholder="Wish Description"></textarea>
-                    <button onclick="addWish()" style="width: 100%; margin-top: 0.5rem;">Add Wish</button>
-                </div>
-                <div id="wishesList" class="wishes-list"></div>
-            </div>
-
-            <!-- Settings Tab -->
-            <div class="admin-content" id="settings">
-                <h3 style="margin-bottom: 1rem; color: var(--primary-color);">⚙️ Settings</h3>
+            <!-- Settings Section -->
+            <div class="admin-section">
+                <div class="admin-section-title">⚙️ Settings</div>
+                
                 <div class="admin-form-group">
                     <label>Website Title</label>
-                    <input type="text" id="siteTitle" placeholder="Website Title" />
+                    <input type="text" id="siteTitle" placeholder="Enter website title">
+                    <button class="admin-btn" onclick="updateSiteTitle()">Update Title</button>
                 </div>
+
                 <div class="admin-form-group">
-                    <label>Girlfriend Name</label>
-                    <input type="text" id="girlfriendName" placeholder="Her Name" />
+                    <label>Girlfriend's Name</label>
+                    <input type="text" id="girlfriendName" placeholder="Enter girlfriend name (e.g., Saba, Mahak)">
+                    <button class="admin-btn" onclick="updateGirlfriendName()">Update Name</button>
                 </div>
+
                 <div class="admin-form-group">
                     <label>Birthday Date</label>
-                    <input type="date" id="birthdayDate" />
+                    <input type="date" id="birthdayDate">
+                    <button class="admin-btn" onclick="updateBirthdayDate()">Update Date</button>
                 </div>
-                <div class="admin-form-group">
-                    <label>Primary Color</label>
-                    <input type="color" id="primaryColor" />
-                </div>
-                <button onclick="saveSettings()" style="width: 100%;">Save Settings</button>
-                <button onclick="resetWebsite()" style="width: 100%; margin-top: 0.5rem; background: #8B0000;">Reset All Data</button>
             </div>
 
-            <!-- Backup Tab -->
-            <div class="admin-content" id="backup">
-                <h3 style="margin-bottom: 1rem; color: var(--primary-color);">💾 Backup & Restore</h3>
+            <!-- Messages Section -->
+            <div class="admin-section">
+                <div class="admin-section-title">💌 Messages</div>
+                
                 <div class="admin-form-group">
-                    <button onclick="exportBackup()" style="width: 100%;">📥 Export Backup</button>
+                    <label>Main Message</label>
+                    <textarea id="mainMessage" placeholder="Enter main birthday message" rows="4"></textarea>
+                    <button class="admin-btn" onclick="updateMainMessage()">Save Message</button>
                 </div>
+
                 <div class="admin-form-group">
-                    <label>Import Backup</label>
-                    <input type="file" id="backupInput" accept=".json" onchange="importBackup()" />
+                    <label>Grand Finale Message</label>
+                    <textarea id="finalMessage" placeholder="Enter grand finale message" rows="3"></textarea>
+                    <button class="admin-btn" onclick="updateFinalMessage()">Save Finale</button>
                 </div>
+            </div>
+
+            <!-- Photos Section -->
+            <div class="admin-section">
+                <div class="admin-section-title">📸 Photos</div>
+                
+                <div class="admin-form-group">
+                    <label>Upload Photo</label>
+                    <input type="file" id="photoInput" accept="image/*">
+                    <button class="admin-btn" onclick="uploadPhoto()">Upload</button>
+                </div>
+
+                <div id="photosGrid" class="admin-grid"></div>
+            </div>
+
+            <!-- Music Section -->
+            <div class="admin-section">
+                <div class="admin-section-title">🎵 Music</div>
+                
+                <div class="admin-form-group">
+                    <label>Upload Music File</label>
+                    <input type="file" id="musicInput" accept="audio/*">
+                    <button class="admin-btn" onclick="uploadMusic()">Upload Music</button>
+                </div>
+
+                <div id="musicStatus" class="player-status">No music uploaded yet</div>
+            </div>
+
+            <!-- Timeline Section -->
+            <div class="admin-section">
+                <div class="admin-section-title">📅 Timeline</div>
+                
+                <div class="admin-form-group">
+                    <label>Memory Date</label>
+                    <input type="date" id="timelineDate">
+                </div>
+
+                <div class="admin-form-group">
+                    <label>Memory Title</label>
+                    <input type="text" id="timelineTitle" placeholder="Enter memory title">
+                </div>
+
+                <div class="admin-form-group">
+                    <label>Memory Description</label>
+                    <textarea id="timelineDescription" placeholder="Enter memory description" rows="3"></textarea>
+                    <button class="admin-btn" onclick="addTimelineMemory()">Add Memory</button>
+                </div>
+
+                <div id="timelineList" class="admin-list"></div>
+            </div>
+
+            <!-- Wishes Section -->
+            <div class="admin-section">
+                <div class="admin-section-title">✨ Wishes</div>
+                
+                <div class="admin-form-group">
+                    <label>Wish Emoji</label>
+                    <input type="text" id="wishEmoji" placeholder="Enter emoji (e.g., ❤️)" maxlength="2">
+                </div>
+
+                <div class="admin-form-group">
+                    <label>Wish Title</label>
+                    <input type="text" id="wishTitle" placeholder="Enter wish title">
+                </div>
+
+                <div class="admin-form-group">
+                    <label>Wish Description</label>
+                    <textarea id="wishDescription" placeholder="Enter wish description" rows="3"></textarea>
+                    <button class="admin-btn" onclick="addWish()">Add Wish</button>
+                </div>
+
+                <div id="wishesList" class="admin-list"></div>
+            </div>
+
+            <!-- Backup Section -->
+            <div class="admin-section">
+                <div class="admin-section-title">💾 Backup</div>
+                
+                <button class="admin-btn admin-btn-success" onclick="exportBackup()">📥 Export Backup</button>
+                <button class="admin-btn" onclick="document.getElementById('importInput').click()">📤 Import Backup</button>
+                <input type="file" id="importInput" accept=".json" style="display: none;" onchange="importBackup()">
+                <button class="admin-btn admin-btn-danger" onclick="resetAllData()">🔄 Reset All Data</button>
             </div>
         </div>
     </div>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero" id="heroSection">
+            <div class="hero-content">
+                <h1 class="hero-title">🎂 Happy Birthday My Love ❤️</h1>
+                <p class="hero-subtitle" id="heroSubtitle">Today is all about the most beautiful person in my life.</p>
+                <div class="cake-container">
+                    <span class="cake-emoji">🎂</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Love Message Section -->
+        <section class="section">
+            <div class="message-card glass">
+                <h2 class="section-title">💌 Special Message</h2>
+                <div class="typing-text" id="mainMessageDisplay"></div>
+            </div>
+        </section>
+
+        <!-- Love Cards Section -->
+        <section class="section">
+            <h2 class="section-title">❤️ Why You're Amazing</h2>
+            <div class="cards-grid" id="loveCardsContainer">
+                <div class="love-card glass">
+                    <div class="love-card-emoji">❤️</div>
+                    <h3>CEO of My Heart</h3>
+                    <p>You run my heart with pure love and joy</p>
+                </div>
+                <div class="love-card glass">
+                    <div class="love-card-emoji">😜</div>
+                    <h3>Official Trouble Maker</h3>
+                    <p>You make my days chaotic and beautiful</p>
+                </div>
+                <div class="love-card glass">
+                    <div class="love-card-emoji">😂</div>
+                    <h3>Professional Mood Changer</h3>
+                    <p>Your smile changes everything instantly</p>
+                </div>
+                <div class="love-card glass">
+                    <div class="love-card-emoji">👑</div>
+                    <h3>Queen of Drama & My Life</h3>
+                    <p>You reign supreme in my heart forever</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section class="section">
+            <h2 class="section-title">📸 Memory Gallery</h2>
+            <div class="gallery" id="galleryContainer"></div>
+        </section>
+
+        <!-- Timeline Section -->
+        <section class="section">
+            <h2 class="section-title">📅 Our Love Timeline</h2>
+            <div class="timeline" id="timelineContainer"></div>
+        </section>
+
+        <!-- Countdown Section -->
+        <section class="section">
+            <h2 class="section-title">⏱️ Birthday Countdown</h2>
+            <div class="countdown" id="countdownContainer">
+                <div class="countdown-item">
+                    <div class="countdown-number" id="days">0</div>
+                    <div class="countdown-label">Days</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-number" id="hours">0</div>
+                    <div class="countdown-label">Hours</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-number" id="minutes">0</div>
+                    <div class="countdown-label">Minutes</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-number" id="seconds">0</div>
+                    <div class="countdown-label">Seconds</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Surprise Gift Section -->
+        <section class="section">
+            <h2 class="section-title">🎁 Special Surprise</h2>
+            <div class="surprise-container">
+                <div class="gift-box" id="giftBox" onclick="openGiftBox()">
+                    <div class="gift-box-inner">
+                        <div class="gift-box-front">🎁</div>
+                        <div class="gift-box-back" id="giftMessage">Click to reveal the magic!</div>
+                    </div>
+                </div>
+                <div class="surprise-message" id="surpriseMessage"></div>
+            </div>
+        </section>
+
+        <!-- Love Meter Section -->
+        <section class="section">
+            <h2 class="section-title">💕 Love Meter</h2>
+            <div class="love-meter">
+                <div class="meter-bar">
+                    <div class="meter-fill"></div>
+                </div>
+                <div class="meter-text" id="meterText">System Scan Complete: Unlimited Love Detected ❤️</div>
+            </div>
+        </section>
+
+        <!-- Wish Wall Section -->
+        <section class="section">
+            <h2 class="section-title">✨ Wish Wall</h2>
+            <div class="wish-wall" id="wishWallContainer"></div>
+        </section>
+
+        <!-- Grand Finale Section -->
+        <section class="grand-finale">
+            <div class="finale-text" id="finalText">Happy Birthday My Princess 👑❤️</div>
+        </section>
+
+        <!-- Footer -->
+        <section class="footer">
+            <div class="creator-name" id="creatorName" onclick="handleCreatorClick()">Created By REXHZO</div>
+        </section>
+    </main>
+
+    <!-- Music Player -->
+    <div class="music-player">
+        <div class="player-title">🎵 Birthday Soundtrack</div>
+        <audio id="musicPlayer" controls>
+            <source id="musicSource" src="" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+        <div class="player-status" id="playerStatus">No music loaded</div>
+    </div>
+
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">🌙</button>
 
     <script>
         // ========== DATA MANAGEMENT ==========
-        let appData = {
+        const DATA_KEY = 'birthdayWebsiteData';
+        const ADMIN_SESSION_KEY = 'adminSession';
+
+        let websiteData = {
+            girlfriendName: 'Saba',
+            siteTitle: '🎂 Happy Birthday My Love ❤️',
+            birthdayDate: new Date(new Date().getFullYear(), 11, 25).toISOString().split('T')[0],
+            mainMessage: 'No matter how many birthdays come, you will always be my favorite person. Happy Birthday My Love ❤️🎂',
+            finalMessage: 'Happy Birthday My Princess 👑❤️',
             photos: [],
-            music: '',
-            mainMessage: 'You are the most beautiful person I have ever met. Your smile brightens my world, and every moment with you feels like a dream. Happy Birthday to my love, my life, my everything! 💕',
-            surpriseMessage: 'You make my heart skip a beat every single day. No matter how many birthdays come, you will always be my favorite person. Happy Birthday My Love ❤️🎂',
-            timeline: [
-                { date: '2023-01-15', title: 'First Meeting', description: 'The day we met changed everything!' },
-                { date: '2023-06-10', title: 'First Kiss', description: 'The moment we realized we were meant to be.' },
-                { date: '2024-02-14', title: 'Valentine\'s Day', description: 'Our first Valentine\'s together was magical.' }
-            ],
-            wishes: [
-                { emoji: '❤️', title: 'CEO of My Heart', description: 'You run my heart with pure love and joy' },
-                { emoji: '😜', title: 'Official Trouble Maker', description: 'Making mischief has never been so fun' },
-                { emoji: '😂', title: 'Professional Mood Changer', description: 'One smile from you changes everything' },
-                { emoji: '👑', title: 'Queen of Drama & My Life', description: 'You are my queen, always and forever' }
-            ],
-            settings: {
-                siteTitle: '🎂 Happy Birthday My Love ❤️',
-                girlfriendName: 'My Princess',
-                birthdayDate: new Date().toISOString().split('T')[0],
-                primaryColor: '#ff1493'
-            }
+            musicData: null,
+            timeline: [],
+            wishes: [],
+            theme: 'dark'
         };
 
-        // ========== LOAD DATA FROM LOCALSTORAGE ==========
+        // Load data from localStorage
         function loadData() {
-            const saved = localStorage.getItem('birthdayAppData');
+            const saved = localStorage.getItem(DATA_KEY);
             if (saved) {
                 try {
-                    appData = JSON.parse(saved);
+                    websiteData = { ...websiteData, ...JSON.parse(saved) };
                 } catch (e) {
-                    console.log('Error loading data, using defaults');
+                    console.error('Error loading data:', e);
                 }
             }
         }
 
-        // ========== SAVE DATA TO LOCALSTORAGE ==========
+        // Save data to localStorage
         function saveData() {
-            localStorage.setItem('birthdayAppData', JSON.stringify(appData));
+            localStorage.setItem(DATA_KEY, JSON.stringify(websiteData));
         }
 
-        // ========== INITIALIZE APP ==========
-        function initApp() {
+        // ========== INITIALIZATION ==========
+        window.addEventListener('load', function() {
             loadData();
-            updateUI();
+            initializeWebsite();
+            setTimeout(() => {
+                document.getElementById('loadingScreen').classList.add('hidden');
+            }, 2500);
+        });
+
+        function initializeWebsite() {
+            updatePageTitle();
+            generateFloatingHearts();
             startCountdown();
-            createFloatingHearts();
-            createSparkles();
-            updateTheme();
-            typeMessage();
-            startConfetti();
-            setupGiftBox();
-            loadPhotosInGallery();
+            loadGallery();
             loadTimeline();
             loadWishes();
-            loadAdminData();
             loadMusic();
-            loadLoveCards();
-            document.title = appData.settings.siteTitle;
+            applyTheme();
+            generateFloatingElements();
+            setInterval(generateConfetti, 8000);
         }
 
-        // ========== UI UPDATES ==========
-        function updateUI() {
-            document.getElementById('creatorName').textContent = 'Created By REXHZO';
-            document.getElementById('girlfriendName').value = appData.settings.girlfriendName;
-            document.getElementById('siteTitle').value = appData.settings.siteTitle;
-            document.getElementById('birthdayDate').value = appData.settings.birthdayDate;
-            document.getElementById('mainMessage').value = appData.mainMessage;
-            document.getElementById('surpriseMessage').value = appData.surpriseMessage;
-            document.getElementById('surpriseContent').textContent = appData.surpriseMessage;
-            document.getElementById('surpriseMessageDisplay').textContent = appData.surpriseMessage;
-            document.getElementById('primaryColor').value = appData.settings.primaryColor;
+        // ========== THEME MANAGEMENT ==========
+        function toggleTheme() {
+            const isDark = document.body.classList.toggle('light-mode');
+            websiteData.theme = isDark ? 'light' : 'dark';
+            saveData();
+            document.getElementById('themeToggle').textContent = isDark ? '☀️' : '🌙';
         }
 
-        // ========== LOVE CARDS ==========
-        function loadLoveCards() {
-            const grid = document.getElementById('loveCardsGrid');
-            grid.innerHTML = '';
-            
-            const defaultCards = [
-                { emoji: '❤️', title: 'CEO of My Heart', description: 'You run my heart with pure love and joy' },
-                { emoji: '😜', title: 'Official Trouble Maker', description: 'Making mischief has never been so fun' },
-                { emoji: '😂', title: 'Professional Mood Changer', description: 'One smile from you changes everything' },
-                { emoji: '👑', title: 'Queen of Drama & My Life', description: 'You are my queen, always and forever' }
-            ];
-
-            defaultCards.forEach(card => {
-                const cardEl = document.createElement('div');
-                cardEl.className = 'love-card glass';
-                cardEl.innerHTML = `
-                    <div class="love-card-emoji">${card.emoji}</div>
-                    <h3>${card.title}</h3>
-                    <p>${card.description}</p>
-                `;
-                grid.appendChild(cardEl);
-            });
-        }
-
-        // ========== FLOATING HEARTS ==========
-        function createFloatingHearts() {
-            const container = document.getElementById('floatingHearts');
-            container.innerHTML = '';
-            for (let i = 0; i < 8; i++) {
-                const heart = document.createElement('div');
-                heart.className = 'heart';
-                heart.innerHTML = '❤️';
-                heart.style.left = Math.random() * 100 + '%';
-                heart.style.top = Math.random() * 100 + '%';
-                heart.style.animationDelay = Math.random() * 2 + 's';
-                container.appendChild(heart);
-            }
-        }
-
-        // ========== SPARKLES ==========
-        function createSparkles() {
-            const container = document.body;
-            for (let i = 0; i < 20; i++) {
-                const sparkle = document.createElement('div');
-                sparkle.className = 'sparkle';
-                sparkle.style.left = Math.random() * 100 + '%';
-                sparkle.style.top = Math.random() * 100 + '%';
-                sparkle.style.animationDelay = Math.random() * 2 + 's';
-                container.appendChild(sparkle);
-            }
-        }
-
-        // ========== CONFETTI ==========
-        function startConfetti() {
-            setInterval(() => {
-                for (let i = 0; i < 5; i++) {
-                    const confetti = document.createElement('div');
-                    confetti.className = 'confetti';
-                    confetti.innerHTML = ['🎉', '🎊', '❤️', '💕', '✨'][Math.floor(Math.random() * 5)];
-                    confetti.style.left = Math.random() * 100 + '%';
-                    confetti.style.top = '-10px';
-                    confetti.style.fontSize = (Math.random() * 20 + 10) + 'px';
-                    confetti.style.animation = `confetti-fall ${Math.random() * 3 + 2}s linear forwards`;
-                    document.body.appendChild(confetti);
-                    setTimeout(() => confetti.remove(), 5000);
-                }
-            }, 3000);
-        }
-
-        // ========== TYPING ANIMATION ==========
-        function typeMessage() {
-            const text = appData.mainMessage;
-            const element = document.getElementById('typingText');
-            element.textContent = '';
-            let index = 0;
-
-            function type() {
-                if (index < text.length) {
-                    element.textContent += text[index];
-                    index++;
-                    setTimeout(type, 30);
-                }
-            }
-            type();
-        }
-
-        // ========== COUNTDOWN TIMER ==========
-        function startCountdown() {
-            function updateCountdown() {
-                const birthDate = new Date(appData.settings.birthdayDate).getTime();
-                const now = new Date().getTime();
-                const distance = birthDate - now;
-
-                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                document.getElementById('countdownDays').textContent = Math.max(0, days);
-                document.getElementById('countdownHours').textContent = Math.max(0, hours);
-                document.getElementById('countdownMinutes').textContent = Math.max(0, minutes);
-                document.getElementById('countdownSeconds').textContent = Math.max(0, seconds);
-            }
-
-            updateCountdown();
-            setInterval(updateCountdown, 1000);
-        }
-
-        // ========== GIFT BOX ==========
-        function setupGiftBox() {
-            const giftBox = document.getElementById('giftBox');
-            giftBox.addEventListener('click', function() {
-                this.classList.toggle('opened');
-                if (this.classList.contains('opened')) {
-                    createFireworks();
-                }
-            });
-        }
-
-        // ========== FIREWORKS ==========
-        function createFireworks() {
-            for (let i = 0; i < 20; i++) {
-                const firework = document.createElement('div');
-                firework.style.position = 'fixed';
-                firework.style.pointerEvents = 'none';
-                firework.innerHTML = '✨';
-                firework.style.fontSize = '1.5rem';
-                firework.style.left = window.innerWidth / 2 + 'px';
-                firework.style.top = window.innerHeight / 2 + 'px';
-                firework.style.zIndex = '99';
-
-                const angle = (Math.PI * 2 * i) / 20;
-                const velocity = 5;
-                const tx = Math.cos(angle) * velocity * 100;
-                const ty = Math.sin(angle) * velocity * 100;
-
-                firework.style.setProperty('--tx', tx + 'px');
-                firework.style.setProperty('--ty', ty + 'px');
-                firework.style.animation = 'firework 1s ease-out forwards';
-
-                document.body.appendChild(firework);
-                setTimeout(() => firework.remove(), 1000);
-            }
-        }
-
-        // ========== THEME TOGGLE ==========
-        function updateTheme() {
-            const isDark = localStorage.getItem('theme') === 'light' ? false : true;
-            if (!isDark) {
+        function applyTheme() {
+            if (websiteData.theme === 'light') {
                 document.body.classList.add('light-mode');
                 document.getElementById('themeToggle').textContent = '☀️';
             } else {
@@ -1817,285 +1722,514 @@
             }
         }
 
-        document.getElementById('themeToggle').addEventListener('click', function() {
-            document.body.classList.toggle('light-mode');
-            const theme = document.body.classList.contains('light-mode') ? 'light' : 'dark';
-            localStorage.setItem('theme', theme);
-            this.textContent = theme === 'light' ? '☀️' : '🌙';
-        });
+        // ========== PAGE UPDATES ==========
+        function updatePageTitle() {
+            document.title = websiteData.siteTitle;
+            document.getElementById('page-title').textContent = websiteData.siteTitle;
+            document.getElementById('heroSubtitle').textContent = `Today is all about the most beautiful person in my life. Happy Birthday ${websiteData.girlfriendName}! 🎉`;
+            document.getElementById('mainMessageDisplay').textContent = websiteData.mainMessage;
+            document.getElementById('finalText').textContent = websiteData.finalMessage;
+        }
 
-        // ========== GALLERY ==========
-        function loadPhotosInGallery() {
-            const gallery = document.getElementById('galleryGrid');
-            gallery.innerHTML = '';
+        // ========== FLOATING HEARTS & PARTICLES ==========
+        function generateFloatingHearts() {
+            const container = document.getElementById('floatingHearts');
+            const heartEmojis = ['❤️', '💕', '💖', '💝', '💗'];
 
-            if (appData.photos.length === 0) {
-                gallery.innerHTML = '<p style="grid-column: 1/-1; text-align: center; opacity: 0.7;">Upload photos from admin panel</p>';
+            for (let i = 0; i < 15; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.top = Math.random() * 100 + '%';
+                heart.style.animationDelay = Math.random() * 2 + 's';
+                container.appendChild(heart);
+            }
+        }
+
+        function generateFloatingElements() {
+            const container = document.getElementById('floatingHearts');
+            for (let i = 0; i < 20; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.classList.add('sparkle');
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.top = Math.random() * 100 + '%';
+                sparkle.style.animationDelay = Math.random() * 3 + 's';
+                container.appendChild(sparkle);
+            }
+        }
+
+        function generateConfetti() {
+            for (let i = 0; i < 30; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.textContent = ['🎉', '🎊', '✨', '💖', '🎂'][Math.floor(Math.random() * 5)];
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.top = '-10px';
+                confetti.style.fontSize = Math.random() * 1 + 1 + 'rem';
+                confetti.style.animation = `confetti-fall ${Math.random() * 2 + 2}s linear forwards`;
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 4000);
+            }
+        }
+
+        // ========== COUNTDOWN TIMER ==========
+        function startCountdown() {
+            const updateCountdown = () => {
+                const birthdayDate = new Date(websiteData.birthdayDate + 'T00:00:00').getTime();
+                const now = new Date().getTime();
+                const distance = birthdayDate - now;
+
+                if (distance > 0) {
+                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    document.getElementById('days').textContent = days;
+                    document.getElementById('hours').textContent = hours;
+                    document.getElementById('minutes').textContent = minutes;
+                    document.getElementById('seconds').textContent = seconds;
+                } else {
+                    document.getElementById('days').textContent = '0';
+                    document.getElementById('hours').textContent = '0';
+                    document.getElementById('minutes').textContent = '0';
+                    document.getElementById('seconds').textContent = '0';
+                    generateConfetti();
+                }
+            };
+
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+        }
+
+        // ========== GALLERY MANAGEMENT ==========
+        function loadGallery() {
+            const container = document.getElementById('galleryContainer');
+            container.innerHTML = '';
+
+            if (websiteData.photos.length === 0) {
+                container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #ccc;">No photos yet. Upload from admin panel!</p>';
                 return;
             }
 
-            appData.photos.forEach((photo, index) => {
+            websiteData.photos.forEach((photo, index) => {
                 const item = document.createElement('div');
-                item.className = 'gallery-item';
+                item.classList.add('gallery-item');
+                item.onclick = () => openLightbox(photo);
                 item.innerHTML = `
                     <img src="${photo}" alt="Memory ${index + 1}">
                     <div class="gallery-overlay">
-                        <div class="gallery-overlay-text">Click to view</div>
+                        <div class="gallery-overlay-text">Click to view full size</div>
                     </div>
                 `;
-                item.addEventListener('click', () => openLightbox(photo));
-                gallery.appendChild(item);
+                container.appendChild(item);
             });
         }
 
-        function openLightbox(src) {
+        function openLightbox(imageSrc) {
             document.getElementById('lightbox').classList.add('active');
-            document.getElementById('lightboxImage').src = src;
+            document.getElementById('lightboxImage').src = imageSrc;
         }
 
-        document.getElementById('lightboxClose').addEventListener('click', () => {
+        function closeLightbox() {
             document.getElementById('lightbox').classList.remove('active');
-        });
+        }
 
-        document.getElementById('lightbox').addEventListener('click', function(e) {
-            if (e.target === this) {
-                this.classList.remove('active');
+        function uploadPhoto() {
+            const input = document.getElementById('photoInput');
+            const file = input.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    websiteData.photos.push(e.target.result);
+                    saveData();
+                    loadGallery();
+                    input.value = '';
+                    alert('✅ Photo uploaded successfully!');
+                };
+                reader.readAsDataURL(file);
+            } else {
+                alert('Please select a photo!');
             }
-        });
+        }
 
-        // ========== TIMELINE ==========
+        // ========== MUSIC MANAGEMENT ==========
+        function uploadMusic() {
+            const input = document.getElementById('musicInput');
+            const file = input.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    websiteData.musicData = e.target.result;
+                    saveData();
+                    loadMusic();
+                    input.value = '';
+                    alert('✅ Music uploaded successfully!');
+                };
+                reader.readAsDataURL(file);
+            } else {
+                alert('Please select a music file!');
+            }
+        }
+
+        function loadMusic() {
+            if (websiteData.musicData) {
+                document.getElementById('musicSource').src = websiteData.musicData;
+                document.getElementById('playerStatus').textContent = '🎵 Music loaded and ready!';
+                document.getElementById('musicStatus').textContent = '✅ Music uploaded!';
+            } else {
+                document.getElementById('playerStatus').textContent = 'No music loaded';
+                document.getElementById('musicStatus').textContent = 'No music uploaded yet';
+            }
+        }
+
+        // ========== TIMELINE MANAGEMENT ==========
+        function addTimelineMemory() {
+            const date = document.getElementById('timelineDate').value;
+            const title = document.getElementById('timelineTitle').value;
+            const description = document.getElementById('timelineDescription').value;
+
+            if (!date || !title || !description) {
+                alert('Please fill all fields!');
+                return;
+            }
+
+            websiteData.timeline.push({ date, title, description });
+            saveData();
+            loadTimeline();
+
+            document.getElementById('timelineDate').value = '';
+            document.getElementById('timelineTitle').value = '';
+            document.getElementById('timelineDescription').value = '';
+            alert('✅ Memory added!');
+        }
+
         function loadTimeline() {
-            const timeline = document.getElementById('timeline');
-            timeline.innerHTML = '';
+            const container = document.getElementById('timelineContainer');
+            container.innerHTML = '';
 
-            appData.timeline.forEach((item, index) => {
-                const timelineItem = document.createElement('div');
-                timelineItem.className = 'timeline-item';
-                timelineItem.innerHTML = `
+            const defaultMemories = [
+                { date: '2023-01-15', title: '💑 First Meeting', description: 'The day my life changed forever' },
+                { date: '2023-06-20', title: '💕 First Anniversary', description: 'Celebrating our beautiful journey' },
+                { date: '2024-02-14', title: '💖 Valentine\'s Day', description: 'Love in every moment together' }
+            ];
+
+            const timeline = websiteData.timeline.length > 0 ? websiteData.timeline : defaultMemories;
+
+            timeline.forEach((memory, index) => {
+                const item = document.createElement('div');
+                item.classList.add('timeline-item');
+                item.innerHTML = `
                     <div class="timeline-dot"></div>
                     <div class="timeline-content">
-                        <div class="timeline-date">${new Date(item.date).toLocaleDateString()}</div>
-                        <div class="timeline-title">${item.title}</div>
-                        <p>${item.description}</p>
+                        <div class="timeline-date">${memory.date}</div>
+                        <div class="timeline-title">${memory.title}</div>
+                        <p>${memory.description}</p>
                     </div>
                 `;
-                timeline.appendChild(timelineItem);
+                container.appendChild(item);
             });
         }
 
-        // ========== WISHES ==========
-        function loadWishes() {
-            const wishWall = document.getElementById('wishWall');
-            wishWall.innerHTML = '';
+        function deleteTimelineMemory(index) {
+            websiteData.timeline.splice(index, 1);
+            saveData();
+            loadTimeline();
+        }
 
-            appData.wishes.forEach((wish) => {
+        // ========== WISHES MANAGEMENT ==========
+        function addWish() {
+            const emoji = document.getElementById('wishEmoji').value || '✨';
+            const title = document.getElementById('wishTitle').value;
+            const description = document.getElementById('wishDescription').value;
+
+            if (!title || !description) {
+                alert('Please fill all fields!');
+                return;
+            }
+
+            websiteData.wishes.push({ emoji, title, description });
+            saveData();
+            loadWishes();
+
+            document.getElementById('wishEmoji').value = '';
+            document.getElementById('wishTitle').value = '';
+            document.getElementById('wishDescription').value = '';
+            alert('✅ Wish added!');
+        }
+
+        function loadWishes() {
+            const container = document.getElementById('wishWallContainer');
+            container.innerHTML = '';
+
+            if (websiteData.wishes.length === 0) {
+                const defaultWishes = [
+                    { emoji: '💝', title: 'Unconditional Love', description: 'May you always feel my love no matter where we are' },
+                    { emoji: '🌟', title: 'Success & Happiness', description: 'Wishing you achieve all your dreams this year' },
+                    { emoji: '😊', title: 'Endless Smiles', description: 'May your days be filled with laughter and joy' },
+                    { emoji: '🎉', title: 'Amazing Adventures', description: 'Let\'s create more beautiful memories together' }
+                ];
+                websiteData.wishes = defaultWishes;
+                saveData();
+            }
+
+            websiteData.wishes.forEach((wish, index) => {
                 const card = document.createElement('div');
-                card.className = 'wish-card';
+                card.classList.add('wish-card');
                 card.innerHTML = `
+                    <button class="wish-delete-btn" onclick="deleteWish(${index})">DELETE</button>
                     <div class="wish-card-content">
                         <div class="wish-emoji">${wish.emoji}</div>
                         <h3>${wish.title}</h3>
                         <p>${wish.description}</p>
                     </div>
                 `;
-                wishWall.appendChild(card);
-            });
-        }
-
-        // ========== PHOTO UPLOAD ==========
-        function uploadPhoto() {
-            const input = document.getElementById('photoInput');
-            const file = input.files[0];
-            
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    appData.photos.push(e.target.result);
-                    saveData();
-                    loadPhotosInGallery();
-                    loadAdminPhotos();
-                    input.value = '';
-                    alert('✅ Photo uploaded successfully!');
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function deletePhoto(index) {
-            appData.photos.splice(index, 1);
-            saveData();
-            loadPhotosInGallery();
-            loadAdminPhotos();
-        }
-
-        // ========== MUSIC UPLOAD ==========
-        function uploadMusic() {
-            const input = document.getElementById('musicInput');
-            const file = input.files[0];
-            
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    appData.music = e.target.result;
-                    saveData();
-                    loadMusic();
-                    document.getElementById('musicStatus').textContent = '✅ Music uploaded: ' + file.name;
-                    input.value = '';
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function loadMusic() {
-            const audio = document.getElementById('birthAudio');
-            if (appData.music) {
-                audio.src = appData.music;
-            }
-        }
-
-        // ========== MESSAGES ==========
-        function saveMessages() {
-            appData.mainMessage = document.getElementById('mainMessage').value;
-            appData.surpriseMessage = document.getElementById('surpriseMessage').value;
-            document.getElementById('surpriseContent').textContent = appData.surpriseMessage;
-            document.getElementById('surpriseMessageDisplay').textContent = appData.surpriseMessage;
-            saveData();
-            typeMessage();
-            alert('✅ Messages saved!');
-        }
-
-        // ========== TIMELINE MANAGEMENT ==========
-        function addTimeline() {
-            const date = document.getElementById('memoryDate').value;
-            const title = document.getElementById('memoryTitle').value;
-            const description = document.getElementById('memoryDescription').value;
-
-            if (date && title && description) {
-                appData.timeline.push({ date, title, description });
-                saveData();
-                loadTimeline();
-                loadTimelineList();
-                document.getElementById('memoryDate').value = '';
-                document.getElementById('memoryTitle').value = '';
-                document.getElementById('memoryDescription').value = '';
-                alert('✅ Memory added!');
-            } else {
-                alert('⚠️ Please fill all fields');
-            }
-        }
-
-        function loadTimelineList() {
-            const list = document.getElementById('timelineList');
-            list.innerHTML = '';
-            appData.timeline.forEach((item, index) => {
-                const div = document.createElement('div');
-                div.className = 'wish-item';
-                div.innerHTML = `
-                    <div class="wish-item-text">
-                        <strong>${item.title}</strong> - ${new Date(item.date).toLocaleDateString()}
-                    </div>
-                    <button class="wish-item-delete" onclick="deleteTimeline(${index})">Delete</button>
-                `;
-                list.appendChild(div);
-            });
-        }
-
-        function deleteTimeline(index) {
-            appData.timeline.splice(index, 1);
-            saveData();
-            loadTimeline();
-            loadTimelineList();
-        }
-
-        // ========== WISHES MANAGEMENT ==========
-        function addWish() {
-            const emoji = document.getElementById('wishEmoji').value;
-            const title = document.getElementById('wishTitle').value;
-            const description = document.getElementById('wishDescription').value;
-
-            if (emoji && title && description) {
-                appData.wishes.push({ emoji, title, description });
-                saveData();
-                loadWishes();
-                loadWishesList();
-                document.getElementById('wishEmoji').value = '';
-                document.getElementById('wishTitle').value = '';
-                document.getElementById('wishDescription').value = '';
-                alert('✅ Wish added!');
-            } else {
-                alert('⚠️ Please fill all fields');
-            }
-        }
-
-        function loadWishesList() {
-            const list = document.getElementById('wishesList');
-            list.innerHTML = '';
-            appData.wishes.forEach((wish, index) => {
-                const div = document.createElement('div');
-                div.className = 'wish-item';
-                div.innerHTML = `
-                    <div class="wish-item-text">
-                        <strong>${wish.emoji} ${wish.title}</strong><br>
-                        <small>${wish.description}</small>
-                    </div>
-                    <button class="wish-item-delete" onclick="deleteWish(${index})">Delete</button>
-                `;
-                list.appendChild(div);
+                container.appendChild(card);
             });
         }
 
         function deleteWish(index) {
-            appData.wishes.splice(index, 1);
-            saveData();
-            loadWishes();
-            loadWishesList();
-        }
-
-        // ========== SETTINGS ==========
-        function saveSettings() {
-            appData.settings.siteTitle = document.getElementById('siteTitle').value;
-            appData.settings.girlfriendName = document.getElementById('girlfriendName').value;
-            appData.settings.birthdayDate = document.getElementById('birthdayDate').value;
-            appData.settings.primaryColor = document.getElementById('primaryColor').value;
-
-            document.documentElement.style.setProperty('--primary-color', appData.settings.primaryColor);
-
-            saveData();
-            document.title = appData.settings.siteTitle;
-            startCountdown();
-            alert('✅ Settings saved!');
-        }
-
-        function resetWebsite() {
-            if (confirm('⚠️ Are you sure? This will reset ALL data! This cannot be undone.')) {
-                localStorage.clear();
-                location.reload();
+            if (confirm('Delete this wish?')) {
+                websiteData.wishes.splice(index, 1);
+                saveData();
+                loadWishes();
             }
         }
 
-        // ========== BACKUP & RESTORE ==========
+        // ========== ADMIN PANEL ==========
+        let creatorClickCount = 0;
+        let creatorClickTimeout;
+
+        function handleCreatorClick() {
+            creatorClickCount++;
+            clearTimeout(creatorClickTimeout);
+
+            if (creatorClickCount >= 5) {
+                creatorClickCount = 0;
+                openPasswordModal();
+            } else {
+                creatorClickTimeout = setTimeout(() => {
+                    creatorClickCount = 0;
+                }, 3000);
+            }
+        }
+
+        function openPasswordModal() {
+            document.getElementById('modalBackdrop').classList.add('active');
+            document.getElementById('adminPasswordModal').classList.add('active');
+            document.getElementById('adminPassword').value = '';
+            document.getElementById('passwordError').style.display = 'none';
+        }
+
+        function closePasswordModal() {
+            document.getElementById('modalBackdrop').classList.remove('active');
+            document.getElementById('adminPasswordModal').classList.remove('active');
+        }
+
+        function handlePasswordKeypress(event) {
+            if (event.key === 'Enter') {
+                submitAdminPassword();
+            }
+        }
+
+        function submitAdminPassword() {
+            const password = document.getElementById('adminPassword').value;
+            if (password === 'REHAN') {
+                closePasswordModal();
+                openAdminPanel();
+            } else {
+                const errorDiv = document.getElementById('passwordError');
+                errorDiv.textContent = '❌ Wrong password! Try again.';
+                errorDiv.style.display = 'block';
+                document.getElementById('adminPassword').value = '';
+            }
+        }
+
+        function openAdminPanel() {
+            localStorage.setItem(ADMIN_SESSION_KEY, 'true');
+            document.getElementById('adminOverlay').classList.add('active');
+            loadAdminPanel();
+        }
+
+        function closeAdminPanel() {
+            document.getElementById('adminOverlay').classList.remove('active');
+            localStorage.removeItem(ADMIN_SESSION_KEY);
+        }
+
+        function loadAdminPanel() {
+            document.getElementById('siteTitle').value = websiteData.siteTitle;
+            document.getElementById('girlfriendName').value = websiteData.girlfriendName;
+            document.getElementById('birthdayDate').value = websiteData.birthdayDate;
+            document.getElementById('mainMessage').value = websiteData.mainMessage;
+            document.getElementById('finalMessage').value = websiteData.finalMessage;
+            loadAdminPhotos();
+            loadAdminTimeline();
+            loadAdminWishes();
+        }
+
+        function updateSiteTitle() {
+            const title = document.getElementById('siteTitle').value.trim();
+            if (title) {
+                websiteData.siteTitle = title;
+                saveData();
+                updatePageTitle();
+                alert('✅ Title updated!');
+            }
+        }
+
+        function updateGirlfriendName() {
+            const name = document.getElementById('girlfriendName').value.trim();
+            if (name) {
+                websiteData.girlfriendName = name;
+                saveData();
+                updatePageTitle();
+                alert(`✅ Name updated to ${name}!`);
+            }
+        }
+
+        function updateBirthdayDate() {
+            const date = document.getElementById('birthdayDate').value;
+            if (date) {
+                websiteData.birthdayDate = date;
+                saveData();
+                startCountdown();
+                alert('✅ Birthday date updated!');
+            }
+        }
+
+        function updateMainMessage() {
+            const msg = document.getElementById('mainMessage').value.trim();
+            if (msg) {
+                websiteData.mainMessage = msg;
+                saveData();
+                updatePageTitle();
+                alert('✅ Main message updated!');
+            }
+        }
+
+        function updateFinalMessage() {
+            const msg = document.getElementById('finalMessage').value.trim();
+            if (msg) {
+                websiteData.finalMessage = msg;
+                saveData();
+                updatePageTitle();
+                alert('✅ Final message updated!');
+            }
+        }
+
+        function loadAdminPhotos() {
+            const container = document.getElementById('photosGrid');
+            container.innerHTML = '';
+
+            if (websiteData.photos.length === 0) {
+                container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #ccc;">No photos uploaded yet</p>';
+                return;
+            }
+
+            websiteData.photos.forEach((photo, index) => {
+                const item = document.createElement('div');
+                item.classList.add('admin-item');
+                item.innerHTML = `
+                    <img src="${photo}" alt="Photo ${index + 1}">
+                    <button class="admin-item-delete" onclick="deleteAdminPhoto(${index})">DELETE</button>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function deleteAdminPhoto(index) {
+            if (confirm('Delete this photo?')) {
+                websiteData.photos.splice(index, 1);
+                saveData();
+                loadGallery();
+                loadAdminPhotos();
+            }
+        }
+
+        function loadAdminTimeline() {
+            const container = document.getElementById('timelineList');
+            container.innerHTML = '';
+
+            if (websiteData.timeline.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #ccc;">No custom memories added yet</p>';
+                return;
+            }
+
+            websiteData.timeline.forEach((memory, index) => {
+                const item = document.createElement('div');
+                item.classList.add('admin-list-item');
+                item.innerHTML = `
+                    <div class="admin-list-item-text">
+                        <strong>${memory.date}</strong><br>
+                        ${memory.title}<br>
+                        <small>${memory.description.substring(0, 50)}...</small>
+                    </div>
+                    <button class="admin-list-item-delete" onclick="deleteAdminMemory(${index})">DELETE</button>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function deleteAdminMemory(index) {
+            if (confirm('Delete this memory?')) {
+                websiteData.timeline.splice(index, 1);
+                saveData();
+                loadTimeline();
+                loadAdminTimeline();
+            }
+        }
+
+        function loadAdminWishes() {
+            const container = document.getElementById('wishesList');
+            container.innerHTML = '';
+
+            websiteData.wishes.forEach((wish, index) => {
+                const item = document.createElement('div');
+                item.classList.add('admin-list-item');
+                item.innerHTML = `
+                    <div class="admin-list-item-text">
+                        <strong>${wish.emoji} ${wish.title}</strong><br>
+                        ${wish.description.substring(0, 50)}...
+                    </div>
+                    <button class="admin-list-item-delete" onclick="deleteAdminWish(${index})">DELETE</button>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function deleteAdminWish(index) {
+            if (confirm('Delete this wish?')) {
+                websiteData.wishes.splice(index, 1);
+                saveData();
+                loadWishes();
+                loadAdminWishes();
+            }
+        }
+
         function exportBackup() {
-            const backup = JSON.stringify(appData, null, 2);
-            const element = document.createElement('a');
-            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(backup));
-            element.setAttribute('download', 'birthday-backup-' + new Date().getTime() + '.json');
-            element.style.display = 'none';
-            document.body.appendChild(element);
-            element.click();
-            document.body.removeChild(element);
+            const dataStr = JSON.stringify(websiteData, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `birthday-backup-${new Date().getTime()}.json`;
+            link.click();
             alert('✅ Backup exported!');
         }
 
         function importBackup() {
-            const input = document.getElementById('backupInput');
+            const input = document.getElementById('importInput');
             const file = input.files[0];
 
             if (file) {
                 const reader = new FileReader();
-                reader.onload = (e) => {
+                reader.onload = function(e) {
                     try {
-                        const importedData = JSON.parse(e.target.result);
-                        appData = importedData;
+                        const imported = JSON.parse(e.target.result);
+                        websiteData = { ...websiteData, ...imported };
                         saveData();
                         location.reload();
                     } catch (err) {
@@ -2106,108 +2240,21 @@
             }
         }
 
-        // ========== ADMIN PANEL ==========
-        let clickCount = 0;
-        let clickTimer = null;
-
-        document.getElementById('creatorName').addEventListener('click', function() {
-            clickCount++;
-            clearTimeout(clickTimer);
-
-            if (clickCount === 5) {
-                clickCount = 0;
-                openPasswordPrompt();
-            }
-
-            clickTimer = setTimeout(() => {
-                clickCount = 0;
-            }, 3000);
-        });
-
-        function openPasswordPrompt() {
-            document.getElementById('passwordOverlay').classList.add('active');
-            document.getElementById('passwordPopup').classList.add('active');
-            document.getElementById('passwordInput').value = '';
-            document.getElementById('errorMessage').textContent = '';
-            document.getElementById('passwordInput').focus();
-        }
-
-        function closePassword() {
-            document.getElementById('passwordOverlay').classList.remove('active');
-            document.getElementById('passwordPopup').classList.remove('active');
-        }
-
-        function checkPassword() {
-            const password = document.getElementById('passwordInput').value;
-            if (password === 'REHAN') {
-                closePassword();
-                openAdmin();
-            } else {
-                document.getElementById('errorMessage').innerHTML = '<div class="error-message">❌ Incorrect Password!</div>';
-                document.getElementById('passwordInput').value = '';
+        function resetAllData() {
+            if (confirm('⚠️ Are you sure? This will delete EVERYTHING!')) {
+                if (confirm('Really? This cannot be undone!')) {
+                    localStorage.removeItem(DATA_KEY);
+                    location.reload();
+                }
             }
         }
 
-        document.getElementById('passwordInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                checkPassword();
-            }
-        });
-
-        function openAdmin() {
-            document.getElementById('adminOverlay').classList.add('active');
-            loadAdminData();
+        // ========== GIFT BOX ==========
+        function openGiftBox() {
+            document.getElementById('giftBox').classList.add('opened');
+            document.getElementById('surpriseMessage').textContent = '🎉 You deserve the world and more! Happy Birthday to my everything! 💕';
+            generateConfetti();
         }
-
-        function closeAdmin() {
-            document.getElementById('adminOverlay').classList.remove('active');
-        }
-
-        function switchTab(event, tabName) {
-            document.querySelectorAll('.admin-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.admin-tab').forEach(el => el.classList.remove('active'));
-            document.getElementById(tabName).classList.add('active');
-            event.target.classList.add('active');
-        }
-
-        function loadAdminData() {
-            loadAdminPhotos();
-            loadTimelineList();
-            loadWishesList();
-            updateUI();
-        }
-
-        function loadAdminPhotos() {
-            const container = document.getElementById('adminPhotos');
-            container.innerHTML = '';
-
-            appData.photos.forEach((photo, index) => {
-                const item = document.createElement('div');
-                item.className = 'admin-photo-item';
-                item.innerHTML = `
-                    <img src="${photo}" alt="Photo ${index + 1}">
-                    <button class="admin-photo-delete" onclick="deletePhoto(${index})">×</button>
-                `;
-                container.appendChild(item);
-            });
-        }
-
-        // ========== HIDE LOADING SCREEN ==========
-        setTimeout(() => {
-            document.getElementById('loadingScreen').classList.add('hidden');
-        }, 2500);
-
-        // ========== KEYBOARD SHORTCUTS ==========
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closeAdmin();
-                closePassword();
-                document.getElementById('lightbox').classList.remove('active');
-            }
-        });
-
-        // ========== INITIALIZE ==========
-        window.addEventListener('load', initApp);
     </script>
 </body>
 </html>
